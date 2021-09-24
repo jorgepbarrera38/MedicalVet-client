@@ -99,7 +99,7 @@
 </template>
 
 <script>
-    import SearchOwnersAndPets from './../_components/SearchOwnersAndPets'
+    import SearchOwnersAndPets from './../../_components/SearchOwnersAndPets'
     import { VueLoading } from 'vue-loading-template'
     import moment from 'moment'
     moment.locale('es')

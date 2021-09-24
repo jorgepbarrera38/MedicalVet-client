@@ -52,7 +52,7 @@ import Consultation_purposesCreate from '../views/main/consultation_purposes/Cre
 import Consultation_purposesEdit from '../views/main/consultation_purposes/Edit.vue'
 import ClinicHistoriesCreate from '../views/main/clinic_histories/Create.vue'
 import reportsPrescription from '../views/main/reports/Prescription.vue'
-import reportsVaccine from '../views/main/clinic_histories/Vaccine.vue'
+import reportsVaccine from '../views/main/clinic_histories/vaccines/Vaccine.vue'
 import reportsClinicHistory from '../views/main/reports/ClinicHistory.vue'
 import reportsProductAndServiceApplied from '../views/main/reports/ProductAndServiceApplied.vue'
 import UsersIndex from '../views/main/users/Index.vue'
