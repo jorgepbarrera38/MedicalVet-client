@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="app-title">
+        <div class="app-title" v-if="!showAsComponent">
             <div>
               <h1><i class="fa fa-paw"></i> Mascotas</h1>
             </div>
@@ -118,7 +118,7 @@
                   <i  class="fa fa-fw fa-lg fa fa-save"></i>Guardar
                 </button>
                 &nbsp;&nbsp;&nbsp;
-                <router-link :to="{ name: 'pets.index' }" class="btn btn-danger">
+                <router-link :to="{ name: 'pets.index' }" class="btn btn-danger" v-if="!showAsComponent">
                   <i class="fa fa-fw fa-lg fa fa-times-circle"></i>Cancelar
                 </router-link>
               </div>
@@ -134,6 +134,15 @@
     export default {
         components: {
           VueLoading
+        },
+        props: {
+          showAsComponent: {
+            type: Boolean,
+            default: false
+          },
+          updateListOwners: {
+            type: Boolean,
+          }
         },
         created () {
           this.getDataToCreatePet()
@@ -181,9 +190,11 @@
               }
 
               this.$http.post('pets', data).then( response => {
+                this.$emit('pet-registered')
                 this.saving = false
                 this.$toastr.success('Mascota registrada')
-                this.$router.push({ name: 'pets.index' })
+                //this.$router.push({ name: 'pets.index' })
+                this.clearFields()
               }).catch( error => {
                 this.saving = false
                 if (error.response.status == 422) {
@@ -201,8 +212,28 @@
               this.species = response.data.species
               this.races = response.data.races
             })
+          },
+          clearFields () {
+            this.pet.name = ''
+            this.pet.species_id = ''
+            this.pet.race_id = ''
+            this.pet.owner_id = ''
+            this.pet.date_born = ''
+            this.pet.sex = ''
+            this.pet.color = ''
+            this.pet.size = ''
+            this.pet.observations = ''
+            this.errors = null
+
+            this.pet.photo.remove()
           }
         },
+        watch: {
+          updateListOwners () {
+            console.log('Cambió');
+            this.getDataToCreatePet()
+          }
+        }
     }
 </script>
 

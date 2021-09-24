@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="app-title">
+        <div class="app-title" v-if="!showAsComponent">
             <div>
               <h1><i class="fa fa-users"></i> Propietarios</h1>
             </div>
@@ -78,7 +78,7 @@
                   <i  class="fa fa-fw fa-lg fa fa-save"></i>Guardar
                 </button>
                 &nbsp;&nbsp;&nbsp;
-                <router-link :to="{ name: 'owners.index' }" class="btn btn-danger">
+                <router-link :to="{ name: 'owners.index' }" class="btn btn-danger" v-if="!showAsComponent">
                   <i class="fa fa-fw fa-lg fa fa-times-circle"></i>Cancelar
                 </router-link>
               </div>
@@ -94,6 +94,12 @@
     export default {
         components: {
           VueLoading
+        },
+        props: {
+          showAsComponent: {
+            type: Boolean,
+            default: false
+          }
         },
         created () {
           this.getCities()
@@ -125,6 +131,7 @@
             this.saving = true
             this.$http.post('owners', this.owner).then( response => {
               this.$toastr.success('Propietario registrado')
+              this.$emit('owner-registered')
               this.saving = false
               this.errors = null
               this.owner = {

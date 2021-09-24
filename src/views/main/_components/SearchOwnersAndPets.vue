@@ -14,6 +14,9 @@
             <button class="btn btn-info" type="button" @click="showModalForSearchOwner" :disabled="disableFields">
               <i class="fa fa-list-alt"></i>
             </button>
+            <button class="btn btn-success" type="button" @click="showModalForCreateOwnerAndPets" :disabled="disableFields">
+              <i class="fa fa-plus"></i>
+            </button>
             <!--inicio modal buscar propietarios-->
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
@@ -74,6 +77,30 @@
               </div>
             </div>
             <!--Fin modal buscar propietarios-->
+            <!--inicio modal crear propietarios y mascotas-->
+            <div class="modal fade bd-example-modal-lg" id="modalForCreateOwnerAndPets" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Nuevo propietario y mascota</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      <OwnerCreate :showAsComponent="true" @owner-registered="ownerRegistered"/>
+                      <PetCreate 
+                        @pet-registered="ownerRegistered"
+                        :showAsComponent="true"
+                        :updateListOwners="updateListOwnersFromPetCreateComponent"/>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--Fin modal buscar propietarios y mascotas-->
           </div>
         </div>
     </div>
@@ -97,9 +124,11 @@
 <script>
     import { VueLoading } from 'vue-loading-template'
 import LoginVue from '../../login/Login.vue'
+    import OwnerCreate from '../owners/Create.vue'
+    import PetCreate from '../pets/Create.vue'
     export default {
         components: {
-            VueLoading,
+            VueLoading, OwnerCreate, PetCreate
         },
         created () {
           this.getOwners()
@@ -128,6 +157,7 @@ import LoginVue from '../../login/Login.vue'
                 petsFromOwner: [],
                 search: '',
                 searchingOwnerInModalTable: true,
+                updateListOwnersFromPetCreateComponent: false
             }
         },
         methods: {
@@ -167,6 +197,9 @@ import LoginVue from '../../login/Login.vue'
             showModalForSearchOwner () {
                 $('#exampleModal').modal('show')
             },
+            showModalForCreateOwnerAndPets () {
+                $('#modalForCreateOwnerAndPets').modal('show')
+            },
             getOwners (page = 1) {
               
               this.$http.get(`clinic-histories/get-owners?q=${ this.search }&page=${ page }`).then( response => {
@@ -194,6 +227,10 @@ import LoginVue from '../../login/Login.vue'
                     this.$emit('searching', false)
                 })
             },
+            ownerRegistered () {
+              this.getOwners()
+              this.updateListOwnersFromPetCreateComponent = !this.updateListOwnersFromPetCreateComponent
+            }
         },
         watch: {          
             petSelected(newValue, oldValue) {
