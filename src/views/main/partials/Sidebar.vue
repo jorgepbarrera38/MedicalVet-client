@@ -111,8 +111,8 @@
                     </a>
                 </li>
                 <li v-if="hasPermission('clinic-histories.show-vaccine')">
-                    <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'reports.vaccine' })" class="treeview-item">
-                        <i class="icon fa fa-circle-o"></i> Informe de vacunación y desparasitación
+                    <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'clinic_histories.vaccine' })" class="treeview-item">
+                        <i class="icon fa fa-circle-o"></i> Vacunación y desparasitación
                     </a>
                 </li>
                 <li v-if="hasPermission('clinic-histories.show-product-and-services-applied')">

@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="tile">
-              <h3 class="tile-title">Informe de vacunación y desparasitación</h3>
+              <h3 class="tile-title">Vacunación y desparasitación</h3>
               <SearchOwnersAndPets 
                   @owner-selected="setOwnerSelected"
                   @pet-selected="petOwnerSelected"
@@ -34,7 +34,7 @@
         </div>
       </div>
       <!--Inicio de resultados de vacunas y desparasitaciones-->
-      <div class="row" v-if="vaccinesFromPet.length || dewormingsFromPet.length">
+      <div class="row" v-if="!loadingResults">
         <div class="col-md-12">
           <div class="tile">
             <h4 class="tile-title">Vacunas</h4>
