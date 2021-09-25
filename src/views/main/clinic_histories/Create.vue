@@ -2005,7 +2005,7 @@
             this.clinicHistory.pet_id = payload
           },
           setStateFromLoading (payload) {
-            this.loadingResults = payload
+            //this.loadingResults = payload
           },
           setFileInAttachment (e) {
             if (e.target.files[0].type != 'application/pdf') {
