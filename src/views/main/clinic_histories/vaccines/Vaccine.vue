@@ -45,10 +45,11 @@
                     <th nowrap>Fecha de siguiente vacuna</th>
                     <th>Usuario</th>
                     <th>Folio</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="vaccineFromPet in vaccinesFromPet" :key="vaccineFromPet.id">
+                    <tr v-for="(vaccineFromPet, index) in vaccinesFromPet" :key="vaccineFromPet.id">
                         <td nowrap>{{ vaccineFromPet.product.name }}</td>
                         <td nowrap>{{ formatDate(vaccineFromPet.clinic_history ? vaccineFromPet.clinic_history.created_at : vaccineFromPet.created_at) }}</td>
                         <td nowrap>{{ formatDate(vaccineFromPet.next_date) }}</td>
@@ -62,6 +63,12 @@
                                                             vaccineFromPet.user.surnames }}
                         </td>
                         <td nowrap>{{ vaccineFromPet.clinic_history ? vaccineFromPet.clinic_history.number_folio : '' }}</td>
+                        <td nowrap>
+                          <button class="btn btn-danger btn-sm" @click="deleteVaccine(vaccineFromPet, index)" :disabled="vaccineFromPet.deleting">
+                            <span v-if="vaccineFromPet.deleting" class="spinner-border spinner-border-sm"></span>
+                            <i class="fa fa-trash" v-else></i>
+                          </button>
+                        </td>
                     </tr>
                 </tbody>
               </table>
@@ -85,10 +92,11 @@
                     <th nowrap>Fecha de siguiente desparasitación</th>
                     <th>Usuario</th>
                     <th>Folio</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="dewormingFromPet in dewormingsFromPet" :key="dewormingFromPet.id">
+                    <tr v-for="(dewormingFromPet, index) in dewormingsFromPet" :key="dewormingFromPet.id">
                         <td nowrap>{{ dewormingFromPet.product.name }}</td>
                         <td nowrap>{{ dewormingFromPet.dose }}</td>
                         <td nowrap>{{ dewormingFromPet.unity.description }}</td>
@@ -109,6 +117,12 @@
                                                                 dewormingFromPet.user.surnames 
                         }}</td>
                         <td nowrap>{{ dewormingFromPet.clinic_history ? dewormingFromPet.clinic_history.number_folio : '' }}</td>
+                        <td nowrap>
+                          <button class="btn btn-danger btn-sm" @click="deleteDeworming(dewormingFromPet, index)" :disabled="dewormingFromPet.deleting">
+                            <span v-if="dewormingFromPet.deleting" class="spinner-border spinner-border-sm"></span>
+                            <i class="fa fa-trash" v-else></i>
+                          </button>
+                        </td>
                     </tr>
                 </tbody>
               </table>
@@ -152,7 +166,13 @@
                 this.$toastr.info('No existen registros de vacunas ni desparasitaciones')
               }
               this.vaccinesFromPet = response.data.vaccines
+              this.vaccinesFromPet.forEach(vaccine => {
+                  this.$set(vaccine, 'deleting', false)
+              })
               this.dewormingsFromPet = response.data.dewormings
+              this.dewormingsFromPet.forEach(deworming => {
+                  this.$set(deworming, 'deleting', false)
+              })
               this.loadingResults = false
             }).catch(() => {
               this.loadingResults = false
@@ -183,6 +203,26 @@
             this.vaccinesFromPet = []
             this.dewormingsFromPet = []
             //this.loadingResults = payload
+          },
+          deleteVaccine (vaccine, index) {
+            vaccine.deleting = true
+            this.$http.delete(`vaccines/${ vaccine.id }`).then( response => {
+              this.vaccinesFromPet.splice(index, 1)
+              this.getVaccinesFromPet()
+              this.$toastr.success('Vacuna eliminada con éxito')
+            }).catch( () => {
+              vaccine.deleting = false
+            })
+          },
+          deleteDeworming (deworming, index) {
+            deworming.deleting = true
+            this.$http.delete(`dewormings/${ deworming.id }`).then( response => {
+              this.dewormingsFromPet.splice(index, 1)
+              this.getVaccinesFromPet()
+              this.$toastr.success('Desparasitante eliminado con éxito')
+            }).catch( () => {
+              deworming.deleting = false
+            })
           },
           formatDate (date) {
             return moment(date).format('LLL')
