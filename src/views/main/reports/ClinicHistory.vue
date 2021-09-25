@@ -258,7 +258,7 @@
             this.foliosSelected = []
           },
           setStateFromLoading (payload) {
-            this.loadingResults = payload
+            //this.loadingResults = payload
           },
           formatDate (date) {
             return moment(date).format('LLL')
