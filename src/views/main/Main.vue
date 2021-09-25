@@ -12,6 +12,20 @@
                   </div>
                   <div class="modal-body">
                       Desarrollado por
+                      <h4>Jorge Alexis Paz Barrera</h4>
+                      Tel:
+                      <a href="tel:+573203719962" target="_blank">
+                        +57 3203719962
+                      </a> <br>
+                      Email:
+                      <a href="mailto:jorgepbarrera38@gmail.com" target="_blank">
+                        jorgepbarrera38@gmail.com
+                      </a>
+                      <br>
+                      <a href="https://api.whatsapp.com/send?phone=+573203719962" target="_blank">
+                        WhatsApp
+                      </a>
+                      <hr>
                       <h4>DigitalPro</h4> 
                       Tel:
                       <a href="tel:+573214436063" target="_blank">
@@ -28,6 +42,10 @@
                       <br>
                       <a href="https://api.whatsapp.com/send?phone=+573214436063" target="_blank">
                         WhatsApp
+                      </a>
+                      <hr>
+                      <a class="btn btn-primary" href="https://articulo.mercadolibre.com.co/MCO-598976178-software-veterinario-medical-vet-_JM" target="_blank">
+                        <i class="fa fa-hand-o-right" aria-hidden="true"></i> Adquirir Medical Vet
                       </a>
                   </div>
                   <div class="modal-footer">
