@@ -240,6 +240,40 @@
 
                           <div>
                             <div class="form-group">
+                              <label class="control-label">Sistema respiratorio:</label>
+                              <div>
+                                <span v-if="errors && errors['reviewBySystems.respiratorySystem.state']" class="text-danger">
+                                  {{ errors['reviewBySystems.respiratorySystem.state'][0] }}
+                                </span>
+                              </div>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input value="Normal" class="form-check-input" type="radio" v-model="clinicHistory.reviewBySystems.respiratorySystem.state">Normal
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input value="Anormal" class="form-check-input" type="radio" v-model="clinicHistory.reviewBySystems.respiratorySystem.state">Anormal
+                                </label>
+                              </div>
+
+                            </div>
+                            <div class="form-group" v-show="clinicHistory.reviewBySystems.respiratorySystem.state == 'Anormal'">
+                              <label for="">Observaciónes</label>
+                              <textarea rows="3" :class="{ 
+                                                          'form-control': true, 
+                                                          'is-invalid': errors && errors['reviewBySystems.respiratorySystem.observations']
+                                                          }" 
+                                        v-model="clinicHistory.reviewBySystems.respiratorySystem.observations" 
+                                        maxlength="1000"></textarea>
+                              <span v-if="errors && errors['reviewBySystems.respiratorySystem.observations']" class="text-danger">
+                                {{ errors['reviewBySystems.respiratorySystem.observations'][0] }}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div>
+                            <div class="form-group">
                               <label class="control-label">Sistema tegumentario:</label>
                               <div>
                                 <span v-if="errors && errors['reviewBySystems.tegumentarySystem.state']" class="text-danger">
@@ -256,7 +290,6 @@
                                   <input value="Anormal" class="form-check-input" type="radio" v-model="clinicHistory.reviewBySystems.tegumentarySystem.state">Anormal
                                 </label>
                               </div>
-
                             </div>
                             <div class="form-group" v-show="clinicHistory.reviewBySystems.tegumentarySystem.state == 'Anormal'">
                               <label for="">Observaciónes</label>
@@ -1330,6 +1363,10 @@
                     observations: ''
                   },
                   reviewBySystems: {
+                    respiratorySystem: {
+                      state: '',
+                      observations: '',
+                    },
                     tegumentarySystem: {
                       state: '',
                       observations: '',
@@ -1508,6 +1545,9 @@
             data.append('physiologicalConstants[temperature]', this.clinicHistory.physiologicalConstants.temperature ? this.clinicHistory.physiologicalConstants.temperature : '') 
             data.append('physiologicalConstants[heart_rate]', this.clinicHistory.physiologicalConstants.heart_rate ? this.clinicHistory.physiologicalConstants.heart_rate : '') 
             data.append('physiologicalConstants[breathing_frequency]', this.clinicHistory.physiologicalConstants.breathing_frequency ? this.clinicHistory.physiologicalConstants.breathing_frequency : '') 
+
+            data.append('reviewBySystems[respiratorySystem][state]', this.clinicHistory.reviewBySystems.respiratorySystem.state ? this.clinicHistory.reviewBySystems.respiratorySystem.state : '')
+            data.append('reviewBySystems[respiratorySystem][observations]', this.clinicHistory.reviewBySystems.respiratorySystem.observations ? this.clinicHistory.reviewBySystems.respiratorySystem.observations : '')
 
             data.append('reviewBySystems[tegumentarySystem][state]', this.clinicHistory.reviewBySystems.tegumentarySystem.state ? this.clinicHistory.reviewBySystems.tegumentarySystem.state : '')
             data.append('reviewBySystems[tegumentarySystem][observations]', this.clinicHistory.reviewBySystems.tegumentarySystem.observations ? this.clinicHistory.reviewBySystems.tegumentarySystem.observations : '')
@@ -1828,6 +1868,10 @@
                     observations: ''
                   },
                   reviewBySystems: {
+                    respiratorySystem: {
+                      state: '',
+                      observations: '',
+                    },
                     tegumentarySystem: {
                       state: '',
                       observations: '',
