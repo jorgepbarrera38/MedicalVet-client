@@ -114,7 +114,7 @@
     <div :class="sizeFromColumnField ? 'col-md-' + sizeFromColumnField : 'col-md-4'">
       <div class="form-group">
         <label for="">Mascota</label>
-        <select class="form-control" v-model="petSelected" :disabled="disableFields">
+        <select class="form-control" v-model="petSelected" :disabled="disableFields || loadingResults">
           <option value="">Seleccione mascota</option>
           <option :value="petFromOwner.id" v-for="petFromOwner in petsFromOwner" :key="'pet-' + petFromOwner.id">{{ petFromOwner.name }}</option>
         </select>
@@ -136,6 +136,10 @@ import LoginVue from '../../login/Login.vue'
         },
         props: {
           disableFields: {
+            type: Boolean,
+            default: false
+          },
+          loadingResults: {
             type: Boolean,
             default: false
           },
