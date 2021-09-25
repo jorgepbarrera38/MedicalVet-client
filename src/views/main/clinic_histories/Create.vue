@@ -679,7 +679,7 @@
                               <div class="form-group">
                                 <label for=""></label>
                                 <button class="btn btn-primary" @click="addRecordToClinicHistory">
-                                  Agregar
+                                  <i class="fa fa-plus"></i> Agregar
                                 </button>
                               </div>
                             </div>
@@ -742,7 +742,7 @@
                               <div class="form-group">
                                 <label for=""></label>
                                 <button class="btn btn-primary" @click="addDiagnosisToClinicHistory">
-                                  Agregar
+                                  <i class="fa fa-plus"></i> Agregar
                                 </button>
                               </div>
                             </div>
@@ -803,7 +803,7 @@
                               <div class="form-group">
                                 <label for=""></label>
                                 <button class="btn btn-primary" @click="addVaccineToClinicHistory">
-                                  Agregar
+                                  <i class="fa fa-plus"></i> Agregar
                                 </button>
                               </div>
                             </div>
@@ -881,7 +881,7 @@
                               <div class="form-group">
                                 <label for=""></label>
                                 <button class="btn btn-primary" @click="addDewormingToClinicHistory">
-                                  Agregar
+                                  <i class="fa fa-plus"></i> Agregar
                                 </button>
                               </div>
                             </div>
@@ -977,7 +977,7 @@
                               <div class="form-group">
                                 <label for=""></label>
                                 <button class="btn btn-primary" @click="addProductAppliedToClinicHistory">
-                                  Agregar
+                                  <i class="fa fa-plus"></i> Agregar
                                 </button>
                               </div>
                             </div>
@@ -1041,7 +1041,7 @@
                               <div class="form-group">
                                 <label for=""></label>
                                 <button class="btn btn-primary" @click="addServiceAppliedToClinicHistory">
-                                  Agregar
+                                  <i class="fa fa-plus"></i> Agregar
                                 </button>
                               </div>
                             </div>
@@ -1108,7 +1108,7 @@
                       </div>
                       <div class="col-md-12">
                         <button class="btn btn-primary" type="submit">
-                          Agregar
+                          <i class="fa fa-plus"></i> Agregar
                         </button>
                       </div>
                     </form>
@@ -1162,7 +1162,7 @@
                         <textarea rows="4" class="form-control" v-model="productToAddToPrescription.posology" maxlength="500"></textarea>
                       </div>
                       <div class="form-group">
-                        <button class="btn btn-primary" @click="addProductToPrescription">Agregar</button>
+                        <button class="btn btn-primary" @click="addProductToPrescription"><i class="fa fa-plus"></i> Agregar</button>
                       </div>
                     </div>
                     <div class="col-md-8">
@@ -1233,7 +1233,7 @@
                 <div class="row">
                   <div class="col-lg-12">
                     <button :disabled="saving" class="btn btn-primary float-right" @click="preSaveClinicHistory">
-                      <i class="fa fa-fw fa-lg fa fa-save"></i>Grabar folio <span v-if="saving" class="spinner-border spinner-border-sm"></span>
+                      <i class="fa fa-fw fa-lg fa fa-save"></i>Grabar folio <span v-if="saving" class="spinner-border spinner-border-sm ml-1"></span>
                       </button>
                   </div>
                 </div>
@@ -1284,7 +1284,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" @click="saveClinicHistory()" :disabled="saving">
-                  <i class="fa fa-save"></i> Grabar el folio de todas formas <span v-if="saving" class="spinner-border spinner-border-sm"></span>
+                  <i class="fa fa-save"></i> Grabar el folio de todas formas <span v-if="saving" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
               </div>
@@ -1309,7 +1309,7 @@
                 <button :disabled="printingFolio" type="button" class="btn btn-primary" @click="printFolioCreated">
                   <i class="fa fa-fw fa-lg fa fa-check"></i>
                   Aceptar
-                  <span v-if="printingFolio" class="spinner-border spinner-border-sm"></span>
+                  <span v-if="printingFolio" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
               </div>
