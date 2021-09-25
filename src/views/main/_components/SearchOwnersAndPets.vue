@@ -8,8 +8,9 @@
             @keyup.enter="getOwner"
             :disabled="disableFields">
           <div class="input-group-append">
-            <button class="btn btn-primary" type="button" @click="getOwner" :disabled="disableFields">
-              <i class="fa fa-search"></i>
+            <button class="btn btn-primary" type="button" @click="getOwner" :disabled="disableFields || searchingOwnerByIdentification">
+              <span v-if="searchingOwnerByIdentification" class="spinner-border spinner-border-sm"></span>
+              <i class="fa fa-search" v-else></i>
             </button>
             <button class="btn btn-info" type="button" @click="showModalForSearchOwner" :disabled="disableFields">
               <i class="fa fa-list-alt"></i>
@@ -154,6 +155,7 @@ import LoginVue from '../../login/Login.vue'
                   surnames: '',
                   pets_count: ''
                 },
+                searchingOwnerByIdentification: false,
                 petsFromOwner: [],
                 search: '',
                 searchingOwnerInModalTable: true,
@@ -162,6 +164,7 @@ import LoginVue from '../../login/Login.vue'
         },
         methods: {
             getOwner () {
+                this.searchingOwnerByIdentification = true
                 this.petSelected = ''
                 this.petsFromOwner = []
                 this.ownerSelected.id = ''
@@ -169,15 +172,16 @@ import LoginVue from '../../login/Login.vue'
                 this.ownerSelected.surnames = ''
                 this.ownerSelected.pets_count = ''
                 
-                if (!this.ownerSelected.identification) return this.$toastr.error('Digite el documento del propietario')
+                if (!this.ownerSelected.identification) {
+                  this.$toastr.error('Digite el documento del propietario')
+                  return this.searchingOwnerByIdentification = false
+                }
                 
                 this.$emit('searching', true)
                 
                 this.$http.get(`clinic-histories/get-owner?identification=${ this.ownerSelected.identification }`).then( response => {
                     this.ownerSelected = response.data
                     this.petsFromOwner = response.data.pets
-                    
-                    //this.petSelected = this.pet_id || ''
                     
                     this.$emit('owner-selected', true)
                     this.$emit('searching', false)
@@ -186,7 +190,10 @@ import LoginVue from '../../login/Login.vue'
                         this.$toastr.info('El propietario no tiene mascotas relacionadas')
                     }
 
+                    this.searchingOwnerByIdentification = false
+
                 }).catch(error => {
+                    this.searchingOwnerByIdentification = false
                     this.$emit('owner-selected', false)
                     this.$emit('searching', false)
                     if (error.response.status == 404) {
