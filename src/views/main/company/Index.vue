@@ -211,6 +211,10 @@
             this.company.logoNew = e.target.files[0]
         },
         downloadBackupFiles () {
+            if (this.$limitedVersion) {
+              return this.$toastr.error('Esta funcionalidad no está disponible en la versión limitada')
+            }
+
             this.downloadingBackupFiles = true
             this.$http.get('company/download-backup-files', { responseType: 'blob' }).then( response => {
                 download(response.data, 'backup-files.zip')
