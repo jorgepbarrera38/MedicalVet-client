@@ -464,7 +464,7 @@
             }
           },
           setStateFromLoading (payload) {
-            this.loadingResults = payload
+            //this.loadingResults = payload
           },
           formatDate (date) {
             //return date;
