@@ -125,8 +125,8 @@
                           <td>{{ petSelected.size }}</td>
                         </tr>
                         <tr>
-                          <th>Observaciónes</th>
-                          <td colspan="3">{{ petSelected.observations }}</td>
+                          <th>Observaciónes: </th>
+                          <td colspan="3" class="text-justify">{{ petSelected.observations }}</td>
                         </tr>
                       </table>
                   </div>
