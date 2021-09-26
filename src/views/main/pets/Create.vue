@@ -165,6 +165,10 @@
         },
         methods: {
           savePet () {
+            if (this.showAsComponent && this.$limitedVersion) {
+              return this.$toastr.error('Esta funcionalidad no está disponible en la versión limitada')
+            }
+            
             this.saving = true
 
             this.pet.photo.generateBlob((blob) => {
