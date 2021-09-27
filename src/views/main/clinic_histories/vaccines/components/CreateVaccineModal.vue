@@ -74,7 +74,7 @@ export default {
     },
     methods: {
         getQuantityVaccinesCreated () {
-            this.$http.get('vaccines/get-quantity-vaccines-created').then( response => {
+            this.$http.get(`vaccines/${ this.pet_id }/get-quantity-vaccines-created`).then( response => {
                 this.quantityVaccinesCreated = response.data
             })
         },

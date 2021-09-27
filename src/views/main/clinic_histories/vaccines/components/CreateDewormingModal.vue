@@ -94,7 +94,7 @@ export default {
     },
     methods: {
         getQuantityDewormingsCreated () {
-            this.$http.get('dewormings/get-quantity-dewormings-created').then( response => {
+            this.$http.get(`dewormings/${ this.pet_id }/get-quantity-dewormings-created`).then( response => {
                 this.quantityDewormingsCreated = response.data
             })
         },
