@@ -20,12 +20,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="">Propietario (*)</label>
-                    <select v-model="pet.owner_id" class="form-control">
-                      <option value="">Seleccione propietario</option>
-                      <option :value="owner.id" v-for="owner in owners" :key="'owner' + owner.id">
-                        {{ owner.identification + ' - ' + owner.names + ' ' + owner.surnames}}
-                      </option>
-                    </select>
+                    <v-select :options="owners" label="fullNamesAndIdentification" :reduce="owner => owner.id" v-model="pet.owner_id"></v-select>
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -209,6 +204,9 @@
           getDataToCreatePet () {
             this.$http.get('pets/get-data-to-create-pet').then( response => {
               this.owners = response.data.owners
+              this.owners.forEach(owner => {
+                owner.fullNamesAndIdentification = owner.identification + ' - ' + owner.names + ' ' + owner.surnames
+              })
               this.species = response.data.species
               this.races = response.data.races
             })
