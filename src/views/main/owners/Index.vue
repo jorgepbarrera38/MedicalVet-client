@@ -28,6 +28,7 @@
                   <tr>
                     <th>Identificación</th>
                     <th>Nombres</th>
+                    <th>Ciudad</th>
                     <th>Teléfono 1</th>
                     <th>Teléfono 2</th>
                     <th>Dirección</th>
@@ -40,6 +41,7 @@
                   <tr v-for="(owner, index) in owners.data" :key="owner.id">
                     <td nowrap>{{ owner.identification }}</td>
                     <td nowrap>{{ owner.names + ' ' + owner.surnames }}</td>
+                    <td nowrap>{{ owner.city.name + ' - ' + owner.city.state.name }}</td>
                     <td nowrap>{{ owner.phonenumber }}</td>
                     <td nowrap>{{ owner.phonenumber2 }}</td>
                     <td nowrap>{{ owner.address }}</td>
