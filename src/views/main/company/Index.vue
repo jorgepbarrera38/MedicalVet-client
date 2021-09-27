@@ -46,7 +46,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="">Logo</label>
+                                    <label for="">Logo <span class="badge badge-warning" v-if="this.$limitedVersion">No disponible en la versión limitada</span></label>
                                     <input type="file" class="form-control" @change="setLogo">
                                 </div>
                             </div>
@@ -191,7 +191,7 @@
             data.append('email_password', this.company.email_password ? this.company.email_password : '')
             data.append('email_encryption', this.company.email_encryption ? this.company.email_encryption : '')
 
-            if (this.company.logoNew) {
+            if (this.company.logoNew && !this.$limitedVersion) {
                 data.append('logo', this.company.logoNew)
             }
 
