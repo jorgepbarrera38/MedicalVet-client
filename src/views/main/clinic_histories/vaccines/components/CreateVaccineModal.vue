@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary mr-1" @click="registerVaccine" :disabled="saving">
+                    <button type="button" class="btn btn-primary mr-1" @click="registerVaccine" :disabled="saving || ($limitedVersion && quantityVaccinesCreated === null)">
                         <i  class="fa fa-fw fa-lg fa fa-save"></i> Registrar <span v-if="saving" class="spinner-border spinner-border-sm ml-1"></span>
                     </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -59,6 +59,7 @@ export default {
         }
     },
     created() {
+        this.getQuantityVaccinesCreated()
         this.getVaccines()
     },
     data() {
@@ -66,11 +67,17 @@ export default {
             vaccines: [],
             vaccineSelected: '',
             nextVaccineDate: '',
+            quantityVaccinesCreated: null,
             errors: null,
             saving: false,
         }
     },
     methods: {
+        getQuantityVaccinesCreated () {
+            this.$http.get('vaccines/get-quantity-vaccines-created').then( response => {
+                this.quantityVaccinesCreated = response.data
+            })
+        },
         getVaccines () {
             this.$http.get('vaccines').then( response => {
                 this.vaccines = response.data
@@ -80,6 +87,10 @@ export default {
             $('#modalForRegisterVaccine').modal('show')
         },
         registerVaccine () {
+            if (this.quantityVaccinesCreated >= 2 && this.$limitedVersion) {
+              return this.$toastr.error('Solo puede registrar hasta 2 vacunas en la versión limitada')
+            }
+
             this.saving = true
 
             let data = {
@@ -89,6 +100,8 @@ export default {
             }
 
             this.$http.post('vaccines', data).then( response => {
+                this.quantityVaccinesCreated = null
+                this.getQuantityVaccinesCreated()
                 this.$emit('vaccineRegistered')
                 this.$toastr.success('Vacunación registrada')
                 this.clearFields()
