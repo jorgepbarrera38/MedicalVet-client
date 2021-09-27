@@ -35,6 +35,11 @@
                       <a href="mailto:digitalprosoporte@gmail.com" target="_blank">
                         digitalprosoporte@gmail.com
                       </a>
+                       <br>
+                      Email:
+                      <a href="mailto:digitalprosoporte@gmail.com" target="_blank">
+                        soporte@medicalvet.com.co
+                      </a>
                       <br>
                       <a href="https://www.facebook.com/digitalpro.guaviare/" target="_blank">
                         Facebook
@@ -44,7 +49,7 @@
                         WhatsApp
                       </a>
                       <hr>
-                      <a class="btn btn-primary" href="https://articulo.mercadolibre.com.co/MCO-598976178-software-veterinario-medical-vet-_JM" target="_blank">
+                      <a class="btn btn-primary" href="https://medicalvet.com.co" target="_blank">
                         <i class="fa fa-hand-o-right" aria-hidden="true"></i> Adquirir Medical Vet
                       </a>
                   </div>
