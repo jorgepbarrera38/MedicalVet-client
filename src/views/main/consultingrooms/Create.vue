@@ -25,7 +25,7 @@
               </div>
               <vue-loading v-if="saving" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
               <div v-else>
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" :disabled="$limitedVersion && quantityConsultingroomsCreated === null">
                   <i  class="fa fa-fw fa-lg fa fa-save"></i>Guardar  
                 </button>
                 &nbsp;&nbsp;&nbsp;
@@ -46,17 +46,31 @@
         components: {
           VueLoading
         },
+        created() {
+          if (this.$limitedVersion) {
+            this.getQuantityConsultingroomsCreated()
+          }
+        },
         data() {
             return {
                 consultingroom: {
                   name: ''
                 },
+                quantityConsultingroomsCreated: null,
                 errors: null,
                 saving: false,
             }
         },
         methods: {
+          getQuantityConsultingroomsCreated () {
+            this.$http.get('consultingrooms/get-quantity-consultingrooms-created').then( response => {
+              this.quantityConsultingroomsCreated = response.data
+            })
+          },
           saveConsultingroom () {
+            if (this.quantityConsultingroomsCreated >= 1 && this.$limitedVersion) {
+              return this.$toastr.error('Solo puede registrar 1 consultorio en la versión limitada')
+            }
             this.saving = true
             this.$http.post('consultingrooms', this.consultingroom).then( response => {
               this.$toastr.success('Consultorio registrado')

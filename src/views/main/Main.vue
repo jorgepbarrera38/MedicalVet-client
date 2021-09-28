@@ -78,7 +78,7 @@
             <Sidebar/>
             <main class="app-content">
               <router-view></router-view>
-              <div class="limitedVersion">
+              <div class="limitedVersion" v-if="$limitedVersion">
                 <marquee behavior="" direction="">Esta es una versión limitada de Medical Vet
                     <span class="badge badge-success">
                       <a href="https://medicalvet.com.co/" target="_blank" class="buttonBuy">Click aquí para adquirir full licencia </a>
