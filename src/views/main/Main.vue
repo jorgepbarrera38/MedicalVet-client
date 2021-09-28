@@ -55,30 +55,37 @@
               </div>
             </div>
             <!--Fin modal acerca de-->
-        <!-- Navbar-->
-    <header class="app-header"><span class="app-header__logo">Medical Vet</span>
-      <!-- Sidebar toggle button-->
-      <a class="app-sidebar__toggle" href="#" @click.prevent="hideOrShowNavBarMovil"></a>
-      <!-- Navbar Right Menu-->
-      <ul class="app-nav">
-        <!-- User Menu-->
-        <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
-          <ul class="dropdown-menu settings-menu dropdown-menu-right">
-            <li>
-              <a class="dropdown-item" href="" @click.prevent="logout">
-                <i class="fa fa-sign-out fa-lg"></i> Salir
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </header>
-    <!-- Sidebar menu-->
-    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
-    <Sidebar/>
-    <main class="app-content">
-      <router-view></router-view>
-    </main>
+            <!-- Navbar-->
+            <header class="app-header"><span class="app-header__logo">Medical Vet</span>
+              <!-- Sidebar toggle button-->
+              <a class="app-sidebar__toggle" href="#" @click.prevent="hideOrShowNavBarMovil"></a>
+              <!-- Navbar Right Menu-->
+              <ul class="app-nav">
+                <!-- User Menu-->
+                <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
+                  <ul class="dropdown-menu settings-menu dropdown-menu-right">
+                    <li>
+                      <a class="dropdown-item" href="" @click.prevent="logout">
+                        <i class="fa fa-sign-out fa-lg"></i> Salir
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </header>
+            <!-- Sidebar menu-->
+            <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+            <Sidebar/>
+            <main class="app-content">
+              <router-view></router-view>
+              <div class="limitedVersion">
+                <marquee behavior="" direction="">Esta es una versión limitada de Medical Vet
+                    <span class="badge badge-success">
+                      <a href="https://medicalvet.com.co/" target="_blank" class="buttonBuy">Click aquí para adquirir full licencia </a>
+                    </span>
+                </marquee>
+              </div>
+            </main>
     </div>
 </template>
 <script>
@@ -106,3 +113,18 @@
     },
   }
 </script>
+<style scoped>
+  .limitedVersion {
+    background: #222D32;
+    color: white;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    z-index: 100;
+    width: 100%;
+  }
+  .buttonBuy {
+    text-decoration: none;
+    color: white;
+  }
+</style>
