@@ -97,7 +97,7 @@
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label for="">Foto</label>
+                    <label for="">Foto <span class="badge badge-warning" v-if="this.$limitedVersion">No disponible en la versión limitada</span></label>
                     <croppa 
                       placeholder="Seleccione imagen" 
                       :placeholder-font-size="16" 
@@ -109,7 +109,7 @@
               </div>
               <vue-loading v-if="saving" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
               <div v-else>
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" :disabled="$limitedVersion && quantityPetsCreated === null">
                   <i  class="fa fa-fw fa-lg fa fa-save"></i>Guardar
                 </button>
                 &nbsp;&nbsp;&nbsp;
@@ -140,6 +140,7 @@
           }
         },
         created () {
+          this.getQuantityPetsCreated()
           this.getDataToCreatePet()
         },
         data() {
@@ -159,12 +160,26 @@
                 owners: [],
                 species: [],
                 races: [],
+                quantityPetsCreated: null,
                 errors: null,
                 saving: false,
             }
         },
         methods: {
+          async getQuantityPetsCreated () {
+            this.$http.get('pets/get-quantity-pets-created').then( response => {
+              this.quantityPetsCreated = response.data
+            })
+          },
           savePet () {
+            if (this.showAsComponent && this.$limitedVersion) {
+              return this.$toastr.error('Esta funcionalidad no está disponible en la versión limitada')
+            }
+
+            if (this.quantityPetsCreated >= 10 && this.$limitedVersion) {
+              return this.$toastr.error('Solo puede registrar hasta 10 mascotas en la versión limitada')
+            }
+            
             this.saving = true
 
             this.pet.photo.generateBlob((blob) => {
@@ -180,7 +195,7 @@
               data.append('size', this.pet.size)
               data.append('observations', this.pet.observations ? this.pet.observations : '')
 
-              if (blob) {
+              if (blob && !this.$limitedVersion) {
                 data.append('photo', blob)
               }
 

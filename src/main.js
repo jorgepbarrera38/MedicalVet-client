@@ -74,6 +74,7 @@ if (production) {
 
 Vue.prototype.$http = axios
 
+Vue.prototype.$limitedVersion = true
 
 Vue.config.productionTip = false
 

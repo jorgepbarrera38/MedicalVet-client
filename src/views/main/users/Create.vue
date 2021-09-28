@@ -71,7 +71,7 @@
               </div>
               <vue-loading v-if="saving" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
               <div v-else>
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" :disabled="$limitedVersion && quantityOwnersCreated === null">
                   <i  class="fa fa-fw fa-lg fa fa-save"></i>Guardar
                 </button>
                 &nbsp;&nbsp;&nbsp;
@@ -92,6 +92,9 @@
         components: {
           VueLoading
         },
+        created() {
+          this.getQuantityOwnersCreated()
+        },
         data() {
             return {
                 user: {
@@ -104,12 +107,22 @@
                   is_vet: false,
                   professional_register: '',
                 },
+                quantityOwnersCreated: null,
                 errors: null,
                 saving: false,
             }
         },
         methods: {
+          getQuantityOwnersCreated () {
+            this.$http.get('users/get-quantity-users-created').then( response => {
+              this.quantityOwnersCreated = response.data
+            })
+          },
           saveUser () {
+            if (this.quantityOwnersCreated >= 2 && this.$limitedVersion) {
+              return this.$toastr.error('Solo puede registrar hasta 2 usuarios en la versión limitada')
+            }
+
             this.saving = true
           
             let data = new FormData

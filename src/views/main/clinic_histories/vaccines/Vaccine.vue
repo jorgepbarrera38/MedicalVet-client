@@ -22,7 +22,8 @@
                 <button :disabled="!ownerSelected || !petSelected || exportingVaccinesInPdf" class="btn btn-primary mr-1" @click="exportVaccinesInPdf">
                   <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingVaccinesInPdf" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>
-                <button :disabled="!ownerSelected || !petSelected || (!vaccinesFromPet.length && !dewormingsFromPet.length) || sendingVaccinesAndDewormingsForEmail" class="btn btn-info" @click="sendVaccinesAndDewormingsForEmail">
+                <button :disabled="!ownerSelected || !petSelected || (!vaccinesFromPet.length && !dewormingsFromPet.length) || sendingVaccinesAndDewormingsForEmail" 
+                                    class="btn btn-info" @click="sendVaccinesAndDewormingsForEmail">
                   <i class="fa fa-fw fa-lg fa-envelope"></i>Enviar por email <span v-if="sendingVaccinesAndDewormingsForEmail" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>
               </div>              
@@ -306,6 +307,10 @@
             return moment(date).format('LLL')
           },
           sendVaccinesAndDewormingsForEmail () {
+            if (this.$limitedVersion) {
+              return this.$toastr.error('Esta funcionalidad no está disponible en la versión limitada')
+            }
+
             this.sendingVaccinesAndDewormingsForEmail = true
 
             this.$http.get(`reports/vaccine/${ this.petSelected }/send-vaccines-and-dewormings-for-email`).then(response => {

@@ -98,7 +98,7 @@
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label for="">Foto</label>
+                    <label for="">Foto <span class="badge badge-warning" v-if="this.$limitedVersion">No disponible en la versión limitada</span></label>
                     <croppa 
                       placeholder="Seleccione imagen" 
                       :placeholder-font-size="16" 
@@ -167,6 +167,9 @@
             })
           },
           savePet () {
+            if (this.idFromPet && this.$limitedVersion) {
+              return this.$toastr.error('Esta funcionalidad no está disponible en la versión limitada')
+            }
             this.saving = true
             this.photo.generateBlob((blob) => {
 
@@ -182,7 +185,7 @@
               data.append('observations', this.pet.observations ? this.pet.observations : '')
               data.append('_method', 'PUT')
 
-              if (blob) {
+              if (blob && !this.$limitedVersion) {
                 data.append('photo', blob)
               }
 

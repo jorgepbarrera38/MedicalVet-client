@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary mr-1" @click="registerDeworming" :disabled="saving">
+                    <button type="button" class="btn btn-primary mr-1" @click="registerDeworming" :disabled="saving || ($limitedVersion && quantityDewormingsCreated === null)">
                         <i  class="fa fa-fw fa-lg fa fa-save"></i> Registrar <span v-if="saving" class="spinner-border spinner-border-sm ml-1"></span>
                     </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -76,6 +76,7 @@ export default {
         }
     },
     created() {
+        this.getQuantityDewormingsCreated()
         this.getDewormingsAndUnities()
     },
     data() {
@@ -85,12 +86,18 @@ export default {
             doseDeworming: '',
             unityDoseDeworming: '',
             nextDewormingDate: '',
+            quantityDewormingsCreated: null,
             unities: [],
             errors: null,
             saving: false,
         }
     },
     methods: {
+        getQuantityDewormingsCreated () {
+            this.$http.get(`dewormings/${ this.pet_id }/get-quantity-dewormings-created`).then( response => {
+                this.quantityDewormingsCreated = response.data
+            })
+        },
         getDewormingsAndUnities () {
             this.$http.get('dewormings').then( response => {
                 this.dewormings = response.data.dewormings
@@ -101,6 +108,10 @@ export default {
             $('#modalForRegisterDeworming').modal('show')
         },
         registerDeworming () {
+            if (this.quantityDewormingsCreated >= 2 && this.$limitedVersion) {
+              return this.$toastr.error('Solo puede registrar hasta 2 desparasitaciones en la versión limitada')
+            }
+
             this.saving = true
 
             let data = {
@@ -112,6 +123,8 @@ export default {
             }
 
             this.$http.post('dewormings', data).then( response => {
+                this.quantityDewormingsCreated = null
+                this.getQuantityDewormingsCreated()
                 this.$emit('dewormingRegistered')
                 this.clearFields()
                 this.$toastr.success('Desparasitación registrada')

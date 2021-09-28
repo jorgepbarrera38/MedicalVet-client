@@ -158,6 +158,10 @@
             return moment(date).format('LLL')
           },
           sendPrescriptionFromPetForEmail () {
+            if (this.$limitedVersion) {
+              return this.$toastr.error('Esta funcionalidad no está disponible en la versión limitada')
+            }
+            
             if (!this.prescriptionSelected) {
               return this.$toastr.error('Seleccione receta veterinaria')
             }

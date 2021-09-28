@@ -128,6 +128,9 @@
             })
           },
           saveOwner () {
+            if (this.showAsComponent && this.$limitedVersion) {
+              return this.$toastr.error('Esta funcionalidad no está disponible en la versión limitada')
+            }            
             this.saving = true
             this.$http.post('owners', this.owner).then( response => {
               this.$toastr.success('Propietario registrado')

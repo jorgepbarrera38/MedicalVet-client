@@ -1337,6 +1337,8 @@
         data() {
             return {
                 loadingResults: false,
+                vaccinesCountTotalFromPet: 0,
+                dewormingsCountTotalFromPet: 0,
                 clinicHistory: {
                   appointment_id: '',
                   pet_id: '',
@@ -1505,6 +1507,13 @@
         },
         methods: {
           preSaveClinicHistory () {
+
+            if (this.$limitedVersion) {
+              if ((this.vaccinesCountTotalFromPet >= 2 && this.clinicHistory.vaccines.length > 0) || 
+                  (this.dewormingsCountTotalFromPet >= 2 && this.clinicHistory.dewormings.length > 0)) {
+                    return this.$toastr.error('Solo puede registrar hasta 2 vacunas o desparasitaciones en la versión limitada')
+              }
+            }
           
             if (
                 (this.consultation_purposesSelected.records && this.clinicHistory.records.length == 0 ) || 
@@ -1620,7 +1629,6 @@
 
             this.$http.post('clinic-histories', data).then( response => {
               this.saving = false
-              //return console.log(response.data);
               this.pet_id_to_print_folio = this.clinicHistory.pet_id
               this.cleanAllData()
               $('#beforeSaveModal').modal('hide')
@@ -1694,6 +1702,10 @@
               this.unities = response.data.unities
               this.folioOpen = true
               this.loadingResults = false
+
+              this.vaccinesCountTotalFromPet = response.data.vaccinesCountTotalFromPet
+              this.dewormingsCountTotalFromPet = response.data.dewormingsCountTotalFromPet
+
             }).catch( error => {
               this.loadingResults = false
               if (error.response.status == 402) {
