@@ -93,7 +93,9 @@
           VueLoading
         },
         created() {
-          this.getQuantityOwnersCreated()
+          if (this.$limitedVersion) {
+            this.getQuantityOwnersCreated()
+          }
         },
         data() {
             return {

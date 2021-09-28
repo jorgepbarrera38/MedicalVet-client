@@ -140,7 +140,10 @@
           }
         },
         created () {
-          this.getQuantityPetsCreated()
+          if (this.$limitedVersion) {
+            this.getQuantityPetsCreated()
+          }
+
           this.getDataToCreatePet()
         },
         data() {

@@ -76,7 +76,9 @@ export default {
         }
     },
     created() {
-        this.getQuantityDewormingsCreated()
+        if (this.$limitedVersion) {
+            this.getQuantityDewormingsCreated()
+        }
         this.getDewormingsAndUnities()
     },
     data() {

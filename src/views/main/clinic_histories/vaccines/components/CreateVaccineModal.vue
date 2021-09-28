@@ -59,7 +59,9 @@ export default {
         }
     },
     created() {
-        this.getQuantityVaccinesCreated()
+        if (this.$limitedVersion) {
+            this.getQuantityVaccinesCreated()
+        }
         this.getVaccines()
     },
     data() {
