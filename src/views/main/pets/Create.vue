@@ -97,7 +97,7 @@
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label for="">Foto</label>
+                    <label for="">Foto <span class="badge badge-warning" v-if="this.$limitedVersion">No disponible en la versión limitada</span></label>
                     <croppa 
                       placeholder="Seleccione imagen" 
                       :placeholder-font-size="16" 
@@ -195,7 +195,7 @@
               data.append('size', this.pet.size)
               data.append('observations', this.pet.observations ? this.pet.observations : '')
 
-              if (blob) {
+              if (blob && !this.$limitedVersion) {
                 data.append('photo', blob)
               }
 
