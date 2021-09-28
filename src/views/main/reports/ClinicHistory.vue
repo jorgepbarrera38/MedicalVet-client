@@ -213,6 +213,10 @@
             })
           },
           sendClinicHistoryFromPetForEmail () {
+            if (this.$limitedVersion) {
+              return this.$toastr.error('Esta funcionalidad no está disponible en la versión limitada')
+            }
+
             if (this.foliosSelected.length == 0) return this.$toastr.error('Seleccione los folios que desea enviar')
             
             this.loadingResults = true
