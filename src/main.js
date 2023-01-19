@@ -61,7 +61,7 @@ toastr.options = {
 
 Vue.prototype.$toastr = toastr
 
-let production = false
+let production = true
 
 if (production) {
   axios.defaults.baseURL = '/api'

@@ -29,7 +29,7 @@
           <div class="tile">
             <div class="bs-component">
               <ul class="nav nav-tabs">
-                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home">Citas pendientes</a></li>
+                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home">Citas</a></li>
                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#profile">Agenda de citas</a></li>
                 
               </ul>
@@ -46,6 +46,7 @@
                             <th>Actividad</th>
                             <th nowrap>Fecha inicio cita</th>
                             <th nowrap>Fecha fin cita</th>
+                            <th nowrap>Estado</th>
                           </thead>
                           <tbody>
                             <tr v-for="appointment in appointmentsFromPet" :key="'appointmentFromPet' + appointment.id" :title="appointment.observations ? appointment.observations : 'No hay observaciónes'">
@@ -53,6 +54,15 @@
                               <td nowrap>{{ appointment.activity.name }}</td>
                               <td nowrap>{{ formatDate(appointment.date_time_start) }}</td>
                               <td nowrap>{{ formatDate(appointment.date_time_finish) }}</td>
+                              <td nowrap>
+                                <div :class="{ badge:true, 
+                                              'badge-info': appointment.state == 'PENDIENTE', 
+                                              'badge-success': appointment.state == 'CUMPLIDA', 
+                                              'badge-warning': appointment.state == 'INCUMPLIDA',
+                                              'badge-danger': appointment.state == 'CANCELADA'
+                                              }">
+                                  {{ appointment.state }}</div>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
