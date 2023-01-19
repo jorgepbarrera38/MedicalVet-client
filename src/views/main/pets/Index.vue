@@ -199,7 +199,7 @@
               this.$toastr.success('Mascota eliminada')
           }).catch( errors => {
             if (errors.response.status == 422) {
-              this.$toastr.error('La mascota no se puede eliminar ya que tiene historias clínicas relacionadas')
+              this.$toastr.error(errors.response.data.message)
             }
           })
         },
