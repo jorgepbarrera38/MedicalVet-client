@@ -65,6 +65,7 @@
     import hasPermission from '../_utilities/hasPermission'
     import { VueLoading } from 'vue-loading-template'
     import Search from '../_components/Search'
+import { error } from 'toastr'
     export default {
       mixins: [ hasPermission ],
       components: {
@@ -101,7 +102,7 @@
               this.$toastr.success('Motivo de cancelación eliminado')
           }).catch( errors => {
             if (errors.response.status == 422) {
-              this.$toastr.error('El motivo de cancelación no se puede eliminar ya que tiene registros relacionadas')
+              this.$toastr.error(errors.response.data.message)
             }
           })
         }
