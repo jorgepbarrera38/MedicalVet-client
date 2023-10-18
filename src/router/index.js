@@ -73,6 +73,7 @@ import informedConsentTemplateIndex from '../views/main/informed_consent_templat
 import informedConsentTemplateCustomize from '../views/main/informed_consent_templates/Customize.vue'
 
 import InformedConsentsIndex from '../views/main/informed_consents/Index.vue'
+import BillingPendingBilling from '../views/main/billing/PendingBilling.vue'
 
 Vue.use(VueRouter)
 
@@ -405,6 +406,11 @@ const routes = [
         path: '/consentimiento-informado',
         name: 'informed_consent.index',
         component: InformedConsentsIndex
+      },
+      {
+        path: '/facturacion/pendiente-por-facturar',
+        name: 'billing.pending_billing',
+        component: BillingPendingBilling
       },
     ]
   },

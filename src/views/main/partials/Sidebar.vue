@@ -239,6 +239,22 @@
             </ul>
         </li>
 
+        <li class="treeview" id="billing">
+            <a class="app-menu__item" href="#" data-toggle="treeview" @click.prevent="explodeOrImplode('billing')">
+                <i class="app-menu__icon fa fa-list-alt"></i>
+                <span class="app-menu__label">Facturación</span>
+                <i class="treeview-indicator fa fa-angle-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <!-- v-if="hasPermission('reports.consultations')"-->
+                <li>
+                    <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'billing.pending_billing' })" class="treeview-item">
+                        <i class="icon fa fa-circle-o"></i> Pendiente por facturar
+                    </a>
+                </li>
+            </ul>
+        </li>
+
         <li class="treeview" id="system">
             <a class="app-menu__item" href="#" data-toggle="treeview" @click.prevent="explodeOrImplode('system')">
                 <i class="app-menu__icon fa fa-cogs"></i>
