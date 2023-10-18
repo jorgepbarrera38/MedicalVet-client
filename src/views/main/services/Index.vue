@@ -26,13 +26,17 @@
               <table class="table table-hover table-sm">
                 <thead>
                   <tr>
+                    <th>Código</th>
                     <th>Nombre</th>
+                    <th>Precio</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="service in services.data" :key="service.id">
+                    <td nowrap>{{ service.code }}</td>
                     <td nowrap>{{ service.name }}</td>
+                    <td nowrap>{{ service.price }}</td>
                     <td nowrap>
                       <button class="btn btn-primary btn-sm" 
                         :disabled="!hasPermission('services.update')"

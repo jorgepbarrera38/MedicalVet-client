@@ -26,7 +26,9 @@
               <table class="table table-hover table-sm">
                 <thead>
                   <tr>
+                    <th>Código</th>
                     <th>Nombre</th>
+                    <th>Precio</th>
                     <th nowrap>Control de vacunas</th>
                     <th nowrap>Control de desparasitación</th>
                     <th></th>
@@ -34,7 +36,9 @@
                 </thead>
                 <tbody>
                   <tr v-for="product in products.data" :key="product.id">
+                    <td nowrap>{{ product.code }}</td>
                     <td nowrap>{{ product.name }}</td>
+                    <td nowrap>{{ product.price }}</td>
                     <td nowrap>
                       <input type="checkbox" :checked="product.vaccine">
                     </td>

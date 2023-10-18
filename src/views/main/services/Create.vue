@@ -16,10 +16,22 @@
             </div>
             <form @submit.prevent="saveService()">
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="">Código (*)</label>
+                    <input type="text" class="form-control" v-model="service.code" maxlength="20">
+                  </div>
+                </div>
+                <div class="col-md-6">
                   <div class="form-group">
                     <label for="">Nombre (*)</label>
                     <input type="text" class="form-control" v-model="service.name" maxlength="100">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="">Precio (*)</label>
+                    <input type="number" class="form-control" v-model="service.price">
                   </div>
                 </div>
               </div>
@@ -49,7 +61,9 @@
         data() {
             return {
                 service: {
+                  code: '',
                   name: '',
+                  price: '',
                 },
                 errors: null,
                 saving: false,
@@ -59,10 +73,14 @@
           saveService () {
             this.saving = true
             this.$http.post('services', this.service).then( response => {
-              this.$toastr.success('Servicio registrada')
+              this.$toastr.success('Servicio registrado')
               this.saving = false
               this.errors = null
-              this.service.name = ''
+              this.service = {
+                  code: '',
+                  name: '',
+                  price: '',
+              }
             }).catch( error => {
               this.saving = false
               if (error.response.status == 422) {

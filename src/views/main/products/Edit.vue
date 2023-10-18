@@ -9,12 +9,29 @@
         <div class="col-md-12">
           <div class="tile">
             <h3 class="tile-title">Editar producto</h3>
+            <div class="alert alert-danger" v-if="errors">
+              <li v-for="(error, index) in errors" :key="index">
+                {{ error[0] }}
+              </li>
+            </div>
             <form @submit.prevent="saveProduct()">
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="">Código (*)</label>
+                    <input type="text" class="form-control" v-model="product.code" maxlength="20">
+                  </div>
+                </div>
+                <div class="col-md-6">
                   <div class="form-group">
                     <label for="">Nombre (*)</label>
                     <input type="text" class="form-control" v-model="product.name" maxlength="90">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="">Precio (*)</label>
+                    <input type="number" class="form-control" v-model="product.price">
                   </div>
                 </div>
                 <div class="col-md-12">
@@ -59,7 +76,9 @@
         data() {
             return {
                 product: {
+                  code: '',
                   name: '',
+                  price: '',
                   vaccine: false,
                   deworming: false
                 },
