@@ -20,7 +20,7 @@
             </button>
             <!--inicio modal buscar propietarios-->
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog" role="document">
+              <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Propietarios</h5>
@@ -61,7 +61,12 @@
                             <td nowrap>{{ owner.identification }}</td>
                             <td nowrap>{{ owner.names }}</td>
                             <td nowrap>{{ owner.surnames }}</td>
-                            <td nowrap>{{ owner.pets_count }}</td>
+                            <td nowrap>
+                              <button class="btn btn-success btn-sm mr-1" v-for="pet in owner.pets" @click.stop="selectOwnerAndPet(owner, pet)">
+                                <i class="fa fa-fw fa fa-paw"></i> {{ pet.name }}
+                              </button>
+                              <!--{{ owner.pets_count }}-->
+                            </td>
                           </tr>
                         </tbody>
                       </table>
@@ -215,6 +220,7 @@ import LoginVue from '../../login/Login.vue'
               
               this.$http.get(`clinic-histories/get-owners?q=${ this.search }&page=${ page }`).then( response => {
                 this.owners = response.data
+                console.log(this.owners);
                 this.searchingOwnerInModalTable = false
               })
             },
@@ -226,6 +232,18 @@ import LoginVue from '../../login/Login.vue'
                 this.ownerSelected = owner
                 this.$emit('owner-selected', true)
                 this.getPetsFromOwner()
+            },
+            selectOwnerAndPet (owner, pet) {
+                console.log(pet);
+                this.petsFromOwner = []
+                this.ownerSelected = owner
+                this.getPetsFromOwner()
+                this.$emit('searching', true)
+                this.petSelected = pet.id
+                
+                this.$emit('owner-selected', true)
+                $('#exampleModal').modal('hide')
+                
             },
             getPetsFromOwner () {
                 this.$http.get(`clinic-histories/${ this.ownerSelected.id }/get-pet-from-owner`).then( response => {
