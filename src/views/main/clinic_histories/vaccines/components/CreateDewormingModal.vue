@@ -28,23 +28,6 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                            <label for="">Dosis (*)</label>
-                            <input type="number" class="form-control" v-model="doseDeworming">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                            <label for="">Unidad (*)</label>
-                            <select v-model="unityDoseDeworming" class="form-control">
-                                <option value="">Seleccione unidad</option>
-                                <option :value="unity.id" v-for="unity in unities" :key="'unity' + unity.id">
-                                    {{ unity.description }}
-                                </option>
-                            </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
                                 <label for="">Próxima desparasitación (*)</label>
                                 <input type="date" class="form-control" v-model="nextDewormingDate">
                             </div>
@@ -79,17 +62,14 @@ export default {
         if (this.$limitedVersion) {
             this.getQuantityDewormingsCreated()
         }
-        this.getDewormingsAndUnities()
+        this.getDewormings()
     },
     data() {
         return {
             dewormings: [],
             dewormingSelected: '',
-            doseDeworming: '',
-            unityDoseDeworming: '',
             nextDewormingDate: '',
             quantityDewormingsCreated: null,
-            unities: [],
             errors: null,
             saving: false,
         }
@@ -100,10 +80,9 @@ export default {
                 this.quantityDewormingsCreated = response.data
             })
         },
-        getDewormingsAndUnities () {
+        getDewormings () {
             this.$http.get('dewormings').then( response => {
                 this.dewormings = response.data.dewormings
-                this.unities = response.data.unities
             })
         },
         showModalForRegisterDeworming () {
@@ -119,8 +98,6 @@ export default {
             let data = {
                 pet_id: this.pet_id,
                 product_id: this.dewormingSelected,
-                dose: this.doseDeworming,
-                unity_id: this.unityDoseDeworming,
                 next_date: this.nextDewormingDate
             }
 
@@ -140,8 +117,6 @@ export default {
         },
         clearFields () {
             this.dewormingSelected = ''
-            this.doseDeworming = ''
-            this.unityDoseDeworming = ''
             this.nextDewormingDate = ''
             this.errors = null
         }

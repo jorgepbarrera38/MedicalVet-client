@@ -141,7 +141,6 @@
         deleteInformedConsentTemplates (id) {
           this.$http.delete(`informed-consent-templates/${ id }`).then( response => {
               this.getInformedConsentTemplates()
-              console.log(response.data);
               this.$toastr.success('Plantilla eliminada')
           }).catch( errors => {
             if (errors.response.status == 422) {

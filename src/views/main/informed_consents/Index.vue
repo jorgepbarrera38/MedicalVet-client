@@ -170,7 +170,6 @@
           },
           petOwnerSelected(payload) {
             this.petSelected = payload
-            console.log(this.petSelected);
           },
           setStateFromLoading (payload) {
             this.loadingResults = payload

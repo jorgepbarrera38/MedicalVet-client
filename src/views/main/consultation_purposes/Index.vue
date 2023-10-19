@@ -27,6 +27,7 @@
                 <thead>
                   <tr>
                     <th>Nombre</th>
+                    <th>Motivo</th>
                     <th>Síntomas</th>
                     <th>Antecedentes</th>
                     <th nowrap>Constantes fisiológicas</th>
@@ -46,6 +47,9 @@
                   <tr v-for="consultation_purpose in consultation_purposes.data" :key="consultation_purpose.id">
                     <td nowrap>
                       {{ consultation_purpose.name }}
+                    </td>
+                    <td nowrap>
+                      <input type="checkbox" :checked="consultation_purpose.reason_consultation">
                     </td>
                     <td nowrap>
                       <input type="checkbox" :checked="consultation_purpose.symptoms">

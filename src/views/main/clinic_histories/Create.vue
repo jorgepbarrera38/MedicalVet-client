@@ -22,6 +22,7 @@
                       <label for="">Finalidad de la consulta (*)</label>
                       <select class="form-control" :disabled="!buttonThatOpenFolio" v-model="consultation_purposesSelected">
                         <option :value="{ id: null,
+                                        reason_consultation: '',
                                         symptoms: '',
                                         anamnesis: '',
                                         indications: '',
@@ -180,13 +181,13 @@
         <div class="row" v-if="folioOpen">
           <div class="col-md-12">
             <!--Motivo y síntomas-->
-            <div class="row">
+            <div class="row" v-if="consultation_purposesSelected.reason_consultation || consultation_purposesSelected.symptoms || consultation_purposesSelected.anamnesis">
               <div class="col-md-12">
                 <div class="tile">
                   <!--<div class="tile-title"></div>-->
                     <div class="row" id="errors">
                     <!--Finalidad de la consulta-->
-                      <div class="col-md-12">
+                      <div class="col-md-12" v-if="consultation_purposesSelected.reason_consultation">
                         <div class="form-group">
                           <label for="">Motivo (*)</label>
                           <textarea rows="3" :class="{ 
@@ -852,23 +853,6 @@
                                 <v-select :options="dewormings" label="name" v-model="dewormingSelected"></v-select>
                               </div>
                             </div>
-                            <div class="col-md-2">
-                              <div class="form-group">
-                                <label for="">Dosis (*)</label>
-                                <input type="number" class="form-control" v-model="doseDeworming">
-                              </div>
-                            </div>
-                            <div class="col-md-2">
-                              <div class="form-group">
-                                <label for="">Unidad (*)</label>
-                                <select v-model="unityDoseDeworming" class="form-control">
-                                  <option value="">Seleccione unidad</option>
-                                  <option :value="unity" v-for="unity in unities" :key="'unity' + unity.id">
-                                    {{ unity.description }}
-                                  </option>
-                                </select>
-                              </div>
-                            </div>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <label for="">Próxima desparasitación (*)</label>
@@ -893,8 +877,6 @@
                                   <thead>
                                     <tr>
                                       <th>Nombre</th>
-                                      <th>Dosis</th>
-                                      <th>Unidad</th>
                                       <th nowrap>Proxima desparasitación</th>
                                       <th></th>
                                     </tr>
@@ -902,8 +884,6 @@
                                   <tbody>
                                     <tr v-for="(deworming, index) in clinicHistory.dewormings" :key="'dewor' + index">
                                       <td nowrap>{{ deworming.name }}</td>
-                                      <td nowrap>{{ deworming.dose }}</td>
-                                      <td nowrap>{{ deworming.unity_description }}</td>
                                       <td nowrap>{{ deworming.next_date }}</td>
                                       <td nowrap>
                                         <button class="btn btn-danger btn-sm" @click="deleteRegistry(clinicHistory.dewormings, index)">
@@ -954,17 +934,6 @@
                                 <input type="number" class="form-control" v-model="quantityProductApplied">
                               </div>
                             </div>
-                            <div class="col-md-2">
-                              <div class="form-group">
-                                <label for="">Unidad (*)</label>
-                                <select v-model="unityQuantityProductApplied" class="form-control">
-                                  <option value="">Seleccione unidad</option>
-                                  <option :value="unity" v-for="unity in unities" :key="'unity' + unity.id">
-                                    {{ unity.description }}
-                                  </option>
-                                </select>
-                              </div>
-                            </div>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <label for="">Observaciónes</label>
@@ -989,8 +958,7 @@
                                   <thead>
                                     <tr>
                                       <th>Producto</th>
-                                      <th nowrap>Cantidad aplicada</th>
-                                      <th nowrap>Unidad</th>
+                                      <th nowrap>Cantidad</th>
                                       <th>Observaciónes</th>
                                       <th></th>
                                     </tr>
@@ -999,7 +967,6 @@
                                     <tr v-for="(product, index) in clinicHistory.products" :key="'prodpet' + index">
                                       <td nowrap>{{ product.name }}</td>
                                       <td nowrap>{{ product.quantity }}</td>
-                                      <td nowrap>{{ product.unity.description }}</td>
                                       <td nowrap>{{ product.observations }}</td>
                                       <td nowrap>
                                         <button class="btn btn-danger btn-sm" @click="deleteRegistry(clinicHistory.products, index)">
@@ -1405,6 +1372,7 @@
                 },
                 consultation_purposesSelected: {
                   id: null,
+                  reason_consultation: null,
                   symptoms: '',
                   anamnesis: '',
                   records: '',
@@ -1434,21 +1402,17 @@
                 nextVaccineDate: null,
                 productSelected: null,
                 quantityProductApplied: null,
-                unityQuantityProductApplied: '',
                 observationsProductApplied: '',
                 serviceSelected: null,
                 quantityServiceApplied: null,
                 observationsServiceApplied: '',
                 dewormingSelected: null,
                 nextDewormingDate: null,
-                doseDeworming: null,
-                unityDoseDeworming: '',
                 diagnoses: [],
                 vaccines: [],
                 products: [],
                 services: [],
                 dewormings: [],
-                unities: [],
                 errors: null,
                 folioOpen: false,
                 lookingPet: false,
@@ -1596,15 +1560,12 @@
 
             this.clinicHistory.dewormings.forEach((deworming, index) => {
               data.append(`dewormings[${index}][product_id]`, deworming.product_id)
-              data.append(`dewormings[${index}][dose]`, deworming.dose)
               data.append(`dewormings[${index}][next_date]`, deworming.next_date)
-              data.append(`dewormings[${index}][unity_id]`, deworming.unity_id)
             })
 
             this.clinicHistory.products.forEach((product, index) => {
               data.append(`products[${index}][product_id]`, product.product_id)
               data.append(`products[${index}][quantity]`, product.quantity)
-              data.append(`products[${index}][unity_id]`, product.unity.id)
               data.append(`products[${index}][observations]`, product.observations ? product.observations : '')
             })
 
@@ -1699,7 +1660,6 @@
               this.products = response.data.products
               this.services = response.data.services
               this.dewormings = response.data.dewormings
-              this.unities = response.data.unities
               this.folioOpen = true
               this.loadingResults = false
 
@@ -1761,22 +1721,16 @@
               return this.$toastr.error('La cantidad debe ser estar entre 0.0001 y 1000')
             }
 
-            if (!this.unityQuantityProductApplied) {
-              return this.$toastr.error('Seleccione la unidad')
-            }
-
             let data = {
               product_id: this.productSelected.id,
               name: this.productSelected.name,
               quantity: this.quantityProductApplied,
-              unity: this.unityQuantityProductApplied,
               observations: this.observationsProductApplied
             }
 
             this.clinicHistory.products.push(data)
             this.productSelected = null
             this.quantityProductApplied = null
-            this.unityQuantityProductApplied = ''
             this.observationsProductApplied = null
           },
           addServiceAppliedToClinicHistory () {
@@ -1800,16 +1754,8 @@
             this.observationsServiceApplied = null
           },
           addDewormingToClinicHistory () {
-            if (!this.dewormingSelected || !this.doseDeworming || !this.unityDoseDeworming || !this.nextDewormingDate) {
+            if (!this.dewormingSelected || !this.nextDewormingDate) {
               return this.$toastr.error('Diligencie los datos de la desparasitación')
-            }
-
-            if (isNaN(this.doseDeworming)) {
-              return this.$toastr.error('La dosis debe ser un número')
-            }
-
-            if (this.doseDeworming <= 0 || this.doseDeworming > 1000) {
-              return this.$toastr.error('La dosis debe ser estar entre 0.0001 y 1000')
             }
 
             let dateDewormingIsBeforeOfNow = moment(this.nextDewormingDate).isSameOrAfter(Date.now(), 'day')
@@ -1821,16 +1767,11 @@
             let data = {
               product_id: this.dewormingSelected.id,
               name: this.dewormingSelected.name,
-              dose: this.doseDeworming,
-              unity_id: this.unityDoseDeworming.id,
-              unity_description: this.unityDoseDeworming.description,
               next_date: this.nextDewormingDate
             }
             this.clinicHistory.dewormings.push(data)
             this.dewormingSelected = null
-            this.doseDeworming = null
             this.nextDewormingDate = null
-            this.unityDoseDeworming = ''
           },
           addRecordToClinicHistory () {
             if (!this.record) {
@@ -1920,6 +1861,7 @@
                 }
                 this.consultation_purposesSelected = {
                   id: null,
+                  reason_consultation: '',
                   symptoms: '',
                   anamnesis: '',
                   indications: '',
@@ -1948,14 +1890,11 @@
                 this.observationsServiceApplied = ''
                 this.dewormingSelected = null
                 this.nextDewormingDate = null
-                this.doseDeworming = null
-                this.unityDoseDeworming = ''
                 this.diagnoses = []
                 this.vaccines = []
                 this.products = []
                 this.services = []
                 this.dewormings = []
-                this.unities = []
                 this.errors = null
                 this.folioOpen = false
                 this.lookingPet = false

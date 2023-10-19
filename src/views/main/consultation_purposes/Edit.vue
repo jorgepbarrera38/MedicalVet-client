@@ -39,6 +39,15 @@
                       </thead>
                       <tbody>
                         <tr>
+                          <td nowrap>Motivo</td>
+                          <td nowrap>
+                              <input type="checkbox" v-model="consultation_purposes.reason_consultation">
+                          </td>
+                           <td>
+                            Obligatorio
+                          </td>
+                        </tr>
+                        <tr>
                           <td nowrap>Síntomas</td>
                           <td nowrap>
                               <input type="checkbox" v-model="consultation_purposes.symptoms">
@@ -183,6 +192,7 @@
                 consultation_purposes: {
                   id: '',
                   name: '',
+                  reason_consultation: false,
                   symptoms: false,
                   records: false,
                   physiological_constants: false,
@@ -220,6 +230,7 @@
             })
           },
           selectAll () {
+            this.consultation_purposes.reason_consultation = true
             this.consultation_purposes.symptoms = true
             this.consultation_purposes.records = true
             this.consultation_purposes.physiological_constants = true
@@ -234,6 +245,7 @@
             this.consultation_purposes.review_by_systems = true
           },
           unSelectAll () {
+            this.consultation_purposes.reason_consultation = false
             this.consultation_purposes.symptoms = false
             this.consultation_purposes.records = false
             this.consultation_purposes.physiological_constants = false

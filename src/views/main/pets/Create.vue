@@ -246,7 +246,6 @@
         },
         watch: {
           updateListOwners () {
-            console.log('Cambió');
             this.getDataToCreatePet()
           }
         }

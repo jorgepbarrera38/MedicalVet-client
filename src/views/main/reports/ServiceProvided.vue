@@ -92,7 +92,6 @@
             this.services = []
             this.$http.get(`reports/get-services-provided?startDate=${ this.rangeDates.startDate }&endDate=${ this.rangeDates.endDate }`).then(response => {
                 this.services = response.data
-                console.log(response.data);
                 this.loadingResults = false
             }).catch( error => {
               this.loadingResults = false

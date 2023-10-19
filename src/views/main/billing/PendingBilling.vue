@@ -171,7 +171,6 @@
                 /*Para agregar más productos y/o servicios*/
                 allVaccines: [],
                 allDewormings: [],
-                allUnities: [],
                 
                 loadingResults: false,
                 exportingVaccinesInPdf: false,
@@ -182,7 +181,6 @@
         methods: {
           getVaccinesFromPet () {
             this.$http.get(`billings/${ this.petSelected }/get-pending-billing`).then(response => {
-              console.log(response.data);
               /*if (!response.data.vaccines.length && !response.data.dewormings.length) {
                 this.$toastr.info('No existen registros de vacunas ni desparasitaciones')
               }*/
@@ -193,8 +191,7 @@
               })
               
               /*this.allVaccines = response.data.allVaccines
-              this.allDewormings = response.data.allDewormings
-              this.allUnities = response.data.allUnities*/
+              this.allDewormings = response.data.allDewormings*/
 
               if (!this.productsAndServices.length) {
                 this.$toastr.info('No existen productos o servicios pendientes por facturar')

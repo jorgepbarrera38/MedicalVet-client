@@ -220,7 +220,6 @@ import LoginVue from '../../login/Login.vue'
               
               this.$http.get(`clinic-histories/get-owners?q=${ this.search }&page=${ page }`).then( response => {
                 this.owners = response.data
-                console.log(this.owners);
                 this.searchingOwnerInModalTable = false
               })
             },
@@ -234,7 +233,6 @@ import LoginVue from '../../login/Login.vue'
                 this.getPetsFromOwner()
             },
             selectOwnerAndPet (owner, pet) {
-                console.log(pet);
                 this.petsFromOwner = []
                 this.ownerSelected = owner
                 this.getPetsFromOwner()

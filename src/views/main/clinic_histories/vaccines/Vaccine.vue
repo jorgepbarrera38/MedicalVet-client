@@ -111,8 +111,6 @@
                 <thead>
                   <tr>
                     <th>Desparasitante</th>
-                    <th>Dosis</th>
-                    <th>Unidad</th>
                     <th nowrap>Fecha de aplicación</th>
                     <th nowrap>Fecha de siguiente desparasitación</th>
                     <th>Usuario</th>
@@ -125,14 +123,6 @@
                         <td nowrap>
                           <v-select :options="allDewormings" v-if="dewormingFromPet.showFormForEdit" label="name" :reduce="deworming => deworming.id" v-model="dewormingFromPet.product_id_copy"></v-select>
                           <span v-else>{{ dewormingFromPet.product.name }}</span>
-                        </td>
-                        <td nowrap>
-                          <input type="number" v-if="dewormingFromPet.showFormForEdit" v-model="dewormingFromPet.dose_copy" class="form-control">
-                          <span v-else>{{ dewormingFromPet.dose }}</span>
-                        </td>
-                        <td nowrap>
-                          <v-select :options="allUnities" v-if="dewormingFromPet.showFormForEdit" label="description" :reduce="unity => unity.id" v-model="dewormingFromPet.unity_id_copy"></v-select>
-                          <span v-else>{{ dewormingFromPet.unity.description }}</span>
                         </td>
                         <td nowrap>{{ formatDate(dewormingFromPet.clinic_history ? 
                                                                     dewormingFromPet.clinic_history.created_at
@@ -208,7 +198,6 @@
                 dewormingsFromPet: [],
                 allVaccines: [],
                 allDewormings: [],
-                allUnities: [],
                 loadingResults: false,
                 exportingVaccinesInPdf: false,
                 sendingVaccinesAndDewormingsForEmail: false,
@@ -240,14 +229,10 @@
                   this.$set(deworming, 'next_date_copy', deworming.next_date)
                   this.$set(deworming, 'product_id_copy', deworming.product.id)
                   this.$set(deworming, 'product_name_copy', deworming.product.name)
-                  this.$set(deworming, 'dose_copy', deworming.dose)
-                  this.$set(deworming, 'unity_id_copy', deworming.unity.id)
-                  this.$set(deworming, 'unity_name_copy', deworming.unity.name)
               })
 
               this.allVaccines = response.data.allVaccines
               this.allDewormings = response.data.allDewormings
-              this.allUnities = response.data.allUnities
 
               this.loadingResults = false
             }).catch(() => {
@@ -353,16 +338,11 @@
             dewormingFromPet.next_date_copy = dewormingFromPet.next_date
             dewormingFromPet.product_id_copy = dewormingFromPet.product.id
             dewormingFromPet.product_name_copy = dewormingFromPet.product.name
-            dewormingFromPet.dose_copy = dewormingFromPet.dose
-            dewormingFromPet.unity_id_copy = dewormingFromPet.unity.id
-            dewormingFromPet.unity_name_copy = dewormingFromPet.unity.name
           },
           updateDeworming (dewormingFromPet) {
             dewormingFromPet.updating = true
             let data = {
               product_id: dewormingFromPet.product_id_copy,
-              dose: dewormingFromPet.dose_copy,
-              unity_id: dewormingFromPet.unity_id_copy,
               next_date: dewormingFromPet.next_date_copy,
             }
 
@@ -370,9 +350,6 @@
               dewormingFromPet.next_date = dewormingFromPet.next_date_copy
               dewormingFromPet.product.id = dewormingFromPet.product_id_copy
               dewormingFromPet.product.name = this.allDewormings.find(deworming => deworming.id == dewormingFromPet.product_id_copy).name
-              dewormingFromPet.dose = dewormingFromPet.dose_copy
-              dewormingFromPet.unity.id = dewormingFromPet.unity_id_copy
-              dewormingFromPet.unity.description = this.allUnities.find(unity => unity.id == dewormingFromPet.unity_id_copy).description
 
               dewormingFromPet.updating = false
               dewormingFromPet.showFormForEdit = false

@@ -54,7 +54,6 @@
                   <tr>
                     <th>Producto</th>
                     <th>Cantidad</th>
-                    <th>Unidad</th>
                     <th nowrap>Fecha de aplicación</th>
                     <th>Usuario</th>
                     <th>Folio</th>
@@ -71,9 +70,6 @@
                           <span v-else>
                             {{ product.quantity }}
                           </span>
-                        </td>
-                        <td nowrap>
-                          {{ product.unity ? product.unity.description : '' }}
                         </td>
                         <td nowrap>{{ formatDate(product.clinic_history.created_at) }}</td>
                         <td nowrap>{{ product.clinic_history.user.identification + ' - ' + product.clinic_history.user.names + ' ' + product.clinic_history.user.surnames }}</td>
@@ -224,7 +220,6 @@
                   id: product.id,
                   clinic_history: product.clinic_history,
                   quantity: product.quantity,
-                  unity: product.unity,
                   product: product.product,
                   edit: false
                 }
