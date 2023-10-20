@@ -38,7 +38,7 @@
               <h3 class="title">Vacunas <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
               <CreateVaccineModal v-if="petSelected" :pet_id="petSelected" @vaccineRegistered="loadingResults = true; getVaccinesFromPet()"/>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive" style="max-height: 200px;">
               <table class="table table-hover table-sm">
                 <thead>
                   <tr>
@@ -110,7 +110,7 @@
               <h3 class="title">Desparasitaciones <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
               <CreateDewormingModal v-if="petSelected" :pet_id="petSelected" @dewormingRegistered="loadingResults = true; getVaccinesFromPet()"/>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive" style="max-height: 200px;">
               <table class="table table-hover table-sm">
                 <thead>
                   <tr>
