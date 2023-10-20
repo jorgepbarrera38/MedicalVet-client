@@ -43,6 +43,7 @@
                 <thead>
                   <tr>
                     <th>Vacuna</th>
+                    <th nowrap>Fecha de registro</th>
                     <th nowrap>Fecha de aplicación</th>
                     <th nowrap>Fecha de siguiente vacuna</th>
                     <th>Usuario</th>
@@ -57,11 +58,14 @@
                           <span v-else>{{ vaccineFromPet.product.name }}</span>
                         </td>
                         <td nowrap>
-                          {{ formatDate(vaccineFromPet.clinic_history ? vaccineFromPet.clinic_history.created_at : vaccineFromPet.created_at) }}
+                          {{ formatDate(vaccineFromPet.registration_date) }}
+                        </td>
+                        <td nowrap>
+                          {{ formatDateWithoutZero(vaccineFromPet.application_date) }}
                         </td>
                         <td nowrap>
                           <input type="date" v-if="vaccineFromPet.showFormForEdit" v-model="vaccineFromPet.next_date_copy" class="form-control">
-                          <span v-else>{{ formatDate(vaccineFromPet.next_date) }}</span>
+                          <span v-else>{{ formatDateWithoutZero(vaccineFromPet.next_date) }}</span>
                         </td>
                         <td nowrap>{{ vaccineFromPet.clinic_history ? 
                                                             vaccineFromPet.clinic_history.user.identification + ' - ' + 
@@ -111,6 +115,7 @@
                 <thead>
                   <tr>
                     <th>Desparasitante</th>
+                    <th nowrap>Fecha de registro</th>
                     <th nowrap>Fecha de aplicación</th>
                     <th nowrap>Fecha de siguiente desparasitación</th>
                     <th>Usuario</th>
@@ -124,15 +129,13 @@
                           <v-select :options="allDewormings" v-if="dewormingFromPet.showFormForEdit" label="name" :reduce="deworming => deworming.id" v-model="dewormingFromPet.product_id_copy"></v-select>
                           <span v-else>{{ dewormingFromPet.product.name }}</span>
                         </td>
-                        <td nowrap>{{ formatDate(dewormingFromPet.clinic_history ? 
-                                                                    dewormingFromPet.clinic_history.created_at
-                                                                    :
-                                                                    dewormingFromPet.created_at
-                                                                    ) }}
+                        <td nowrap>{{ formatDate(dewormingFromPet.registration_date) }}
+                        </td>
+                        <td nowrap>{{ formatDateWithoutZero(dewormingFromPet.application_date) }}
                         </td>
                         <td nowrap>
                           <input type="date" v-if="dewormingFromPet.showFormForEdit" v-model="dewormingFromPet.next_date_copy" class="form-control">
-                          <span v-else>{{ formatDate(dewormingFromPet.next_date) }}</span>
+                          <span v-else>{{ formatDateWithoutZero(dewormingFromPet.next_date) }}</span>
                         </td>
                         <td nowrap>{{ dewormingFromPet.clinic_history ?
                                                                 dewormingFromPet.clinic_history.user.identification + ' - ' + 
@@ -290,6 +293,9 @@
           },
           formatDate (date) {
             return moment(date).format('LLL')
+          },
+          formatDateWithoutZero (date) {
+            return moment(date).format('LL')
           },
           sendVaccinesAndDewormingsForEmail () {
             if (this.$limitedVersion) {

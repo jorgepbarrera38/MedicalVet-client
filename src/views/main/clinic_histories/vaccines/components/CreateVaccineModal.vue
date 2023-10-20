@@ -8,7 +8,7 @@
             <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Registrar vacuna</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Registrar vacuna2</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -24,6 +24,12 @@
                             <div class="form-group">
                                 <label for="">Vacuna (*)</label>
                                 <v-select :options="vaccines" label="name" :reduce="vaccine => vaccine.id" v-model="vaccineSelected"></v-select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Fecha de aplicación (*)</label>
+                                <input type="date" class="form-control" v-model="vaccineApplicationDate">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -68,6 +74,7 @@ export default {
         return {
             vaccines: [],
             vaccineSelected: '',
+            vaccineApplicationDate: '',
             nextVaccineDate: '',
             quantityVaccinesCreated: null,
             errors: null,
@@ -98,6 +105,7 @@ export default {
             let data = {
                 pet_id: this.pet_id,
                 product_id: this.vaccineSelected,
+                application_date: this.vaccineApplicationDate,
                 next_date: this.nextVaccineDate
             }
 
@@ -117,6 +125,7 @@ export default {
         },
         clearFields () {
             this.vaccineSelected = ''
+            this.vaccineApplicationDate = ''
             this.nextVaccineDate = ''
             this.errors = null
         }

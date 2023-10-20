@@ -794,6 +794,12 @@
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
+                                <label for="">Fecha de aplicación (*)</label>
+                                <input type="date" class="form-control" v-model="vaccineApplicationDate">
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
                                 <label for="">Próxima vacuna (*)</label>
                                 <input type="date" class="form-control" v-model="nextVaccineDate">
                               </div>
@@ -816,13 +822,15 @@
                                   <thead>
                                     <tr>
                                       <th>Nombre</th>
-                                      <th nowrap>Proxima vacuna</th>
+                                      <th nowrap>Fecha de aplicación</th>
+                                      <th nowrap>Próxima vacuna</th>
                                       <th></th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     <tr v-for="(vaccine, index) in clinicHistory.vaccines" :key="'vacpet' + index">
                                       <td nowrap>{{ vaccine.name }}</td>
+                                      <td nowrap>{{ vaccine.application_date }}</td>
                                       <td nowrap>{{ vaccine.next_date }}</td>
                                       <td nowrap>
                                         <button class="btn btn-danger btn-sm" @click="deleteRegistry(clinicHistory.vaccines, index)">
@@ -855,6 +863,12 @@
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
+                                <label for="">Fecha de aplicación (*)</label>
+                                <input type="date" class="form-control" v-model="dewormingApplicationDate">
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
                                 <label for="">Próxima desparasitación (*)</label>
                                 <input type="date" class="form-control" v-model="nextDewormingDate">
                               </div>
@@ -877,6 +891,7 @@
                                   <thead>
                                     <tr>
                                       <th>Nombre</th>
+                                      <th nowrap>Fecha de aplicación</th>
                                       <th nowrap>Proxima desparasitación</th>
                                       <th></th>
                                     </tr>
@@ -884,6 +899,7 @@
                                   <tbody>
                                     <tr v-for="(deworming, index) in clinicHistory.dewormings" :key="'dewor' + index">
                                       <td nowrap>{{ deworming.name }}</td>
+                                      <td nowrap>{{ deworming.application_date }}</td>
                                       <td nowrap>{{ deworming.next_date }}</td>
                                       <td nowrap>
                                         <button class="btn btn-danger btn-sm" @click="deleteRegistry(clinicHistory.dewormings, index)">
@@ -1399,6 +1415,7 @@
                 diagnosisSelected: null,
                 diagnosisType: '',
                 vaccineSelected: null,
+                vaccineApplicationDate: null,
                 nextVaccineDate: null,
                 productSelected: null,
                 quantityProductApplied: null,
@@ -1407,6 +1424,7 @@
                 quantityServiceApplied: null,
                 observationsServiceApplied: '',
                 dewormingSelected: null,
+                dewormingApplicationDate: null,
                 nextDewormingDate: null,
                 diagnoses: [],
                 vaccines: [],
@@ -1555,11 +1573,13 @@
 
             this.clinicHistory.vaccines.forEach((vaccine, index) => {
               data.append(`vaccines[${index}][product_id]`, vaccine.product_id)
+              data.append(`vaccines[${index}][application_date]`, vaccine.application_date)
               data.append(`vaccines[${index}][next_date]`, vaccine.next_date)
             })
 
             this.clinicHistory.dewormings.forEach((deworming, index) => {
               data.append(`dewormings[${index}][product_id]`, deworming.product_id)
+              data.append(`dewormings[${index}][application_date]`, deworming.application_date)
               data.append(`dewormings[${index}][next_date]`, deworming.next_date)
             })
 
@@ -1693,7 +1713,7 @@
             this.diagnosisType = ''
           },
           addVaccineToClinicHistory () {
-            if (!this.vaccineSelected || !this.nextVaccineDate) {
+            if (!this.vaccineSelected || !this.vaccineApplicationDate || !this.nextVaccineDate) {
               return this.$toastr.error('Diligencie los datos de la vacuna')
             }
           
@@ -1706,10 +1726,12 @@
             let data = {
               product_id: this.vaccineSelected.id,
               name: this.vaccineSelected.name,
+              application_date: this.vaccineApplicationDate,
               next_date: this.nextVaccineDate
             }
             this.clinicHistory.vaccines.push(data)
             this.vaccineSelected = null
+            this.vaccineApplicationDate = null
             this.nextVaccineDate = null
           },
           addProductAppliedToClinicHistory () {
@@ -1754,7 +1776,7 @@
             this.observationsServiceApplied = null
           },
           addDewormingToClinicHistory () {
-            if (!this.dewormingSelected || !this.nextDewormingDate) {
+            if (!this.dewormingSelected || !this.dewormingApplicationDate || !this.nextDewormingDate) {
               return this.$toastr.error('Diligencie los datos de la desparasitación')
             }
 
@@ -1767,10 +1789,12 @@
             let data = {
               product_id: this.dewormingSelected.id,
               name: this.dewormingSelected.name,
+              application_date: this.dewormingApplicationDate,
               next_date: this.nextDewormingDate
             }
             this.clinicHistory.dewormings.push(data)
             this.dewormingSelected = null
+            this.dewormingApplicationDate = null
             this.nextDewormingDate = null
           },
           addRecordToClinicHistory () {
@@ -1881,6 +1905,7 @@
                 this.diagnosisSelected = null
                 this.diagnosisType = ''
                 this.vaccineSelected = null
+                this.vaccineApplicationDate = null
                 this.nextVaccineDate = null
                 this.productSelected = null
                 this.quantityProductApplied = null
@@ -1889,6 +1914,7 @@
                 this.quantityServiceApplied = null
                 this.observationsServiceApplied = ''
                 this.dewormingSelected = null
+                this.dewormingApplicationDate = null
                 this.nextDewormingDate = null
                 this.diagnoses = []
                 this.vaccines = []

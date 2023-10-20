@@ -28,6 +28,12 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label for="">Fecha de aplicación (*)</label>
+                                <input type="date" class="form-control" v-model="dewormingApplicationDate">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label for="">Próxima desparasitación (*)</label>
                                 <input type="date" class="form-control" v-model="nextDewormingDate">
                             </div>
@@ -68,6 +74,7 @@ export default {
         return {
             dewormings: [],
             dewormingSelected: '',
+            dewormingApplicationDate: '',
             nextDewormingDate: '',
             quantityDewormingsCreated: null,
             errors: null,
@@ -98,6 +105,7 @@ export default {
             let data = {
                 pet_id: this.pet_id,
                 product_id: this.dewormingSelected,
+                application_date: this.dewormingApplicationDate,
                 next_date: this.nextDewormingDate
             }
 
@@ -117,6 +125,7 @@ export default {
         },
         clearFields () {
             this.dewormingSelected = ''
+            this.dewormingApplicationDate = ''
             this.nextDewormingDate = ''
             this.errors = null
         }
