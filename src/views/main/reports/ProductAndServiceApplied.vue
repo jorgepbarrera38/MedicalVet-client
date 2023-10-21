@@ -35,20 +35,20 @@
                 </button>
               </div>
             </form>-->
-            <button :disabled="!ownerSelected || !petSelected || exportingProductsAndServicesInPdf" class="btn btn-primary" @click="exportProductsAndServicesInPdf">
+            <button :disabled="!ownerSelected || !petSelected || exportingProductsAndServicesInPdf" class="btn btn-primary mr-1 btn-sm" @click="exportProductsAndServicesInPdf">
               <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingProductsAndServicesInPdf" class="spinner-border spinner-border-sm"></span>
             </button>
+            <button class="btn btn-success btn-sm" @click="loadingResults = true; getProductsAndServicesFromPet()" :disabled="!petSelected || loadingResults">
+                    <i class="fa fa-fw fa-lg fa-refresh"></i>
+              </button>
             </div>
           </div>
       </div>
       <div class="row">
-        <vue-loading v-if="loadingResults" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
-      </div>
-      <div class="row" v-if="products.length || services.length">
         <div class="col-md-12">
           <div class="tile">
-            <h4 class="tile-title">Productos aplicados</h4>
-            <div class="table-responsive" v-if="!loadingResults" style="max-height: 200px;">
+            <h4 class="tile-title">Productos aplicados <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h4>
+            <div class="table-responsive" style="max-height: 200px;">
               <table class="table table-hover table-sm">
                 <thead>
                   <tr>
@@ -106,8 +106,8 @@
         </div>
         <div class="col-md-12">
           <div class="tile">
-            <h4 class="tile-title">Servicios aplicados</h4>
-            <div class="table-responsive" v-if="!loadingResults" style="max-height: 200px;">
+            <h4 class="tile-title">Servicios aplicados <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h4>
+            <div class="table-responsive" style="max-height: 200px;">
               <table class="table table-hover table-sm">
                 <thead>
                   <tr>
@@ -170,13 +170,12 @@
 <script>
     import hasPermission from '../_utilities/hasPermission'
     import SearchOwnersAndPets from './../_components/SearchOwnersAndPets'
-    import { VueLoading } from 'vue-loading-template'
     import moment from 'moment'
     moment.locale('es')
     export default {
         mixins: [ hasPermission ],
         components: {
-          VueLoading, SearchOwnersAndPets
+          SearchOwnersAndPets
         },
         data() {
             return {
@@ -284,7 +283,6 @@
           },
           petOwnerSelected(payload) {
             this.petSelected = payload
-            console.log(this.petSelected);
             this.loadingResults = true
             this.products = []
             this.services = []
