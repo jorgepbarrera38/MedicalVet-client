@@ -36,7 +36,7 @@
               <button :disabled="!petSelected || exportingProductsAndServicesInPdf || loadingResults" class="btn btn-primary mr-1 btn-sm" @click="exportProductsAndServicesInPdf">
                 <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingProductsAndServicesInPdf" class="spinner-border spinner-border-sm ml-1"></span>
               </button>
-              <button class="btn btn-success btn-sm" @click="loadingResults = true; getProductsAndServicesFromPet()" :disabled="!petSelected || loadingResults">
+              <button class="btn btn-primary btn-sm" @click="loadingResults = true; getProductsAndServicesFromPet()" :disabled="!petSelected || loadingResults">
                     <i class="fa fa-fw fa-lg fa-refresh"></i>
               </button>
             </div>
@@ -45,7 +45,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="tile">
-            <h4 class="tile-title">Productos aplicados <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h4>
+            <h5 class="tile-title">Productos aplicados <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h5>
             <div class="table-responsive" style="max-height: 200px;">
               <table class="table table-hover table-sm">
                 <thead>
