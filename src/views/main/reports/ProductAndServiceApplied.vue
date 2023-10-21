@@ -48,7 +48,7 @@
         <div class="col-md-12">
           <div class="tile">
             <h4 class="tile-title">Productos aplicados</h4>
-            <div class="table-responsive" v-if="!loadingResults">
+            <div class="table-responsive" v-if="!loadingResults" style="max-height: 200px;">
               <table class="table table-hover table-sm">
                 <thead>
                   <tr>
@@ -107,7 +107,7 @@
         <div class="col-md-12">
           <div class="tile">
             <h4 class="tile-title">Servicios aplicados</h4>
-            <div class="table-responsive" v-if="!loadingResults">
+            <div class="table-responsive" v-if="!loadingResults" style="max-height: 200px;">
               <table class="table table-hover table-sm">
                 <thead>
                   <tr>
