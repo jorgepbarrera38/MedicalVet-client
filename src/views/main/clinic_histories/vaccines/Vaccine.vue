@@ -295,8 +295,11 @@
               this.dewormingsFromPet.splice(index, 1)
               this.getVaccinesFromPet()
               this.$toastr.success('Desparasitante eliminado con éxito')
-            }).catch( () => {
+            }).catch( (error) => {
               deworming.deleting = false
+              if (error.response.status == 422) {
+                this.$toastr.error(error.response.data[0])
+              }
             })
           },
           formatDate (date) {
