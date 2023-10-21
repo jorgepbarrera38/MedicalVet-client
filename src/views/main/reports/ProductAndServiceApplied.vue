@@ -9,10 +9,8 @@
           <div class="col-md-12">
             <div class="tile">
               <h3 class="tile-title">Productos y servicios aplicados</h3>
-              <SearchOwnersAndPets 
-                  @owner-selected="setOwnerSelected"
-                  @pet-selected="petOwnerSelected"
-                  @searching="setStateFromLoading">
+              <SearchOwnersAndPets
+                  @owner-and-pet-selected="petAndOwnerSelected">
               </SearchOwnersAndPets>
               <!--<form @submit.prevent="loadingResults=true; products = [], services = [];getProductsAndServicesFromPet()">
                 <div class="row">
@@ -35,10 +33,10 @@
                 </button>
               </div>
             </form>-->
-            <button :disabled="!ownerSelected || !petSelected || exportingProductsAndServicesInPdf" class="btn btn-primary mr-1 btn-sm" @click="exportProductsAndServicesInPdf">
-              <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingProductsAndServicesInPdf" class="spinner-border spinner-border-sm"></span>
-            </button>
-            <button class="btn btn-success btn-sm" @click="loadingResults = true; getProductsAndServicesFromPet()" :disabled="!petSelected || loadingResults">
+              <button :disabled="!petSelected || exportingProductsAndServicesInPdf || loadingResults" class="btn btn-primary mr-1 btn-sm" @click="exportProductsAndServicesInPdf">
+                <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingProductsAndServicesInPdf" class="spinner-border spinner-border-sm ml-1"></span>
+              </button>
+              <button class="btn btn-success btn-sm" @click="loadingResults = true; getProductsAndServicesFromPet()" :disabled="!petSelected || loadingResults">
                     <i class="fa fa-fw fa-lg fa-refresh"></i>
               </button>
             </div>
@@ -182,7 +180,6 @@
                 owners: [],
                 dateSince: '',
                 dateUntil: '',
-                ownerSelected: '',
                 petSelected: '',
                 petsFromOwner: '',
                 lookingPet: false,
@@ -193,23 +190,8 @@
             }
         },
         methods: {
-          getPetsFromOwner (owner) {
-            this.products = []
-            this.services = []
-            this.lookingPet = true
-            this.$http.get(`clinic-histories/${ owner }/get-pet-from-owner`).then( response => {
-              this.lookingPet = false
-              if (response.data.length == 0) {
-                this.$toastr.info('El propietario no tiene mascotas relacionadas')
-              }
-              this.petsFromOwner = response.data
-            }).catch( err => {
-              this.lookingPet = false
-            })
-          },
           getProductsAndServicesFromPet () {
-            //this.productsAndServicesFromPet = []
-            this.$http.get(`reports/products-and-services-applied/${ this.petSelected }`/*, { params: { dateSince: this.dateSince, dateUntil: this.dateUntil } }*/).then(response => {
+            this.$http.get(`reports/products-and-services-applied/${ this.petSelected }`).then(response => {
               this.loadingResults = false
               if (!response.data.products.length && !response.data.services.length) {
                 this.$toastr.info('No existen registros de productos ni servicios aplicados')
@@ -278,15 +260,16 @@
             return localStorage.getItem('name_user') == user
           },
           setOwnerSelected (payload) {
-            this.ownerSelected = payload
-            console.log(this.ownerSelected);
+            //this.ownerSelected = payload
           },
-          petOwnerSelected(payload) {
-            this.petSelected = payload
-            this.loadingResults = true
+          petAndOwnerSelected(petId) {
+            this.petSelected = petId
             this.products = []
             this.services = []
-            this.getProductsAndServicesFromPet()
+            if (this.petSelected) {
+              this.loadingResults = true
+              this.getProductsAndServicesFromPet()
+            }
           },
           setStateFromLoading (payload) {
             this.products = []

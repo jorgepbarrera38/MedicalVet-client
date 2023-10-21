@@ -12,20 +12,22 @@
               <SearchOwnersAndPets 
                   @owner-selected="setOwnerSelected"
                   @pet-selected="petOwnerSelected"
-                  @searching="setStateFromLoading"
-                  :loadingResults="loadingResults">
+                  @searching="setStateFromLoading">
                 </SearchOwnersAndPets>
               <div>
                 <!--<button :disabled="!ownerSelected || !petSelected || loadingResults" class="btn btn-primary mr-1" @click="loadingResults = true; getVaccinesFromPet()">
                   <i class="fa fa-fw fa-lg fa-search"></i>Consultar <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>-->
-                <button :disabled="!ownerSelected || !petSelected || exportingVaccinesInPdf" class="btn btn-primary mr-1" @click="exportVaccinesInPdf">
+                <button :disabled="!ownerSelected || !petSelected || exportingVaccinesInPdf || loadingResults" class="btn btn-primary btn-sm mr-1" @click="exportVaccinesInPdf">
                   <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingVaccinesInPdf" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>
-                <button :disabled="!ownerSelected || !petSelected || (!vaccinesFromPet.length && !dewormingsFromPet.length) || sendingVaccinesAndDewormingsForEmail" 
-                                    class="btn btn-info" @click="sendVaccinesAndDewormingsForEmail">
+                <button :disabled="!ownerSelected || !petSelected || (!vaccinesFromPet.length && !dewormingsFromPet.length) || loadingResults || sendingVaccinesAndDewormingsForEmail" 
+                                    class="btn btn-info btn-sm mr-1" @click="sendVaccinesAndDewormingsForEmail">
                   <i class="fa fa-fw fa-lg fa-envelope"></i>Enviar por email <span v-if="sendingVaccinesAndDewormingsForEmail" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>
+                <button class="btn btn-success btn-sm" @click="loadingResults = true; getVaccinesFromPet()" :disabled="!petSelected || loadingResults">
+                    <i class="fa fa-fw fa-lg fa-refresh"></i>
+              </button>
               </div>              
             </div>
           </div>

@@ -4,7 +4,7 @@
         <label for="">Identificación propietario</label>
         <div class="input-group mb-3 form-group">
           <input type="text" class="form-control" 
-            v-model="ownerSelected.identification" 
+            v-model="ownerIdentificationSearch" 
             @keyup.enter="getOwner"
             :disabled="disableFields">
           <div class="input-group-append">
@@ -119,7 +119,7 @@
     <div :class="sizeFromColumnField ? 'col-md-' + sizeFromColumnField : 'col-md-4'">
       <div class="form-group">
         <label for="">Mascota</label>
-        <select class="form-control" v-model="petSelected" :disabled="disableFields || loadingResults">
+        <select class="form-control" v-model="petSelectedId" :disabled="disableFields || loadingResults">
           <option value="">Seleccione mascota</option>
           <option :value="petFromOwner.id" v-for="petFromOwner in petsFromOwner" :key="'pet-' + petFromOwner.id">{{ petFromOwner.name }}</option>
         </select>
@@ -156,7 +156,8 @@ import LoginVue from '../../login/Login.vue'
         data() {
             return {
                 owners: {},
-                petSelected: '',
+                petSelectedId: '',
+                ownerIdentificationSearch: '',
                 ownerSelected: {
                   id: '',
                   identification: '',
@@ -174,26 +175,24 @@ import LoginVue from '../../login/Login.vue'
         methods: {
             getOwner () {
                 this.searchingOwnerByIdentification = true
-                this.petSelected = ''
+                this.petSelectedId = ''
                 this.petsFromOwner = []
-                this.ownerSelected.id = ''
-                this.ownerSelected.names = ''
-                this.ownerSelected.surnames = ''
-                this.ownerSelected.pets_count = ''
+                this.ownerSelected = {
+                  id: '',
+                  identification: '',
+                  names: '',
+                  surnames: '',
+                  pets_count: ''
+                }
                 
-                if (!this.ownerSelected.identification) {
+                if (!this.ownerIdentificationSearch) {
                   this.$toastr.error('Digite el documento del propietario')
                   return this.searchingOwnerByIdentification = false
                 }
                 
-                this.$emit('searching', true)
-                
-                this.$http.get(`clinic-histories/get-owner?identification=${ this.ownerSelected.identification }`).then( response => {
+                this.$http.get(`clinic-histories/get-owner?identification=${ this.ownerIdentificationSearch }`).then( response => {
                     this.ownerSelected = response.data
                     this.petsFromOwner = response.data.pets
-                    
-                    this.$emit('owner-selected', true)
-                    this.$emit('searching', false)
 
                     if(!this.ownerSelected.pets_count) {
                         this.$toastr.info('El propietario no tiene mascotas relacionadas')
@@ -203,8 +202,6 @@ import LoginVue from '../../login/Login.vue'
 
                 }).catch(error => {
                     this.searchingOwnerByIdentification = false
-                    this.$emit('owner-selected', false)
-                    this.$emit('searching', false)
                     if (error.response.status == 404) {
                         this.$toastr.error('No existe propietario con ese número de identificación')
                     }
@@ -224,34 +221,31 @@ import LoginVue from '../../login/Login.vue'
               })
             },
             selectOwner (owner) {
-                this.$emit('searching', true)
-                this.petSelected = ''
+                this.petSelectedId = ''
                 this.petsFromOwner = []
                 $('#exampleModal').modal('hide')
                 this.ownerSelected = owner
-                this.$emit('owner-selected', true)
                 this.getPetsFromOwner()
             },
             selectOwnerAndPet (owner, pet) {
-                this.petsFromOwner = []
-                this.ownerSelected = owner
-                this.getPetsFromOwner()
-                this.$emit('searching', true)
-                this.petSelected = pet.id
-                
-                this.$emit('owner-selected', true)
+                if (this.petSelectedId != pet.id) {
+                  this.petsFromOwner = []
+                  this.ownerIdentificationSearch = owner.identification
+                  this.ownerSelected = owner
+                  this.getPetsFromOwner()
+                  this.petSelectedId = pet.id
+                }
+
                 $('#exampleModal').modal('hide')
                 
             },
             getPetsFromOwner () {
                 this.$http.get(`clinic-histories/${ this.ownerSelected.id }/get-pet-from-owner`).then( response => {
-                    this.$emit('searching', false)
                     this.petsFromOwner = response.data
                 if (response.data.length == 0) {
                     this.$toastr.info('El propietario no tiene mascotas relacionadas')
                 }
                 }).catch( err => {
-                    this.$emit('searching', false)
                 })
             },
             ownerRegistered () {
@@ -260,12 +254,12 @@ import LoginVue from '../../login/Login.vue'
             }
         },
         watch: {          
-            petSelected(newValue, oldValue) {
-                this.$emit('pet-selected', newValue)
+            petSelectedId(petId, oldValue) {
+              this.$emit('owner-and-pet-selected', petId)
             },
-            clearData (newValue) {
+            /*clearData (newValue) {
               if (newValue) {
-                this.petSelected = '',
+                this.petSelectedId = '',
                 this.ownerSelected = {
                   id: '',
                   identification: '',
@@ -275,7 +269,7 @@ import LoginVue from '../../login/Login.vue'
                 }
                 this.petsFromOwner = []
               }
-            }
+            }*/
         },
     }
 </script>
