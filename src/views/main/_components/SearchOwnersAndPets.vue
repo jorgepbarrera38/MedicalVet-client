@@ -223,8 +223,9 @@ import LoginVue from '../../login/Login.vue'
             selectOwner (owner) {
                 this.petSelectedId = ''
                 this.petsFromOwner = []
-                $('#exampleModal').modal('hide')
+                this.ownerIdentificationSearch = owner.identification
                 this.ownerSelected = owner
+                $('#exampleModal').modal('hide')
                 this.getPetsFromOwner()
             },
             selectOwnerAndPet (owner, pet) {
