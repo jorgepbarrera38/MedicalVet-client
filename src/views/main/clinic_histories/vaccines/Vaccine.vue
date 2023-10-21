@@ -282,8 +282,11 @@
               this.vaccinesFromPet.splice(index, 1)
               this.getVaccinesFromPet()
               this.$toastr.success('Vacuna eliminada con éxito')
-            }).catch( () => {
+            }).catch( (error) => {
               vaccine.deleting = false
+              if (error.response.status == 422) {
+                this.$toastr.error(error.response.data[0])
+              }
             })
           },
           deleteDeworming (deworming, index) {
