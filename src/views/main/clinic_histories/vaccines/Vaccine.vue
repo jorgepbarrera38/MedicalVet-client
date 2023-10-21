@@ -54,14 +54,15 @@
                 <tbody>
                     <tr v-for="(vaccineFromPet, index) in vaccinesFromPet" :key="vaccineFromPet.id">
                         <td nowrap>
-                          <v-select :options="allVaccines" v-if="vaccineFromPet.showFormForEdit" label="name" :reduce="vaccine => vaccine.id" v-model="vaccineFromPet.product_id_copy"></v-select>
-                          <span v-else>{{ vaccineFromPet.product.name }}</span>
+                          <!--<v-select :options="allVaccines" v-if="vaccineFromPet.showFormForEdit" label="name" :reduce="vaccine => vaccine.id" v-model="vaccineFromPet.product_id_copy"></v-select>-->
+                          <span>{{ vaccineFromPet.product.name }}</span>
                         </td>
                         <td nowrap>
                           {{ formatDate(vaccineFromPet.registration_date) }}
                         </td>
                         <td nowrap>
-                          {{ formatDateWithoutZero(vaccineFromPet.application_date) }}
+                          <input type="date" v-if="vaccineFromPet.showFormForEdit" v-model="vaccineFromPet.application_date_copy" class="form-control">
+                          <span v-else>{{ formatDateWithoutZero(vaccineFromPet.application_date) }}</span>
                         </td>
                         <td nowrap>
                           <input type="date" v-if="vaccineFromPet.showFormForEdit" v-model="vaccineFromPet.next_date_copy" class="form-control">
@@ -126,12 +127,14 @@
                 <tbody>
                     <tr v-for="(dewormingFromPet, index) in dewormingsFromPet" :key="dewormingFromPet.id">
                         <td nowrap>
-                          <v-select :options="allDewormings" v-if="dewormingFromPet.showFormForEdit" label="name" :reduce="deworming => deworming.id" v-model="dewormingFromPet.product_id_copy"></v-select>
-                          <span v-else>{{ dewormingFromPet.product.name }}</span>
+                          <!--<v-select :options="allDewormings" v-if="dewormingFromPet.showFormForEdit" label="name" :reduce="deworming => deworming.id" v-model="dewormingFromPet.product_id_copy"></v-select>-->
+                          <span>{{ dewormingFromPet.product.name }}</span>
                         </td>
                         <td nowrap>{{ formatDate(dewormingFromPet.registration_date) }}
                         </td>
-                        <td nowrap>{{ formatDateWithoutZero(dewormingFromPet.application_date) }}
+                        <td nowrap>
+                          <input type="date" v-if="dewormingFromPet.showFormForEdit" v-model="dewormingFromPet.application_date_copy" class="form-control">
+                          <span v-else>{{ formatDateWithoutZero(dewormingFromPet.application_date) }}</span>
                         </td>
                         <td nowrap>
                           <input type="date" v-if="dewormingFromPet.showFormForEdit" v-model="dewormingFromPet.next_date_copy" class="form-control">
@@ -218,9 +221,10 @@
                   this.$set(vaccine, 'showFormForEdit', false)
                   this.$set(vaccine, 'updating', false)
 
+                  this.$set(vaccine, 'application_date_copy', vaccine.application_date)
                   this.$set(vaccine, 'next_date_copy', vaccine.next_date)
-                  this.$set(vaccine, 'product_id_copy', vaccine.product.id)
-                  this.$set(vaccine, 'product_name_copy', vaccine.product.name)
+                  /*this.$set(vaccine, 'product_id_copy', vaccine.product.id)
+                  this.$set(vaccine, 'product_name_copy', vaccine.product.name)*/
                   
               })
               this.dewormingsFromPet = response.data.dewormings
@@ -229,9 +233,10 @@
                   this.$set(deworming, 'showFormForEdit', false)
                   this.$set(deworming, 'updating', false)
 
+                  this.$set(deworming, 'application_date_copy', deworming.application_date)
                   this.$set(deworming, 'next_date_copy', deworming.next_date)
-                  this.$set(deworming, 'product_id_copy', deworming.product.id)
-                  this.$set(deworming, 'product_name_copy', deworming.product.name)
+                  /*this.$set(deworming, 'product_id_copy', deworming.product.id)
+                  this.$set(deworming, 'product_name_copy', deworming.product.name)*/
               })
 
               this.allVaccines = response.data.allVaccines
@@ -317,21 +322,24 @@
           },
           cancelEditingVaccine (vaccineFromPet) {
             vaccineFromPet.showFormForEdit = false
+            vaccineFromPet.application_date_copy = vaccineFromPet.application_date
             vaccineFromPet.next_date_copy = vaccineFromPet.next_date
-            vaccineFromPet.product_id_copy = vaccineFromPet.product.id
-            vaccineFromPet.product_name_copy = vaccineFromPet.product.name
+            //vaccineFromPet.product_id_copy = vaccineFromPet.product.id
+            //vaccineFromPet.product_name_copy = vaccineFromPet.product.name
           },
           updateVaccine (vaccineFromPet) {
             vaccineFromPet.updating = true
             let data = {
-              product_id: vaccineFromPet.product_id_copy,
+              //product_id: vaccineFromPet.product_id_copy,
+              application_date: vaccineFromPet.application_date_copy,
               next_date: vaccineFromPet.next_date_copy,
             }
 
             this.$http.put(`vaccines/${ vaccineFromPet.id }`, data).then( response => {
+              vaccineFromPet.application_date = vaccineFromPet.application_date_copy
               vaccineFromPet.next_date = vaccineFromPet.next_date_copy
-              vaccineFromPet.product.id = vaccineFromPet.product_id_copy
-              vaccineFromPet.product.name = this.allVaccines.find(vaccine => vaccine.id == vaccineFromPet.product_id_copy).name
+              //vaccineFromPet.product.id = vaccineFromPet.product_id_copy
+              //vaccineFromPet.product.name = this.allVaccines.find(vaccine => vaccine.id == vaccineFromPet.product_id_copy).name
               vaccineFromPet.updating = false
               vaccineFromPet.showFormForEdit = false
               this.$toastr.success('Vacunación actualizada')
@@ -341,21 +349,24 @@
           },
           cancelEditingDeworming (dewormingFromPet) {
             dewormingFromPet.showFormForEdit = false
+            dewormingFromPet.application_date_copy = dewormingFromPet.application_date
             dewormingFromPet.next_date_copy = dewormingFromPet.next_date
-            dewormingFromPet.product_id_copy = dewormingFromPet.product.id
-            dewormingFromPet.product_name_copy = dewormingFromPet.product.name
+            //dewormingFromPet.product_id_copy = dewormingFromPet.product.id
+            //dewormingFromPet.product_name_copy = dewormingFromPet.product.name
           },
           updateDeworming (dewormingFromPet) {
             dewormingFromPet.updating = true
             let data = {
-              product_id: dewormingFromPet.product_id_copy,
+              //product_id: dewormingFromPet.product_id_copy,
+              application_date: dewormingFromPet.application_date_copy,
               next_date: dewormingFromPet.next_date_copy,
             }
 
             this.$http.put(`dewormings/${ dewormingFromPet.id }`, data).then( response => {
+              dewormingFromPet.application_date = dewormingFromPet.application_date_copy
               dewormingFromPet.next_date = dewormingFromPet.next_date_copy
-              dewormingFromPet.product.id = dewormingFromPet.product_id_copy
-              dewormingFromPet.product.name = this.allDewormings.find(deworming => deworming.id == dewormingFromPet.product_id_copy).name
+              //dewormingFromPet.product.id = dewormingFromPet.product_id_copy
+              //dewormingFromPet.product.name = this.allDewormings.find(deworming => deworming.id == dewormingFromPet.product_id_copy).name
 
               dewormingFromPet.updating = false
               dewormingFromPet.showFormForEdit = false
