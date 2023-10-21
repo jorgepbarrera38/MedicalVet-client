@@ -14,7 +14,7 @@
                   @pet-selected="petOwnerSelected"
                   @searching="setStateFromLoading">
               </SearchOwnersAndPets>
-              <form @submit.prevent="loadingResults=true; products = [], services = [];getProductsAndServicesFromPet()">
+              <!--<form @submit.prevent="loadingResults=true; products = [], services = [];getProductsAndServicesFromPet()">
                 <div class="row">
                   <div class="col-md-3">
                     <div class="form-group">
@@ -33,11 +33,11 @@
                 <button :disabled="!ownerSelected || !petSelected || loadingResults" class="btn btn-primary mr-1" type="submit">
                   <i class="fa fa-fw fa-lg fa-search"></i>Consultar
                 </button>
-                <button :disabled="!ownerSelected || !petSelected || exportingProductsAndServicesInPdf" class="btn btn-primary" @click="exportProductsAndServicesInPdf">
-                  <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingProductsAndServicesInPdf" class="spinner-border spinner-border-sm"></span>
-                </button>
               </div>
-              </form>
+            </form>-->
+            <button :disabled="!ownerSelected || !petSelected || exportingProductsAndServicesInPdf" class="btn btn-primary" @click="exportProductsAndServicesInPdf">
+              <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingProductsAndServicesInPdf" class="spinner-border spinner-border-sm"></span>
+            </button>
             </div>
           </div>
       </div>
@@ -209,8 +209,8 @@
             })
           },
           getProductsAndServicesFromPet () {
-            this.productsAndServicesFromPet = []
-            this.$http.get(`reports/products-and-services-applied/${ this.petSelected }`, { params: { dateSince: this.dateSince, dateUntil: this.dateUntil } }).then(response => {
+            //this.productsAndServicesFromPet = []
+            this.$http.get(`reports/products-and-services-applied/${ this.petSelected }`/*, { params: { dateSince: this.dateSince, dateUntil: this.dateUntil } }*/).then(response => {
               this.loadingResults = false
               if (!response.data.products.length && !response.data.services.length) {
                 this.$toastr.info('No existen registros de productos ni servicios aplicados')
@@ -280,9 +280,15 @@
           },
           setOwnerSelected (payload) {
             this.ownerSelected = payload
+            console.log(this.ownerSelected);
           },
           petOwnerSelected(payload) {
             this.petSelected = payload
+            console.log(this.petSelected);
+            this.loadingResults = true
+            this.products = []
+            this.services = []
+            this.getProductsAndServicesFromPet()
           },
           setStateFromLoading (payload) {
             this.products = []
