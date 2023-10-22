@@ -10,9 +10,7 @@
             <div class="tile">
               <h3 class="tile-title">Asignación de citas</h3>
               <SearchOwnersAndPets 
-                  @owner-selected="setOwnerSelected"
-                  @pet-selected="petOwnerSelected"
-                  @searching="setStateFromLoading">
+                  @owner-and-pet-selected="petAndOwnerSelected">
                 </SearchOwnersAndPets>
               <!--<div>
                 <button class="btn btn-primary" @click="scheduleAppointment" :disabled="!appointment.pet_id">
@@ -312,7 +310,6 @@
         },
         data() {
             return {
-                ownerSelected: false,
                 loadingResults: false,
                 date: new Date(),
                 appointment: {
@@ -453,11 +450,8 @@
             this.appointmentSelectedToDelete.id = appointment
             $('#cancelAppointmentModal').modal('show')
           },
-          setOwnerSelected (payload) {
-            this.ownerSelected = payload
-          },
-          petOwnerSelected(payload) {
-            this.appointment.pet_id = payload
+          petAndOwnerSelected(petId) {
+            this.appointment.pet_id = petId
             this.getAppointmentsFromPet()
           },
           getAppointmentsFromPet () {
