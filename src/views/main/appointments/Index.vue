@@ -174,7 +174,7 @@
                           </div>
                         </div>
                         <vue-loading v-if="searchingAppointments" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
-                        <div class="table-responsive" v-else>
+                        <div class="table-responsive" v-else style="max-height: 350px;">
                           <table class="table table-sm table-hover">
                             <thead>
                               <th>Propietario</th>
