@@ -9,7 +9,7 @@
         <div class="col-md-12">
           <div class="tile">
             <div class="tile-title-w-btn">
-              <h3 class="title">Parámetros</h3>
+              <h3 class="tile-title">Parámetros</h3>
             </div>
             <div class="alert alert-danger" v-if="errors">
                 <li v-for="(error, index) in errors" :key="index">
@@ -35,7 +35,7 @@
                 </div>
                 <vue-loading v-if="loading" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>
                 <div v-else>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary btn-sm">
                         <i  class="fa fa-fw fa-lg fa fa-save"></i>Guardar
                     </button>
                 </div>

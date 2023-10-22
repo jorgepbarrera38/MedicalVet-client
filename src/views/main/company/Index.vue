@@ -9,9 +9,9 @@
             <div class="col-md-12">
                 <div class="tile">
                     <div class="tile-title-w-btn">
-                        <h3 class="title">Datos de la empresa</h3>
+                        <h3 class="tile-title">Datos de la empresa</h3>
                         <div @click="saveOrUpdateCompany">
-                            <button type="submit" class="btn btn-primary" :disabled="loading">
+                            <button type="submit" class="btn btn-primary btn-sm" :disabled="loading">
                                 <i  class="fa fa-fw fa-lg fa fa-save"></i>Guardar
                                 <span v-if="loading" class="spinner-border spinner-border-sm"></span>
                             </button>
@@ -70,7 +70,7 @@
             <div class="col-md-12">
                 <div class="tile">
                     <div class="tile-title-w-btn">
-                        <h3 class="title">Mensajería</h3>
+                        <h3 class="tile-title">Mensajería</h3>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -119,7 +119,7 @@
             <div class="col-md-12">
                 <div class="tile">
                     <div class="tile-title-w-btn">
-                        <h3 class="title">Copia de seguridad</h3>
+                        <h3 class="tile-title">Copia de seguridad</h3>
                     </div>
                     <button type="submit" class="btn btn-primary" @click="downloadBackupFiles" :disabled="downloadingBackupFiles">
                         <i class="fa fa-fw fa-lg fa fa-download"></i>Copia de seguridad de archivos

@@ -38,7 +38,7 @@
                 </select>
               </div>
               <div>
-                <button :disabled="!ownerSelected || !petSelected || !informedConsentTemplateSelected || loadingResults" class="btn btn-primary mb-1" @click="getInformedConsentPdf">
+                <button :disabled="!ownerSelected || !petSelected || !informedConsentTemplateSelected || loadingResults" class="btn btn-primary btn-sm mb-1" @click="getInformedConsentPdf">
                   <i class="fa fa-fw fa-lg fa-search"></i>Generar
                 </button>
               </div>

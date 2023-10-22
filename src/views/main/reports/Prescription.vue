@@ -28,13 +28,13 @@
                     </div>
                   </div>
                 </div>
-                <button :disabled="!ownerSelected || !petSelected || !prescriptionSelected || loadingResults" class="btn btn-primary mr-1" @click="getPrescriptionFromPet">
+                <button :disabled="!ownerSelected || !petSelected || !prescriptionSelected || loadingResults" class="btn btn-primary btn-sm mr-1" @click="getPrescriptionFromPet">
                   <i class="fa fa-fw fa-lg fa-search"></i>Consultar
                 </button>
-                <button :disabled="!ownerSelected || !petSelected || !prescriptionSelected || exportingPrescriptionInPdf" class="btn btn-primary mr-1" @click="exportPrescriptionInPdf">
+                <button :disabled="!ownerSelected || !petSelected || !prescriptionSelected || exportingPrescriptionInPdf" class="btn btn-primary btn-sm mr-1" @click="exportPrescriptionInPdf">
                   <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingPrescriptionInPdf" class="spinner-border spinner-border-sm"></span>
                 </button>
-                <button :disabled="!ownerSelected || !petSelected || !prescriptionSelected || sendingPrescriptionForEmail" class="btn btn-info" @click="sendPrescriptionFromPetForEmail">
+                <button :disabled="!ownerSelected || !petSelected || !prescriptionSelected || sendingPrescriptionForEmail" class="btn btn-primary btn-sm" @click="sendPrescriptionFromPetForEmail">
                   <i class="fa fa-fw fa-lg fa-envelope"></i>Enviar por email <span v-if="sendingPrescriptionForEmail" class="spinner-border spinner-border-sm"></span>
                 </button>
               </div>              

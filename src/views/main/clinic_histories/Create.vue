@@ -50,11 +50,10 @@
                   </div>
               </div>
               <div>
-                <button :disabled="!buttonThatOpenFolio || !ownerSelected || !clinicHistory.pet_id || !consultation_purposesSelected.id || folioOpen" class="btn btn-primary" @click="openFolio">
+                <button :disabled="!buttonThatOpenFolio || !ownerSelected || !clinicHistory.pet_id || !consultation_purposesSelected.id || folioOpen" class="btn btn-primary btn-sm mr-1" @click="openFolio">
                   <i  class="fa fa-fw fa-lg fa fa-folder-open"></i>Abrir folio
                 </button>
-                &nbsp;&nbsp;&nbsp;
-                <button :disabled="!ownerSelected || !clinicHistory.pet_id || !consultation_purposesSelected.id || !folioOpen" class="btn btn-danger" @click="undoFolio">
+                <button :disabled="!ownerSelected || !clinicHistory.pet_id || !consultation_purposesSelected.id || !folioOpen" class="btn btn-danger btn-sm" @click="undoFolio">
                   <i  class="fa fa-fw fa-lg fa fa-undo"></i>Deshacer
                 </button>
                 <!--<router-link :to="{ name: 'races.index' }" class="btn btn-danger">Cancelar</router-link>-->

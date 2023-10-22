@@ -52,7 +52,7 @@
               <div>
                 <button :disabled="loadingResults || !from || !until || (!pending && !fulfilled && !unFulfilled && !cancelled) " 
                   @click="getAppointments"  
-                  class="btn btn-primary">
+                  class="btn btn-primary btn-sm">
                   <i class="fa fa-fw fa-lg fa-search"></i>Consultar
                 </button>
               </div>
@@ -61,7 +61,7 @@
             <div class="col-md-8">
                 <div class="tile" style="max-height:100%">
                     <div class="tile-title-w-btn">
-                        <h3 class="title">Resultados</h3>
+                        <h3 class="tile-title">Resultados</h3>
                         <button :disabled="!hasPermission('appointments.report-appointments-export') || downloadingReport || !appointments.length || !from || !until || (!pending && !fulfilled && !unFulfilled && !cancelled) "
                             @click="exportAppointments"
                             class="btn btn-success btn-sm">

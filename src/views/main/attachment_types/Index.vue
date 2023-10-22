@@ -9,7 +9,7 @@
         <div class="col-md-12">
           <div class="tile">
             <div class="tile-title-w-btn">
-              <h3 class="title">Listado de tipos de archivos adjuntos</h3>
+              <h3 class="tile-title">Listado de tipos de archivos adjuntos</h3>
               <button :disabled="!hasPermission('attachment-types.store')"
                 @click="$router.push({ name: 'attachment_types.create' })"
                 class="btn btn-success btn-sm">

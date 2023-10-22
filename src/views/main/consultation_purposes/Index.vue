@@ -9,7 +9,7 @@
         <div class="col-md-12">
           <div class="tile">
             <div class="tile-title-w-btn">
-              <h3 class="title">Listado de finalidades de consulta</h3>
+              <h3 class="tile-title">Listado de finalidades de consulta</h3>
               <button :disabled="!hasPermission('consultation-purposes.store')"
                 @click="$router.push({ name: 'consultation_purposes.create' })"
                 class="btn btn-success btn-sm">

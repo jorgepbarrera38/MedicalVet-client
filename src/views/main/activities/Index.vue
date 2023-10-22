@@ -9,7 +9,7 @@
         <div class="col-md-12">
           <div class="tile">
             <div class="tile-title-w-btn">
-              <h3 class="title">Listado de actividades</h3>
+              <h3 class="tile-title">Listado de actividades</h3>
               <!--:disabled="!hasPermission('activities.store')"-->
               <button :disabled="!hasPermission('activities.store')"
                 @click="$router.push({ name: 'activities.create' })"

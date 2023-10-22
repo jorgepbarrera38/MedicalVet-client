@@ -140,8 +140,8 @@
                       <div class="modal-footer">
                         <vue-loading v-if="savingAppointment" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
                         <div v-else>
-                          <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal">Cerrar</button>
-                          <button type="button" class="btn btn-primary" @click="saveAppointment">Guardar</button>
+                          <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">Cerrar</button>
+                          <button type="button" class="btn btn-primary btn-sm" @click="saveAppointment">Guardar</button>
                         </div>
                       </div>
                     </div>
@@ -266,10 +266,10 @@
                               <div class="modal-footer">
                                 <vue-loading v-if="cancelingAppointment" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
                                 <div v-else>
-                                  <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal">
+                                  <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">
                                     <i class="fa fa-fw fa-lg fa fa-times-circle"></i>Cancelar
                                   </button>
-                                  <button type="button" class="btn btn-primary" @click="cancelAppointment">
+                                  <button type="button" class="btn btn-primary btn-sm" @click="cancelAppointment">
                                     <i  class="fa fa-fw fa-lg fa fa-save"></i>Aceptar
                                   </button>
                                 </div>

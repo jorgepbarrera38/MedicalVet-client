@@ -110,11 +110,10 @@
               </div>
               <vue-loading v-if="saving" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
               <div v-else>
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary btn-sm mr-1">
                   <i  class="fa fa-fw fa-lg fa fa-save"></i>Guardar
                 </button>
-                &nbsp;&nbsp;&nbsp;
-                <a href="" class="btn btn-danger" @click.prevent="idFromPet ? $emit('petUpdated') : $router.push({ name: 'pets.index' })">
+                <a href="" class="btn btn-danger btn-sm" @click.prevent="idFromPet ? $emit('petUpdated') : $router.push({ name: 'pets.index' })">
                   <i class="fa fa-fw fa-lg fa fa-times-circle"></i>Cancelar
                 </a>
               </div>

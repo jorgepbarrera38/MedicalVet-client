@@ -19,7 +19,7 @@
                         <input type="date" class="form-control" v-model="rangeDates.endDate">
                     </div>
                     <div>
-                        <button type="submit" :disabled="!rangeDates.startDate || !rangeDates.startDate || loadingResults" class="btn btn-primary mb-1">
+                        <button type="submit" :disabled="!rangeDates.startDate || !rangeDates.startDate || loadingResults" class="btn btn-primary btn-sm mb-1">
                         <i class="fa fa-fw fa-lg fa-search"></i>Consultar
                         </button>
                     </div>              
@@ -30,7 +30,7 @@
           <div class="col-md-8">
               <div class="tile">
                 <div class="tile-title-w-btn">
-                    <h3 class="title">Resultados</h3>
+                    <h3 class="tile-title">Resultados</h3>
                     <button :disabled="!clinicHistories.length || downloadingReport"
                         @click="exportConsultationsInExcel"
                         class="btn btn-success btn-sm">

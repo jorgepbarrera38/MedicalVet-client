@@ -29,19 +29,21 @@
                     </button>
                   </div>
                   <div class="modal-body">
+
                       <form @submit.prevent="searchingOwnerInModalTable=true;getOwners()" class="row">
                         <div class="form-group col-md-9">
                           <input type="text" class="form-control" v-model="search">
                         </div>
                         <div class="form-group col-md-3">
                           <button :disabled="searchingOwnerInModalTable" class="btn btn-primary" type="submit">
-                            <i class="fa fa-search"></i>Buscar
+                            <i class="fa fa-search"></i> Buscar
                           </button>
                         </div>
                         <div v-if="searchingOwnerInModalTable" class="form-group col-md-12">
                           <vue-loading type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
                         </div>
                       </form>
+                      
                     <div class="table-responsive" v-if="!searchingOwnerInModalTable">
                       <table class="table table-hover table-sm">
                         <thead>
@@ -77,7 +79,7 @@
                       <span slot="prev-nav">&lt; Anterior</span>
                       <span slot="next-nav">Siguiente &gt;</span>
                     </pagination>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
                   </div>
                 </div>
               </div>

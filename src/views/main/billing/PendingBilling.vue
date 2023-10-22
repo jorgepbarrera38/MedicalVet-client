@@ -31,7 +31,7 @@
         <div class="col-md-7">
           <div class="tile">
             <div class="tile-title-w-btn">
-              <h3 class="title">Productos y servicios <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
+              <h3 class="tile-title">Productos y servicios <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
               <button class="btn btn-success btn-sm" @click="loadingResults = true; getVaccinesFromPet()" :disabled="!petSelected || loadingResults">
                     <i class="fa fa-fw fa-lg fa-refresh"></i>
               </button>
@@ -94,7 +94,7 @@
         <div class="col-md-5">
           <div class="tile">
             <div class="tile-title-w-btn">
-              <h3 class="title">Facturar</h3>
+              <h3 class="tile-title">Facturar</h3>
               <!--<button class="btn btn-danger btn-sm" @click="cancelbill">
                     <i class="fa fa-fw fa-lg fa-times"></i> Cancelar
               </button>-->
@@ -141,7 +141,7 @@
               </table>
             </div>
             <h3>Total: ${{ calculateTotalBill() }}</h3>
-            <button class="btn btn-primary" @click="bill" :disabled="saving || !productsAndServicesChecked.length">
+            <button class="btn btn-primary btn-sm" @click="bill" :disabled="saving || !productsAndServicesChecked.length">
                     <i class="fa fa-fw fa-lg fa fa-save"></i> Grabar <span v-if="saving" class="spinner-border spinner-border-sm ml-1"></span>
               </button>
           </div>

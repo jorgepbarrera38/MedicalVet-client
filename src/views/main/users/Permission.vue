@@ -42,11 +42,10 @@
               </div>
               <vue-loading v-if="loading" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>
               <div v-else>
-                <button class="btn btn-primary" @click="savePermissions">
+                <button class="btn btn-primary btn-sm mr-1" @click="savePermissions">
                   <i class="fa fa-fw fa-lg fa fa-save"></i> Actualizar
                 </button>
-                &nbsp;&nbsp;&nbsp;
-                <router-link :to="{ name: 'users.index' }" class="btn btn-danger">
+                <router-link :to="{ name: 'users.index' }" class="btn btn-danger btn-sm">
                   <i class="fa fa-fw fa-lg fa fa-trash"></i> Cancelar
                 </router-link>
               </div>

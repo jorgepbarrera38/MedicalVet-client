@@ -9,7 +9,7 @@
         <div class="col-md-12">
           <div class="tile">
             <div class="tile-title-w-btn">
-              <h3 class="title">Listado de plantillas</h3>
+              <h3 class="tile-title">Listado de plantillas</h3>
               <button :disabled="!hasPermission('informed-consent-templates.store')"
                 @click="showModalToCreateTemplate"
                 class="btn btn-success btn-sm">
@@ -41,11 +41,11 @@
                     <div class="modal-footer">
                       <vue-loading v-if="savingTemplate" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
                       <div v-else>
-                        <button type="submit" class="btn btn-primary mr-1" :disabled="editTemplate && !template.id"
+                        <button type="submit" class="btn btn-primary btn-sm mr-1" :disabled="editTemplate && !template.id"
                           @click="editTemplate ? updateInformedConsentTemplates() : saveInformedConsentTemplates()">
                           <i  class="fa fa-fw fa-lg fa fa-save"></i>Guardar
                         </button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
                       </div>
                     </div>
                   </div>

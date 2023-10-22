@@ -22,10 +22,10 @@
                   <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingVaccinesInPdf" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>
                 <button :disabled="!ownerSelected || !petSelected || (!vaccinesFromPet.length && !dewormingsFromPet.length) || loadingResults || sendingVaccinesAndDewormingsForEmail" 
-                                    class="btn btn-info btn-sm mr-1" @click="sendVaccinesAndDewormingsForEmail">
+                                    class="btn btn-primary btn-sm mr-1" @click="sendVaccinesAndDewormingsForEmail">
                   <i class="fa fa-fw fa-lg fa-envelope"></i>Enviar por email <span v-if="sendingVaccinesAndDewormingsForEmail" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>
-                <button class="btn btn-success btn-sm" @click="loadingResults = true; getVaccinesFromPet()" :disabled="!petSelected || loadingResults">
+                <button class="btn btn-primary btn-sm" @click="loadingResults = true; getVaccinesFromPet()" :disabled="!petSelected || loadingResults">
                     <i class="fa fa-fw fa-lg fa-refresh"></i>
               </button>
               </div>              
@@ -36,10 +36,10 @@
       <div class="row">
         <div class="col-md-12">
           <div class="tile">
-            <div class="tile-title-w-btn">
-              <h3 class="title">Vacunas <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
-              <CreateVaccineModal v-if="petSelected" :pet_id="petSelected" @vaccineRegistered="loadingResults = true; getVaccinesFromPet()"/>
-            </div>
+            
+            <h3 class="tile-title">Vacunas <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
+            <CreateVaccineModal v-if="petSelected" :pet_id="petSelected" @vaccineRegistered="loadingResults = true; getVaccinesFromPet()"/>
+            
             <div class="table-responsive" style="max-height: 200px;">
               <table class="table table-hover table-sm">
                 <thead>
@@ -109,10 +109,10 @@
         </div>
          <div class="col-md-12">
           <div class="tile">
-            <div class="tile-title-w-btn">
-              <h3 class="title">Desparasitaciones <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
+
+              <h3 class="tile-title">Desparasitaciones <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
               <CreateDewormingModal v-if="petSelected" :pet_id="petSelected" @dewormingRegistered="loadingResults = true; getVaccinesFromPet()"/>
-            </div>
+
             <div class="table-responsive" style="max-height: 200px;">
               <table class="table table-hover table-sm">
                 <thead>

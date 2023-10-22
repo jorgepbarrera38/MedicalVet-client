@@ -9,7 +9,7 @@
         <div class="col-md-12">
           <div class="tile">
             <div class="tile-title-w-btn">
-              <h3 class="title">Listado de unidades</h3>
+              <h3 class="tile-title">Listado de unidades</h3>
               <button :disabled="!hasPermission('unities.store')"
                 @click="$router.push({ name: 'unities.create' })"
                 class="btn btn-success btn-sm">

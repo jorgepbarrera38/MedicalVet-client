@@ -45,16 +45,16 @@
                       </table>
                     </div>
                     <div class="mt-2">
-                      <button :disabled="!ownerSelected || !petSelected || searchingClinicHistory || foliosSelected.length == 0" class="btn btn-primary mb-1" @click="getClinicHistoryFromPet">
+                      <button :disabled="!ownerSelected || !petSelected || searchingClinicHistory || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="getClinicHistoryFromPet">
                         <i class="fa fa-fw fa-lg fa-search"></i>Consultar
                       </button>
                       &nbsp;&nbsp;&nbsp;
-                      <button :disabled="!ownerSelected || !petSelected || searchingClinicHistory || foliosSelected.length == 0" class="btn btn-info mb-1" @click="showModalWithAttachments">
+                      <button :disabled="!ownerSelected || !petSelected || searchingClinicHistory || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="showModalWithAttachments">
                         <i class="fa fa-fw fa-lg fa-file-archive-o"></i>
                         Archivos adjuntos
                       </button>
                       &nbsp;&nbsp;&nbsp;
-                      <button :disabled="!ownerSelected || !petSelected || loadingResults || foliosSelected.length == 0" class="btn btn-info mb-1" @click="sendClinicHistoryFromPetForEmail">
+                      <button :disabled="!ownerSelected || !petSelected || loadingResults || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="sendClinicHistoryFromPetForEmail">
                         <i class="fa fa-fw fa-lg fa-envelope"></i>Enviar por email
                       </button>
                     </div>

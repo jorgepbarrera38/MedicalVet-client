@@ -9,7 +9,7 @@
         <div class="col-md-12">
           <div class="tile">
             <div class="tile-title-w-btn">
-              <h3 class="title">Listado de propietarios</h3>
+              <h3 class="tile-title">Listado de propietarios</h3>
               <button :disabled="!hasPermission('owners.store')"
                 @click="$router.push({ name: 'owners.create' })"
                 class="btn btn-success btn-sm">

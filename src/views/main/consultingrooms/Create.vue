@@ -8,7 +8,7 @@
         <div class="row">
         <div class="col-md-12">
           <div class="tile">
-            <h3 class="tile-title">Nueva consultorio</h3>
+            <h3 class="tile-title">Nuevo consultorio</h3>
             <div class="alert alert-danger" v-if="errors">
               <li v-for="(error, index) in errors" :key="index">
                 {{ error[0] }}
@@ -25,11 +25,10 @@
               </div>
               <vue-loading v-if="saving" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
               <div v-else>
-                <button type="submit" class="btn btn-primary" :disabled="$limitedVersion && quantityConsultingroomsCreated === null">
+                <button type="submit" class="btn btn-primary btn-sm mr-1" :disabled="$limitedVersion && quantityConsultingroomsCreated === null">
                   <i  class="fa fa-fw fa-lg fa fa-save"></i>Guardar  
                 </button>
-                &nbsp;&nbsp;&nbsp;
-                <router-link :to="{ name: 'consultingrooms.index' }" class="btn btn-danger">
+                <router-link :to="{ name: 'consultingrooms.index' }" class="btn btn-danger btn-sm">
                   <i class="fa fa-fw fa-lg fa fa-times-circle"></i>Cancelar
                 </router-link>
               </div>
