@@ -45,6 +45,7 @@
                             <th nowrap>Fecha inicio cita</th>
                             <th nowrap>Fecha fin cita</th>
                             <th nowrap>Estado</th>
+                            <th></th>
                           </thead>
                           <tbody>
                             <tr v-for="appointment in appointmentsFromPet" :key="'appointmentFromPet' + appointment.id" :title="appointment.observations ? appointment.observations : 'No hay observaciónes'">
@@ -60,6 +61,22 @@
                                               'badge-danger': appointment.state == 'CANCELADA'
                                               }">
                                   {{ appointment.state }}</div>
+                              </td>
+                              <td nowrap>
+                                <button :disabled="!hasPermission('appointments.fulfill') || appointment.state != 'PENDIENTE' || appointment.fulfilling"
+                                  class="btn btn-success btn-sm mr-1" @click="fulfillAppointment(appointment)" title="Cumplir">
+                                  <span class="spinner-border spinner-border-sm ml-1" v-if="appointment.fulfilling"></span>
+                                  <i class="fa fa-fw fa-lg fa-check" v-else></i>
+                                </button>
+                                <button :disabled="!hasPermission('appointments.unfulfill') || appointment.state != 'PENDIENTE' || appointment.unFulfilling"
+                                  class="btn btn-info btn-sm mr-1" @click="unFulfillAppointment(appointment)" title="Incumplir">
+                                  <span class="spinner-border spinner-border-sm ml-1" v-if="appointment.unFulfilling"></span>
+                                  <i class="fa fa-fw fa-lg fa-clock-o" v-else></i>
+                                </button>
+                                <button :disabled="!hasPermission('appointments.cancel') || appointment.state != 'PENDIENTE'"
+                                  class="btn btn-danger btn-sm" @click="preCancelAppointment(appointment.id)" title="Cancelar">
+                                  <i class="fa fa-fw fa-lg fa-times-circle"></i>
+                                </button>
                               </td>
                             </tr>
                           </tbody>
@@ -202,16 +219,14 @@
                                     <td nowrap>{{ formatDate(appointment.date_time_start) }}</td>
                                     <td nowrap>{{ formatDate(appointment.date_time_finish) }}</td>
                                     <td nowrap>
-                                      <button :disabled="!hasPermission('appointments.fulfill')"
-                                        class="btn btn-success btn-sm" @click="fulfillAppointment(appointment.id)" title="Cumplir">
+                                      <!--<button :disabled="!hasPermission('appointments.fulfill')"
+                                        class="btn btn-success btn-sm mr-1" @click="fulfillAppointment(appointment)" title="Cumplir">
                                         <i class="fa fa-fw fa-lg fa-check"></i>
                                       </button>
-                                      &nbsp;&nbsp;&nbsp;
                                       <button :disabled="!hasPermission('appointments.unfulfill')"
-                                        class="btn btn-info btn-sm" @click="unFulfillAppointment(appointment.id)" title="Incumplir">
+                                        class="btn btn-info btn-sm mr-1" @click="unFulfillAppointment(appointment)" title="Incumplir">
                                         <i class="fa fa-fw fa-lg fa-clock-o"></i>
-                                      </button>
-                                      &nbsp;&nbsp;&nbsp;
+                                      </button>-->
                                       <button :disabled="!hasPermission('appointments.cancel')"
                                         class="btn btn-danger btn-sm" @click="preCancelAppointment(appointment.id)" title="Cancelar">
                                         <i class="fa fa-fw fa-lg fa-times-circle"></i>
@@ -232,50 +247,7 @@
                             </tbody>
                           </table>
                         </div>
-                        <!-- Modal cancelar cita-->
-                        <div class="modal fade" id="cancelAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Motivo de cancelación</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <div class="modal-body">
-                                <div class="row">
-                                  <div class="col-md-12">
-                                    <div class="alert alert-danger" v-if="errorsToCancelAppointment">
-                                      <li v-for="(error, index) in errorsToCancelAppointment" :key="'error' + index">
-                                        {{ error[0] }}
-                                      </li>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="form-group">
-                                  <select class="form-control" v-model="appointmentSelectedToDelete.reason_cancellation_id">
-                                    <option value="">Seleccione motivo de cancelación</option>
-                                    <option :value="reasonCancellation.id" v-for="reasonCancellation in reasonCancellations" :key="'reasonCancellations ' + reasonCancellation.id">
-                                      {{ reasonCancellation.name }}
-                                    </option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div class="modal-footer">
-                                <vue-loading v-if="cancelingAppointment" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
-                                <div v-else>
-                                  <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">
-                                    <i class="fa fa-fw fa-lg fa fa-times-circle"></i>Cancelar
-                                  </button>
-                                  <button type="button" class="btn btn-primary btn-sm" @click="cancelAppointment">
-                                    <i  class="fa fa-fw fa-lg fa fa-save"></i>Aceptar
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!--Fin cancelar cita-->
+                        
                     </div>
                   </div>
                 </div>
@@ -285,7 +257,50 @@
           </div>
         </div>
       </div>
-      
+      <!-- Modal cancelar cita-->
+      <div class="modal fade" id="cancelAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Motivo de cancelación</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="alert alert-danger" v-if="errorsToCancelAppointment">
+                    <li v-for="(error, index) in errorsToCancelAppointment" :key="'error' + index">
+                      {{ error[0] }}
+                    </li>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <select class="form-control" v-model="appointmentSelectedToDelete.reason_cancellation_id">
+                  <option value="">Seleccione motivo de cancelación</option>
+                  <option :value="reasonCancellation.id" v-for="reasonCancellation in reasonCancellations" :key="'reasonCancellations ' + reasonCancellation.id">
+                    {{ reasonCancellation.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <vue-loading v-if="cancelingAppointment" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
+              <div v-else>
+                <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">
+                  <i class="fa fa-fw fa-lg fa fa-times-circle"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" @click="cancelAppointment">
+                  <i  class="fa fa-fw fa-lg fa fa-save"></i>Aceptar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Fin cancelar cita-->
     </div>
 </template>
 
@@ -405,22 +420,26 @@
             $('#appointmentModal').modal('show')
           },
           fulfillAppointment (appointment) {
-            this.$http.put(`appointments/${appointment}/fulfill-appointment`).then( response => {
+            appointment.fulfilling = true
+            this.$http.put(`appointments/${appointment.id}/fulfill-appointment`).then( response => {
               this.getAppointments()
               this.getAppointmentsFromPet()
               this.$toastr.success('Cita actualizada como cumplida')
             }).catch( error => {
+              appointment.fulfilling = false
               if (error.response.status == 422) {
                 this.$toastr.error(error.response.data.errors.message)
               }
             })
           },
           unFulfillAppointment (appointment) {
-            this.$http.put(`appointments/${appointment}/unfulfill-appointment`).then( response => {
+            appointment.unFulfilling = true
+            this.$http.put(`appointments/${appointment.id}/unfulfill-appointment`).then( response => {
               this.getAppointments()
               this.getAppointmentsFromPet()
               this.$toastr.success('Cita actualizada como incumplida')
             }).catch( error => {
+              appointment.unFulfilling = false
               if (error.response.status == 422) {
                 this.$toastr.error(error.response.data.errors.message)
               }
@@ -444,22 +463,27 @@
               }
             })
           },
-          preCancelAppointment (appointment) {
+          preCancelAppointment (appointmentId) {
             this.errorsToCancelAppointment = null
             this.appointmentSelectedToDelete.reason_cancellation_id = ''
-            this.appointmentSelectedToDelete.id = appointment
+            this.appointmentSelectedToDelete.id = appointmentId
             $('#cancelAppointmentModal').modal('show')
           },
           petAndOwnerSelected(petId) {
             this.appointment.pet_id = petId
+            this.searchingAppointmentsFromPet = true
             this.getAppointmentsFromPet()
           },
           getAppointmentsFromPet () {
             if (this.appointment.pet_id) {
-              this.searchingAppointmentsFromPet = true
+              //this.searchingAppointmentsFromPet = true
               this.$http.get(`appointments/${ this.appointment.pet_id }/get-appointments`).then( response => {
                 this.searchingAppointmentsFromPet = false
                 this.appointmentsFromPet = response.data
+                this.appointmentsFromPet.forEach(appointmentFromPet => {
+                    this.$set(appointmentFromPet, 'fulfilling', false);
+                    this.$set(appointmentFromPet, 'unFulfilling', false);
+                })
               }).catch(() => {
                 this.searchingAppointmentsFromPet = false
               })
