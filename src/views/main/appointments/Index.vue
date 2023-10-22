@@ -37,7 +37,7 @@
                   <div class="row mt-3">
                     <div class="col-md-12">
                       <vue-loading v-if="searchingAppointmentsFromPet" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>
-                      <div class="table-responsive" v-else>
+                      <div class="table-responsive" v-else style="max-height: 395px;">
                         <table class="table table-sm table-hover">
                           <thead>
                             <th>Consultorio</th>
