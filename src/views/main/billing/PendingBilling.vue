@@ -202,8 +202,12 @@
                       
             this.$toastr.success('Factura generada')
             this.saving = false
-            }).catch(() => {
+            }).catch(error => {
               this.saving = false
+              console.log(error.response.data.message);
+              if (error.response.status == 422) {
+                this.$toastr.error(error.response.data.message)
+              }
             })
           },
           addProductOrServiceToBill (productAndService) {
