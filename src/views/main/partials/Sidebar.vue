@@ -65,6 +65,11 @@
                         <i class="icon fa fa-circle-o"></i> Asignación de citas
                     </a>
                 </li>
+                <li v-if="hasPermission('appointments.board')">
+                    <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'appointments.board' })" class="treeview-item">
+                        <i class="icon fa fa-circle-o"></i> Tablero de citas
+                    </a>
+                </li>
                 <li v-if="hasPermission('consultingrooms.index')">
                     <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'consultingrooms.index' })" class="treeview-item">
                         <i class="icon fa fa-circle-o"></i> Consultorios

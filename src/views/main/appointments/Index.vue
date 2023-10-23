@@ -360,7 +360,6 @@
             }
         },
         methods: {
-
           getReasonCancellations () {
             this.$http.get('appointments/get-reason-cancellations').then( response => {
               this.reasonCancellations = response.data

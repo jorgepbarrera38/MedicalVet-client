@@ -13,6 +13,7 @@ import RacesIndex from '../views/main/races/Index.vue'
 import RacesCreate from '../views/main/races/Create.vue'
 import RacesEdit from '../views/main/races/Edit.vue'
 import AppointmentsIndex from '../views/main/appointments/Index.vue'
+import AppointmentsBoard from '../views/main/appointments/Board.vue'
 import AppointmentsReportsAppointments from '../views/main/appointments/reports/Appointment.vue'
 import ActivitiesIndex from '../views/main/activities/Index.vue'
 import ActivitiesCreate from '../views/main/activities/Create.vue'
@@ -171,6 +172,11 @@ const routes = [
         path: '/citas',
         name: 'appointments.index',
         component: AppointmentsIndex
+      },
+      {
+        path: '/citas/tablero-de-citas',
+        name: 'appointments.board',
+        component: AppointmentsBoard
       },
       {
         path: '/citas/reporte-de-citas',
