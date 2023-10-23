@@ -9,19 +9,10 @@
           <div class="col-md-12">
             <div class="tile">
               <h3 class="tile-title">Pendiente por facturar</h3>
-              <SearchOwnersAndPets 
-                  @owner-selected="setOwnerSelected"
-                  @pet-selected="petOwnerSelected"
-                  @searching="setStateFromLoading"
-                  :loadingResults="loadingResults">
+              <SearchOwnersAndPets
+                  @owner-and-pet-selected="ownerAndPetSelected">
                 </SearchOwnersAndPets>
               <div>
-                <!--<button :disabled="!ownerSelected || !petSelected || loadingResults" class="btn btn-primary mr-1" @click="loadingResults = true; getVaccinesFromPet()">
-                  <i class="fa fa-fw fa-lg fa-search"></i>Consultar <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1"></span>
-                </button>-->
-                <!--<button :disabled="!ownerSelected || !petSelected || exportingVaccinesInPdf" class="btn btn-primary mr-1" @click="exportVaccinesInPdf">
-                  <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingVaccinesInPdf" class="spinner-border spinner-border-sm ml-1"></span>
-                </button>-->
               </div>              
             </div>
           </div>
@@ -32,7 +23,7 @@
           <div class="tile">
             <div class="tile-title-w-btn">
               <h3 class="tile-title">Productos y servicios <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
-              <button class="btn btn-success btn-sm" @click="loadingResults = true; getVaccinesFromPet()" :disabled="!petSelected || loadingResults">
+              <button class="btn btn-success btn-sm" @click="loadingResults = true; getPendingBilling()" :disabled="!petSelectedId || loadingResults">
                     <i class="fa fa-fw fa-lg fa-refresh"></i>
               </button>
               
@@ -73,10 +64,6 @@
                         
                         <td nowrap>
                           <div>
-                            <button class="btn btn-danger btn-sm mr-1" @click="deleteProductOrService(productAndService, index)" :disabled="productAndService.deleting">
-                              <span v-if="productAndService.deleting" class="spinner-border spinner-border-sm"></span>
-                              <i class="fa fa-trash" v-else></i>
-                            </button>
                             <button class="btn btn-success btn-sm mr-1" @click="addProductOrServiceToBill(productAndService)" v-if="!productAndService.checked">
                               <i class="fa fa-check"></i>
                             </button>
@@ -95,10 +82,6 @@
           <div class="tile">
             <div class="tile-title-w-btn">
               <h3 class="tile-title">Facturar</h3>
-              <!--<button class="btn btn-danger btn-sm" @click="cancelbill">
-                    <i class="fa fa-fw fa-lg fa-times"></i> Cancelar
-              </button>-->
-              
             </div>
             <div class="table-responsive">
               <table class="table table-hover table-sm">
@@ -163,8 +146,7 @@
         },
         data() {
             return {
-                ownerSelected: false,
-                petSelected: '',
+                petSelectedId: '',
                 productsAndServices: [],
                 productsAndServicesChecked : [],
 
@@ -179,19 +161,13 @@
             }
         },
         methods: {
-          getVaccinesFromPet () {
-            this.$http.get(`billings/${ this.petSelected }/get-pending-billing`).then(response => {
-              /*if (!response.data.vaccines.length && !response.data.dewormings.length) {
-                this.$toastr.info('No existen registros de vacunas ni desparasitaciones')
-              }*/
+          getPendingBilling () {
+            this.$http.get(`billings/${ this.petSelectedId }/get-pending-billing`).then(response => {
+              
               this.productsAndServices = response.data.productsAndServices
               this.productsAndServices.forEach(productOrService => {
-                  this.$set(productOrService, 'deleting', false)
                   this.$set(productOrService, 'checked', false)
               })
-              
-              /*this.allVaccines = response.data.allVaccines
-              this.allDewormings = response.data.allDewormings*/
 
               if (!this.productsAndServices.length) {
                 this.$toastr.info('No existen productos o servicios pendientes por facturar')
@@ -202,70 +178,33 @@
               this.loadingResults = false
             })
           },
-          exportVaccinesInPdf () {
-            this.exportingVaccinesInPdf = true
-
-            this.$http.get(`reports/vaccine/${ this.petSelected }/export-pdf`, { responseType: 'blob'}).then(response => {
-              this.exportingVaccinesInPdf = false
-                window.open(URL.createObjectURL(response.data), '_blank')
-            }).catch( error => {
-              this.$toastr.info('Ocurrió un error')
-              this.exportingVaccinesInPdf = false
-            })
-          },
-          setOwnerSelected (payload) {
-            this.ownerSelected = payload
-          },
-          petOwnerSelected(payload) {
+          ownerAndPetSelected(petId) {
             this.productsAndServices = []
-            this.dewormingsFromPet = []
-            this.petSelected = ''
-            if (payload) {
+            this.productsAndServicesChecked = []
+            this.petSelectedId = ''
+            if (petId) {
               this.loadingResults = true
-              this.petSelected = payload
-              this.getVaccinesFromPet()
+              this.petSelectedId = petId
+              this.getPendingBilling()
             }
-          },
-          setStateFromLoading (payload) {
-            this.productsAndServices = []
-            this.dewormingsFromPet = []
-            //this.loadingResults = payload
-          },
-          deleteProductOrService (vaccine, index) {
-            vaccine.deleting = true
-            this.$http.delete(`vaccines/${ vaccine.id }`).then( response => {
-              this.productsAndServices.splice(index, 1)
-              this.getVaccinesFromPet()
-              this.$toastr.success('Vacuna eliminada con éxito')
-            }).catch( () => {
-              vaccine.deleting = false
-            })
           },
           formatDate (date) {
             return moment(date).format('LLL')
           },
           bill () {
             this.saving = true
-            this.$http.post(`billings/${ this.petSelected }/bill`, { productsAndServicesChecked: this.productsAndServicesChecked} ).then(response => {
+            this.$http.post(`billings/${ this.petSelectedId }/bill`, { productsAndServicesChecked: this.productsAndServicesChecked} ).then(response => {
               
             this.productsAndServices = []
             this.productsAndServicesChecked = []
             this.loadingResults = true
-            this.getVaccinesFromPet()
+            this.getPendingBilling()
                       
             this.$toastr.success('Factura generada')
             this.saving = false
             }).catch(() => {
               this.saving = false
             })
-          },
-          cancelbill () {
-            this.productsAndServices.forEach(productOrService => {
-                productOrService.checked = false
-            })
-
-            this.productsAndServicesChecked = []
-            
           },
           addProductOrServiceToBill (productAndService) {
             productAndService.checked = true
