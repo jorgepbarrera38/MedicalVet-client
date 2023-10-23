@@ -28,14 +28,20 @@
                 <thead>
                   <tr>
                     <th>Nombre</th>
-                    <th nowrap>Duración en minutos</th>
+                    <th nowrap>Duración</th>
+                    <th nowrap>Servicio</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="activity in activities.data" :key="activity.id">
                     <td nowrap>{{ activity.name }}</td>
-                    <td nowrap>{{ activity.duration }}</td>
+                    <td nowrap>{{ activity.duration }} minutos</td>
+                    <td nowrap>
+                      <span v-if="activity.service">
+                        {{ activity.service.code + ' - ' + activity.service.name  }}
+                      </span>
+                    </td>
                     <td nowrap>
                       <button :disabled="!hasPermission('activities.update')"
                         class="btn btn-primary btn-sm" 

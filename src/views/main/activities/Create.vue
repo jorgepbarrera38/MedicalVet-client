@@ -28,6 +28,12 @@
                     <input type="number" class="form-control" v-model="activity.duration">
                   </div>
                 </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="">Servicio (*)</label>
+                    <v-select :options="services" label="codeAndName" :reduce="service => service.id" v-model="activity.service_id"></v-select>
+                  </div>
+                </div>
               </div>
               <vue-loading v-if="saving" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
               <div v-else>
@@ -52,25 +58,42 @@
         components: {
           VueLoading
         },
+        created () {
+          this.getServices()
+        },
         data() {
             return {
                 activity: {
                   name: '',
-                  duration: ''
+                  duration: '',
+                  service_id: '',
                 },
+                services: [],
                 errors: null,
                 saving: false,
             }
         },
         methods: {
+          getServices () {
+            this.$http.get('activities/get-services').then( response => {
+              console.log(response.data);
+              this.services = response.data
+              this.services.forEach(service => {
+                  this.$set(service, 'codeAndName', service.code + ' - ' + service.name)
+              })
+            })
+          },
           saveActivity () {
             this.saving = true
             this.$http.post('activities', this.activity).then( response => {
               this.$toastr.success('Actividad registrada')
               this.saving = false
               this.errors = null
-              this.activity.name = ''
-              this.activity.duration = ''
+              this.activity = {
+                  name: '',
+                  duration: '',
+                  service_id: '',
+              }
             }).catch( error => {
               this.saving = false
               if (error.response.status == 422) {

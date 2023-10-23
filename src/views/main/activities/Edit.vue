@@ -28,6 +28,12 @@
                     <input type="number" class="form-control" v-model="activity.duration">
                   </div>
                 </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="">Servicio (*)</label>
+                    <v-select :options="services" label="codeAndName" :reduce="service => service.id" v-model="activity.service_id"></v-select>
+                  </div>
+                </div>
               </div>
               <vue-loading v-if="saving" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
               <div v-else>
@@ -53,22 +59,29 @@
           VueLoading
         },
         created () {
-          this.getActivity()
+          this.getActivityAndServices()
         },
         data() {
             return {
                 activity: {
                   name: '',
-                  duration: ''
+                  duration: '',
+                  service_id: '',
                 },
+                services: [],
                 errors: null,
                 saving: false,
             }
         },
         methods: {
-          getActivity () {
+          getActivityAndServices () {
             this.$http.get(`activities/${ this.$route.params.id }`).then( response => {
-              this.activity = response.data
+              this.services = response.data.services
+              this.services.forEach(service => {
+                  this.$set(service, 'codeAndName', service.code + ' - ' + service.name)
+              });
+
+              this.activity = response.data.activity
             })
           },
           saveActivity () {
