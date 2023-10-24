@@ -5,49 +5,22 @@
               <h1><i class="fa fa-file-text"></i> Historia clínica</h1>
             </div>
         </div>
-        <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
         <div class="row">
           <div class="col-md-12">
             <div class="tile">
               <h3 class="tile-title">Registro de historia clínica</h3>
               <SearchOwnersAndPets 
                 @owner-and-pet-selected="ownerAndPetSelected"
-                
-                @searching="setStateFromLoading"
 
-                :disableFields="!buttonThatOpenFolio"
-                :clearData="buttonThatOpenFolio"
+                :disableFields="folioIsOpen"
+                :clearData="!folioIsOpen"
                 >
               </SearchOwnersAndPets>
               <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                       <label for="">Finalidad de la consulta (*)</label>
-                      <select class="form-control" :disabled="!buttonThatOpenFolio" v-model="consultation_purposesSelected">
+                      <select class="form-control" :disabled="folioIsOpen || !clinicHistory.pet_id" v-model="consultation_purposesSelected">
                         <option :value="{ id: null,
                                         reason_consultation: '',
                                         symptoms: '',
@@ -58,8 +31,9 @@
                                         diagnoses: '',
                                         vaccines: '',
                                         dewormings: '',
-                                        attachments: '',
-                                        products_and_services_applied: '' }">Seleccione finalidad</option>
+                                        products_and_services_applied: '',
+                                        attachments: '', 
+                                        }">Seleccione finalidad</option>
                         <option :value="consultationPurpose" v-for="consultationPurpose in consultationPurposes" :key="'cp-' + consultationPurpose.id">{{ consultationPurpose.name }}</option>
                       </select>
                     </div>
@@ -67,7 +41,7 @@
                   <div class="col-md-4">
                     <div class="form-group">
                       <label for="">Cita</label>
-                      <select class="form-control" :disabled="!buttonThatOpenFolio" v-model="clinicHistory.appointment_id">
+                      <select class="form-control" :disabled="folioIsOpen || !clinicHistory.pet_id" v-model="clinicHistory.appointment_id">
                         <option value="">Seleccione cita pendiente</option>
                         <option :value="appointment.id" v-for="appointment in appointmentsPendingFromPet" :key="'appintment-' + appointment.id">
                           {{ formatDateWithHour(appointment.date_time_start) + ' - ' + appointment.consultingroom.name + ' - ' + appointment.activity.name }}
@@ -77,10 +51,10 @@
                   </div>
               </div>
               <div>
-                <button :disabled="!buttonThatOpenFolio || !clinicHistory.pet_id || !consultation_purposesSelected.id || folioOpen" class="btn btn-primary btn-sm mr-1" @click="openFolio">
+                <button :disabled="loadingResults || folioIsOpen || !clinicHistory.pet_id || !consultation_purposesSelected.id" class="btn btn-primary btn-sm mr-1" @click="getDataForCreateFolioAndOpenFolio()">
                   <i  class="fa fa-fw fa-lg fa fa-folder-open"></i>Abrir folio
                 </button>
-                <button :disabled="!clinicHistory.pet_id || !consultation_purposesSelected.id || !folioOpen" class="btn btn-danger btn-sm" @click="undoFolio">
+                <button :disabled="!clinicHistory.pet_id || !consultation_purposesSelected.id || !folioIsOpen" class="btn btn-danger btn-sm" @click="undoFolio">
                   <i  class="fa fa-fw fa-lg fa fa-undo"></i>Deshacer
                 </button>
                 <!--<router-link :to="{ name: 'races.index' }" class="btn btn-danger">Cancelar</router-link>-->
@@ -90,7 +64,7 @@
           
         </div>
         <!--Info from pacient-->
-        <div class="row" v-if="folioOpen">
+        <div class="row" v-if="folioIsOpen">
           <div class="col-md-4">
             <div class="tile">
               <h3 class="tile-title">Información de la mascota</h3>
@@ -204,7 +178,7 @@
           </div>
         </div>
         <!--Fin info del paciente-->
-        <div class="row" v-if="folioOpen">
+        <div class="row" v-if="folioIsOpen">
           <div class="col-md-12">
             <!--Motivo y síntomas-->
             <div class="row" v-if="consultation_purposesSelected.reason_consultation || consultation_purposesSelected.symptoms || consultation_purposesSelected.anamnesis">
@@ -1414,7 +1388,7 @@
                 },
                 consultation_purposesSelected: {
                   id: null,
-                  reason_consultation: null,
+                  reason_consultation: '',
                   symptoms: '',
                   anamnesis: '',
                   records: '',
@@ -1432,10 +1406,8 @@
                   fileName: '',
                   fileSize: '',
                 },
-                owners: [],
                 consultationPurposes: [],
                 attachmentTypes: [],
-                petsFromOwner: '',
                 record: null,
                 diagnosisSelected: null,
                 diagnosisType: '',
@@ -1457,8 +1429,6 @@
                 services: [],
                 dewormings: [],
                 errors: null,
-                folioOpen: false,
-                lookingPet: false,
                 avatarPet: require('../../../assets/avatar_pet.jpg'),
                 infoFromPetAndOwner: {
                   id: '', 
@@ -1498,7 +1468,7 @@
                   posology: ''
                 },
                 observationsFromPrescription: '',
-                buttonThatOpenFolio: true,
+                folioIsOpen: false,
                 pet_id_to_print_folio: '',
                 printingFolio: false,
                 appointmentsPendingFromPet: [],
@@ -1636,11 +1606,12 @@
             this.$http.post('clinic-histories', data).then( response => {
               this.saving = false
               this.pet_id_to_print_folio = this.clinicHistory.pet_id
+              console.log(this.pet_id_to_print_folio);
+              this.folioIsOpen = false
               this.cleanAllData()
               $('#beforeSaveModal').modal('hide')
               $('#questionPrintFolioCreated').modal('show')
               this.$toastr.success('Folio grabado exitosamente')
-              this.getConsultationPurposes()
             }).catch( error => {
               $('#beforeSaveModal').modal('hide')
               this.saving = false
@@ -1656,6 +1627,7 @@
             })
           },
           printFolioCreated () {
+            console.log(this.pet_id_to_print_folio);
             this.printingFolio = true
             this.$http.get(`reports/clinic-history/${ this.pet_id_to_print_folio }`, { params: { folios: ['latest'] }, responseType: 'blob' }).then( response => {
               let urlPdf = URL.createObjectURL(response.data)
@@ -1664,35 +1636,20 @@
               this.printingFolio = false
             }).catch(() => {
               this.printingFolio = false
+              this.$toastr.error('El folio generado no se pudo imprimir')
             })
           },
           getConsultationPurposes () {
             this.$http.get('clinic-histories/get-consultation-purposes-and-attachment-types').then( response => {
               this.consultationPurposes = response.data.consultationPurposes
-              this.attachmentTypes = response.data.attachmentTypes
             })
-          },
-          getPetsFromOwner (owner) {
-            this.lookingPet = true
-            this.$http.get(`clinic-histories/${ owner }/get-pet-from-owner`).then( response => {
-              this.lookingPet = false
-              this.petsFromOwner = response.data
-            }).catch( err => {
-              this.lookingPet = false
-            })
-          },
-          openFolio () {
-            this.loadingResults = true
-            this.getDataForCreateFolio()
-            this.buttonThatOpenFolio = false
           },
           undoFolio () {
-            this.getConsultationPurposes()
+            this.folioIsOpen = false
             this.cleanAllData()
-            this.folioOpen = false
-            this.buttonThatOpenFolio = true
           },
-          getDataForCreateFolio () {
+          getDataForCreateFolioAndOpenFolio () {
+            this.loadingResults = true
             this.$http.get(`clinic-histories/get-data-for-create-folio/${ this.clinicHistory.pet_id }`).then( response => {
               //Datos del paciente
               this.infoFromPetAndOwner = response.data.infoFromPetAndOwner
@@ -1705,7 +1662,10 @@
               this.products = response.data.products
               this.services = response.data.services
               this.dewormings = response.data.dewormings
-              this.folioOpen = true
+              this.attachmentTypes = response.data.attachmentTypes
+
+              //Abriendo folio para diligenciar
+              this.folioIsOpen = true
               this.loadingResults = false
 
               this.vaccinesCountTotalFromPet = response.data.vaccinesCountTotalFromPet
@@ -1837,173 +1797,20 @@
           deleteRegistry (model, index) {
             model.splice(index, 1)
           },
-          formatDate (date) {
-            return moment(date).format('LL')
-          },
-          formatDateWithHour (date) {
-            return moment(date).format('DD-MMM-Y, h:mm a')
-          },
-          cleanAllData () {
-                this.clinicHistory = {
-                  appointment_id: '',
-                  pet_id: '',
-                  consultation_purposes_id: '',
-                  reason_consultation: '',
-                  symptoms: '',
-                  anamnesis: '',
-                  indications: '',
-                  records: [],
-                  physiologicalConstants: {
-                    weight: null,
-                    temperature: null,
-                    heart_rate: null,
-                    breathing_frequency: null
-                  },
-                  diagnoses: [],
-                  vaccines: [],
-                  dewormings: [],
-                  products: [],
-                  services: [],
-                  attachments: [],
-                  prescription: {
-                    products: [],
-                    observations: ''
-                  },
-                  reviewBySystems: {
-                    respiratorySystem: {
-                      state: '',
-                      observations: '',
-                    },
-                    tegumentarySystem: {
-                      state: '',
-                      observations: '',
-                    },
-                    nervousSystem: {
-                      state: '',
-                      observations: '',
-                    },
-                    genitourinarySystem: {
-                      state: '',
-                      observations: '',
-                    },
-                    lymphNodes: {
-                      state: '',
-                      observations: '',
-                    },
-                    musculoskeletalSystem: {
-                      state: '',
-                      observations: '',
-                    },
-                    reproductiveSystem: {
-                      state: '',
-                      observations: '',
-                    },
-                    digestiveSystem: {
-                      state: '',
-                      observations: '',
-                    },
-                    oralCavity: {
-                      state: '',
-                      observations: '',
-                    },
-                  },
-                }
-                this.consultation_purposesSelected = {
-                  id: null,
-                  reason_consultation: '',
-                  symptoms: '',
-                  anamnesis: '',
-                  indications: '',
-                  records: '',
-                  physiological_constants: '',
-                  diagnoses: '',
-                  vaccines: '',
-                  dewormings: '',
-                  products_and_services_applied: '',
-                  attachments: '',
-                }
-                this.owners = []
-                //this.consultationPurposes = []
-                this.petsFromOwner = ''
-                this.record = null
-                this.diagnosisSelected = null
-                this.diagnosisType = ''
-                this.vaccineSelected = null
-                this.vaccineApplicationDate = null
-                this.nextVaccineDate = null
-                this.productSelected = null
-                this.quantityProductApplied = null
-                this.observationsProductApplied = ''
-                this.serviceSelected = null
-                this.quantityServiceApplied = null
-                this.observationsServiceApplied = ''
-                this.dewormingSelected = null
-                this.dewormingApplicationDate = null
-                this.nextDewormingDate = null
-                this.diagnoses = []
-                this.vaccines = []
-                this.products = []
-                this.services = []
-                this.dewormings = []
-                this.errors = null
-                this.folioOpen = false
-                this.lookingPet = false
-                this.infoFromPetAndOwner = {
-                  id: '', 
-                  name: '', 
-                  photo: '', 
-                  owner_id: '', 
-                  species_id: '', 
-                  race_id: '',
-                  date_born: '', 
-                  sex: '', 
-                  color: '', 
-                  size: '', 
-                  observation: '',
-                  owner: {
-                    id: '',
-                    identification: '',
-                    names: '',
-                    surnames: '',
-                    address: '',
-                    phonenumber: '',
-                    email: ''
-                  },
-                  species: {
-                    id: '',
-                    name: ''
-                  },
-                  race: {
-                    id: '',
-                    name: ''
-                  }
-                },
-                this.diagnosesFromPet = []
-                this.recordsFromPet = []
-                this.buttonThatOpenFolio = true
-                this.appointmentsPendingFromPet = [],
-                this.productToAddToPrescription = {
-                  product: {},
-                  quantity: '',
-                  posology: ''
-                },
-                this.observationsFromPrescription = ''
-          },
           ownerAndPetSelected(petId) {
-            this.appointmentsPendingFromPet = []
+
+            this.cleanAllData()
+
             if (petId) {
               this.loadingResults = true
               this.$http.get(`clinic-histories/${petId}/get-appointments-from-pet`).then( response => {
                 this.appointmentsPendingFromPet = response.data
                 this.loadingResults = false
+                this.clinicHistory.pet_id = petId
               }).catch(() => {
                 this.loadingResults = false
               })
-            }
-            this.clinicHistory.pet_id = petId
-          },
-          setStateFromLoading (payload) {
-            //this.loadingResults = payload
+            }   
           },
           setFileInAttachment (e) {
             if (e.target.files[0].type != 'application/pdf') {
@@ -2075,7 +1882,174 @@
           },
           deleteProductFromPrescription (index) {
             this.clinicHistory.prescription.products.splice(index, 1)
-          }
+          },
+          cleanAllData () {
+                this.vaccinesCountTotalFromPet = 0
+                this.dewormingsCountTotalFromPet = 0
+                this.clinicHistory = {
+                  appointment_id: '',
+                  pet_id: '',
+                  consultation_purposes_id: '',
+                  reason_consultation: '',
+                  indications: '',
+                  symptoms: '',
+                  anamnesis: '',
+                  records: [],
+                  physiologicalConstants: {
+                    weight: null,
+                    temperature: null,
+                    heart_rate: null,
+                    breathing_frequency: null
+                  },
+                  diagnoses: [],
+                  vaccines: [],
+                  dewormings: [],
+                  products: [],
+                  services: [],
+                  attachments:[],
+                  prescription: {
+                    products: [],
+                    observations: ''
+                  },
+                  reviewBySystems: {
+                    respiratorySystem: {
+                      state: '',
+                      observations: '',
+                    },
+                    tegumentarySystem: {
+                      state: '',
+                      observations: '',
+                    },
+                    nervousSystem: {
+                      state: '',
+                      observations: '',
+                    },
+                    genitourinarySystem: {
+                      state: '',
+                      observations: '',
+                    },
+                    lymphNodes: {
+                      state: '',
+                      observations: '',
+                    },
+                    musculoskeletalSystem: {
+                      state: '',
+                      observations: '',
+                    },
+                    reproductiveSystem: {
+                      state: '',
+                      observations: '',
+                    },
+                    digestiveSystem: {
+                      state: '',
+                      observations: '',
+                    },
+                    oralCavity: {
+                      state: '',
+                      observations: '',
+                    },
+                  },
+                }
+                this.consultation_purposesSelected = {
+                  id: null,
+                  reason_consultation: '',
+                  symptoms: '',
+                  anamnesis: '',
+                  records: '',
+                  physiological_constants: '',
+                  diagnoses: '',
+                  vaccines: '',
+                  dewormings: '',
+                  products_and_services_applied: '',
+                  attachments: '',
+                  indications: '',
+                }
+                this.attachment = {
+                  attachment_type: {},
+                  file: '',
+                  fileName: '',
+                  fileSize: '',
+                }
+                
+                this.attachmentTypes = []
+
+                this.record = null
+                this.diagnosisSelected = null
+                this.diagnosisType = ''
+                this.vaccineSelected = null
+                this.vaccineApplicationDate = null
+                this.nextVaccineDate = null
+                this.productSelected = null
+                this.quantityProductApplied = null
+                this.observationsProductApplied = ''
+                this.serviceSelected = null
+                this.quantityServiceApplied = null
+                this.observationsServiceApplied = ''
+                this.dewormingSelected = null
+                this.dewormingApplicationDate = null
+                this.nextDewormingDate = null
+
+                this.diagnoses = []
+                this.vaccines = []
+                this.products = []
+                this.services = []
+                this.dewormings = []
+
+                this.errors = null
+                this.avatarPet = require('../../../assets/avatar_pet.jpg')
+                this.infoFromPetAndOwner = {
+                  id: '', 
+                  name: '', 
+                  photo: '', 
+                  owner_id: '', 
+                  species_id: '', 
+                  race_id: '',
+                  date_born: '', 
+                  sex: '', 
+                  color: '', 
+                  size: '', 
+                  observation: '',
+                  owner: {
+                    id: '',
+                    identification: '',
+                    names: '',
+                    surnames: '',
+                    address: '',
+                    phonenumber: '',
+                    email: ''
+                  },
+                  species: {
+                    id: '',
+                    name: ''
+                  },
+                  race: {
+                    id: '',
+                    name: ''
+                  }
+                }
+                this.diagnosesFromPet = []
+                this.recordsFromPet = []
+                this.productToAddToPrescription = {
+                  product: {},
+                  quantity: '',
+                  posology: ''
+                }
+                this.observationsFromPrescription = ''
+                this.appointmentsPendingFromPet = []
+                this.options = {
+                  duration: 200,
+                  easing: 'easeInOutQuint',
+                  padding: 80,
+                  align: 'top',
+                  onFinish: function () {}
+                }
+          },
+          formatDate (date) {
+            return moment(date).format('LL')
+          },
+          formatDateWithHour (date) {
+            return moment(date).format('DD-MMM-Y, h:mm a')
+          },
         },
         watch: {
           consultation_purposesSelected (newValue, oldValue) {

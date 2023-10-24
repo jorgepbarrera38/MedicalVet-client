@@ -121,7 +121,7 @@
     <div :class="sizeFromColumnField ? 'col-md-' + sizeFromColumnField : 'col-md-4'">
       <div class="form-group">
         <label for="">Mascota</label>
-        <select class="form-control" v-model="petSelectedId" :disabled="disableFields || loadingResults">
+        <select class="form-control" v-model="petSelectedId" :disabled="disableFields">
           <option value="">Seleccione mascota</option>
           <option :value="petFromOwner.id" v-for="petFromOwner in petsFromOwner" :key="'pet-' + petFromOwner.id">{{ petFromOwner.name }}</option>
         </select>
@@ -152,7 +152,7 @@ import LoginVue from '../../login/Login.vue'
           },
           /*identification: '',
           pet_id: '',*/
-          clearData: {},
+          clearData: false,
           sizeFromColumnField: ''
         },
         data() {
@@ -257,12 +257,13 @@ import LoginVue from '../../login/Login.vue'
             }
         },
         watch: {          
-            petSelectedId(petId, oldValue) {
+            petSelectedId(petId) {
               this.$emit('owner-and-pet-selected', petId)
             },
-            /*clearData (newValue) {
+            clearData (newValue) {
               if (newValue) {
                 this.petSelectedId = '',
+                this.ownerIdentificationSearch = ''
                 this.ownerSelected = {
                   id: '',
                   identification: '',
@@ -272,7 +273,7 @@ import LoginVue from '../../login/Login.vue'
                 }
                 this.petsFromOwner = []
               }
-            }*/
+            }
         },
     }
 </script>
