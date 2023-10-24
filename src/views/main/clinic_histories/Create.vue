@@ -5,16 +5,43 @@
               <h1><i class="fa fa-file-text"></i> Historia clínica</h1>
             </div>
         </div>
+        <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
         <div class="row">
           <div class="col-md-12">
             <div class="tile">
               <h3 class="tile-title">Registro de historia clínica</h3>
               <SearchOwnersAndPets 
-                @owner-selected="setOwnerSelected"
-                @pet-selected="petOwnerSelected"
+                @owner-and-pet-selected="ownerAndPetSelected"
+                
                 @searching="setStateFromLoading"
+
                 :disableFields="!buttonThatOpenFolio"
-                :clearData="buttonThatOpenFolio">
+                :clearData="buttonThatOpenFolio"
+                >
               </SearchOwnersAndPets>
               <div class="row">
                 <div class="col-md-4">
@@ -50,10 +77,10 @@
                   </div>
               </div>
               <div>
-                <button :disabled="!buttonThatOpenFolio || !ownerSelected || !clinicHistory.pet_id || !consultation_purposesSelected.id || folioOpen" class="btn btn-primary btn-sm mr-1" @click="openFolio">
+                <button :disabled="!buttonThatOpenFolio || !clinicHistory.pet_id || !consultation_purposesSelected.id || folioOpen" class="btn btn-primary btn-sm mr-1" @click="openFolio">
                   <i  class="fa fa-fw fa-lg fa fa-folder-open"></i>Abrir folio
                 </button>
-                <button :disabled="!ownerSelected || !clinicHistory.pet_id || !consultation_purposesSelected.id || !folioOpen" class="btn btn-danger btn-sm" @click="undoFolio">
+                <button :disabled="!clinicHistory.pet_id || !consultation_purposesSelected.id || !folioOpen" class="btn btn-danger btn-sm" @click="undoFolio">
                   <i  class="fa fa-fw fa-lg fa fa-undo"></i>Deshacer
                 </button>
                 <!--<router-link :to="{ name: 'races.index' }" class="btn btn-danger">Cancelar</router-link>-->
@@ -1409,7 +1436,6 @@
                 consultationPurposes: [],
                 attachmentTypes: [],
                 petsFromOwner: '',
-                ownerSelected: '',
                 record: null,
                 diagnosisSelected: null,
                 diagnosisType: '',
@@ -1899,7 +1925,6 @@
                 this.owners = []
                 //this.consultationPurposes = []
                 this.petsFromOwner = ''
-                this.ownerSelected = ''
                 this.record = null
                 this.diagnosisSelected = null
                 this.diagnosisType = ''
@@ -1964,21 +1989,18 @@
                 },
                 this.observationsFromPrescription = ''
           },
-          setOwnerSelected (payload) {
-            this.ownerSelected = payload
-          },
-          petOwnerSelected(payload) {
+          ownerAndPetSelected(petId) {
             this.appointmentsPendingFromPet = []
-            if (payload) {
+            if (petId) {
               this.loadingResults = true
-              this.$http.get(`clinic-histories/${payload}/get-appointments-from-pet`).then( response => {
+              this.$http.get(`clinic-histories/${petId}/get-appointments-from-pet`).then( response => {
                 this.appointmentsPendingFromPet = response.data
                 this.loadingResults = false
               }).catch(() => {
                 this.loadingResults = false
               })
             }
-            this.clinicHistory.pet_id = payload
+            this.clinicHistory.pet_id = petId
           },
           setStateFromLoading (payload) {
             //this.loadingResults = payload
