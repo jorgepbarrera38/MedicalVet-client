@@ -469,9 +469,13 @@
             $('#cancelAppointmentModal').modal('show')
           },
           petAndOwnerSelected(petId) {
-            this.appointment.pet_id = petId
-            this.searchingAppointmentsFromPet = true
-            this.getAppointmentsFromPet()
+            this.appointmentsFromPet = []
+            this.appointment.pet_id = ''
+            if (petId) {
+              this.searchingAppointmentsFromPet = true
+              this.appointment.pet_id = petId
+              this.getAppointmentsFromPet()
+            }
           },
           getAppointmentsFromPet () {
             if (this.appointment.pet_id) {
