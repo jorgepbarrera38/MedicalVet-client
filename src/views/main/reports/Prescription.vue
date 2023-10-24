@@ -10,9 +10,7 @@
             <div class="tile">
               <h3 class="tile-title">Recetas veterinarias</h3>
               <SearchOwnersAndPets 
-                  @owner-selected="setOwnerSelected"
-                  @pet-selected="petOwnerSelected"
-                  @searching="setStateFromLoading">
+                  @owner-and-pet-selected="ownerAndPetSelected">
                 </SearchOwnersAndPets>
               <div>
                 <div class="row">
@@ -22,34 +20,27 @@
                       <select class="form-control" v-model="prescriptionSelected">
                         <option value="">Seleccione receta veterinaria</option>
                         <option :value="prescription.id" v-for="prescription in prescriptionsFromPet" :key="`presc-${ prescription.id }`">
-                          Folio: {{ prescription.clinic_history.number_folio }} - Fecha: {{ formatDate(prescription.clinic_history.created_at) }}
+                          Id: {{ prescription.id }} Folio: {{ prescription.clinic_history.number_folio }} - Fecha: {{ formatDate(prescription.clinic_history.created_at) }}
                         </option>
                       </select>
                     </div>
                   </div>
                 </div>
-                <button :disabled="!ownerSelected || !petSelected || !prescriptionSelected || loadingResults" class="btn btn-primary btn-sm mr-1" @click="getPrescriptionFromPet">
-                  <i class="fa fa-fw fa-lg fa-search"></i>Consultar
-                </button>
-                <button :disabled="!ownerSelected || !petSelected || !prescriptionSelected || exportingPrescriptionInPdf" class="btn btn-primary btn-sm mr-1" @click="exportPrescriptionInPdf">
+                <button :disabled="!petSelectedId || !prescriptionSelected || exportingPrescriptionInPdf || loadingResults" class="btn btn-primary btn-sm mr-1" @click="exportPrescriptionInPdf">
                   <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingPrescriptionInPdf" class="spinner-border spinner-border-sm"></span>
                 </button>
-                <button :disabled="!ownerSelected || !petSelected || !prescriptionSelected || sendingPrescriptionForEmail" class="btn btn-primary btn-sm" @click="sendPrescriptionFromPetForEmail">
+                <button :disabled="!petSelectedId || !prescriptionSelected || sendingPrescriptionForEmail || loadingResults" class="btn btn-primary btn-sm" @click="sendPrescriptionFromPetForEmail">
                   <i class="fa fa-fw fa-lg fa-envelope"></i>Enviar por email <span v-if="sendingPrescriptionForEmail" class="spinner-border spinner-border-sm"></span>
                 </button>
               </div>              
             </div>
           </div>
       </div>
+      <!--Inicio de resultados de vacunas y desparasitaciones-->
       <div class="row">
         <div class="col-md-12">
-          <vue-loading v-if="loadingResults" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
-        </div>
-      </div>
-      <!--Inicio de resultados de vacunas y desparasitaciones-->
-      <div class="row" v-if="prescriptionFromPet.id || prescriptionFromPet.clinic_history_prescription_details.length">
-        <div class="col-md-12">
           <div class="tile">
+            <h3 class="tile-title">Información de la receta <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
             <div class="table-responsive">
               <table class="table table-hover table-sm">
                 <thead>
@@ -93,8 +84,7 @@
         },
         data() {
             return {
-                ownerSelected: false,
-                petSelected: '',
+                petSelectedId: '',
                 prescriptionsFromPet: [],
                 prescriptionSelected: '',
                 prescriptionFromPet: {
@@ -110,7 +100,7 @@
         },
         methods: {
           getPrescriptionsFromPet () {
-            this.$http.get(`reports/prescriptions/${ this.petSelected }/get-prescriptions-from-pet`).then(response => {
+            this.$http.get(`reports/prescriptions/${ this.petSelectedId }/get-prescriptions-from-pet`).then(response => {
               this.prescriptionsFromPet = response.data
             })
           },
@@ -138,21 +128,13 @@
               this.exportingPrescriptionInPdf = false
             })
           },
-          setOwnerSelected (payload) {
-            this.ownerSelected = payload
-          },
-          petOwnerSelected(payload) {
-            this.petSelected = payload
+          ownerAndPetSelected(petId) {
+            this.petSelectedId = petId
             this.prescriptionsFromPet = []
             this.prescriptionSelected = ''
-            if (this.petSelected) {
+            if (this.petSelectedId) {
               this.getPrescriptionsFromPet()
             }
-          },
-          setStateFromLoading (payload) {
-            this.vaccinesFromPet = []
-            this.dewormingsFromPet = []
-            this.loadingResults = payload
           },
           formatDate (date) {
             return moment(date).format('LLL')
@@ -179,6 +161,12 @@
               this.$toastr.error('El correo no se pudo enviar')
             })
           },
+        },
+        watch: {
+          prescriptionSelected (prescriptionSelectedId) {
+            console.log(prescriptionSelectedId);
+            this.getPrescriptionFromPet()
+          }
         }
     }
 </script>

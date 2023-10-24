@@ -10,18 +10,16 @@
             <div class="tile">
               <h3 class="tile-title">Vacunación y desparasitación</h3>
               <SearchOwnersAndPets 
-                  @owner-selected="setOwnerSelected"
-                  @pet-selected="petOwnerSelected"
-                  @searching="setStateFromLoading">
+                  @owner-and-pet-selected="ownerAndPetSelected">
                 </SearchOwnersAndPets>
               <div>
                 <!--<button :disabled="!ownerSelected || !petSelected || loadingResults" class="btn btn-primary mr-1" @click="loadingResults = true; getVaccinesFromPet()">
                   <i class="fa fa-fw fa-lg fa-search"></i>Consultar <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>-->
-                <button :disabled="!ownerSelected || !petSelected || exportingVaccinesInPdf || loadingResults" class="btn btn-primary btn-sm mr-1" @click="exportVaccinesInPdf">
+                <button :disabled="!petSelected || exportingVaccinesInPdf || loadingResults" class="btn btn-primary btn-sm mr-1" @click="exportVaccinesInPdf">
                   <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingVaccinesInPdf" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>
-                <button :disabled="!ownerSelected || !petSelected || (!vaccinesFromPet.length && !dewormingsFromPet.length) || loadingResults || sendingVaccinesAndDewormingsForEmail" 
+                <button :disabled="!petSelected || (!vaccinesFromPet.length && !dewormingsFromPet.length) || loadingResults || sendingVaccinesAndDewormingsForEmail" 
                                     class="btn btn-primary btn-sm mr-1" @click="sendVaccinesAndDewormingsForEmail">
                   <i class="fa fa-fw fa-lg fa-envelope"></i>Enviar por email <span v-if="sendingVaccinesAndDewormingsForEmail" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>
@@ -263,20 +261,15 @@
           setOwnerSelected (payload) {
             this.ownerSelected = payload
           },
-          petOwnerSelected(payload) {
+          ownerAndPetSelected(petId) {
             this.vaccinesFromPet = []
             this.dewormingsFromPet = []
             this.petSelected = ''
-            if (payload) {
+            if (petId) {
               this.loadingResults = true
-              this.petSelected = payload
+              this.petSelected = petId
               this.getVaccinesFromPet()
             }
-          },
-          setStateFromLoading (payload) {
-            this.vaccinesFromPet = []
-            this.dewormingsFromPet = []
-            //this.loadingResults = payload
           },
           deleteVaccine (vaccine, index) {
             vaccine.deleting = true
