@@ -11,14 +11,11 @@
                 <div class="col-md-12">
                   <div class="tile">
                     <h3 class="tile-title">Consulta de historia clínica</h3>
-                    <SearchOwnersAndPets 
-                      @owner-selected="setOwnerSelected"
-                      @pet-selected="petOwnerSelected"
-                      @searching="setStateFromLoading"
-                      :identification="this.$route.query.identification"
-                      :pet_id="this.$route.query.pet"
+                    <SearchOwnersAndPets
+                      @owner-and-pet-selected="ownerAndPetSelected"
                       :sizeFromColumnField="12">
                     </SearchOwnersAndPets>
+                    <vue-loading v-if="gettingFoliosFromThePetSelected" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>  
                     <div class="table-responsive" style="max-height:250px;overflow-y:auto">
                       <table class="table table-sm table-hover" v-if="folios.length > 0">
                         <thead>
@@ -43,33 +40,32 @@
                           </tr>
                         </tbody>
                       </table>
+                      
                     </div>
                     <div class="mt-2">
-                      <button :disabled="!ownerSelected || !petSelected || searchingClinicHistory || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="getClinicHistoryFromPet">
+                      <button :disabled="!petSelectedId || loadingResults || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="getClinicHistoryFromPet">
                         <i class="fa fa-fw fa-lg fa-search"></i>Consultar
+                        <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1"></span>
                       </button>
                       &nbsp;&nbsp;&nbsp;
-                      <button :disabled="!ownerSelected || !petSelected || searchingClinicHistory || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="showModalWithAttachments">
+                      <button :disabled="!petSelectedId || loadingResults || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="showModalWithAttachments">
                         <i class="fa fa-fw fa-lg fa-file-archive-o"></i>
                         Archivos adjuntos
                       </button>
                       &nbsp;&nbsp;&nbsp;
-                      <button :disabled="!ownerSelected || !petSelected || loadingResults || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="sendClinicHistoryFromPetForEmail">
+                      <button :disabled="!petSelectedId || loadingResults || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="sendClinicHistoryFromPetForEmail">
                         <i class="fa fa-fw fa-lg fa-envelope"></i>Enviar por email
                       </button>
                     </div>
                     <!--Motivo-->
                   </div>
                 </div>
-                <div class="col-md-12">
-                  <vue-loading v-if="loadingResults" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
-                </div>
             </div>
           </div>
           <div class="col-md-8">
               <div class="tile" style="height:80vh">
-                  <vue-pdf-app :pdf="clinicHsitoryPdf" :config="configViewerPdf"></vue-pdf-app>
-                  <!--<iframe :src="clinicHsitoryPdf" style="border:none"
+                  <vue-pdf-app :pdf="clinicHistoryPdf" :config="configViewerPdf"></vue-pdf-app>
+                  <!--<iframe :src="clinicHistoryPdf" style="border:none"
                       width="100%" height="100%" >
                   </iframe>-->
                   
@@ -133,15 +129,12 @@
         },
         data() {
             return {
-                owners: [],
-                ownerSelected: '',
-                petSelected: '',
-                petsFromOwner: '',
-                clinicHsitoryPdf: '',
-                searchingClinicHistory: false,
-                loadingResults: false,
+                petSelectedId: '',
+                clinicHistoryPdf: '',
+                gettingFoliosFromThePetSelected: false,
                 folios: [],
                 foliosSelected: [],
+                loadingResults: false,
                 configViewerPdf: {
                   //toolbar: true,
                   sidebar: {
@@ -194,17 +187,35 @@
             }
         },
         methods: {
+          ownerAndPetSelected(petSelectedId) {
+            this.petSelectedId = petSelectedId
+            this.clinicHistoryPdf = ''
+            this.folios = []
+            this.foliosSelected = []
+            if (petSelectedId) {
+              this.gettingFoliosFromThePetSelected = true
+              this.$http.get(`reports/clinic-history-folios/${ petSelectedId }`).then( response => {
+                this.folios = response.data
+                this.gettingFoliosFromThePetSelected = false
+                if (this.folios.length == 0) {
+                  this.$toastr.info('La mascota no tiene registros de historia clínica')
+                }
+              }).catch(() => {
+                this.gettingFoliosFromThePetSelected = false
+              })
+            }
+          },
           getClinicHistoryFromPet () {
             if (this.foliosSelected.length == 0) return this.$toastr.error('Seleccione los folios que desea consultar')
             
             this.loadingResults = true
-            this.clinicHsitoryPdf = ''
+            this.clinicHistoryPdf = ''
             let folios = this.foliosSelected.map(folio => {
               return folio.number_folio
             })
-            this.$http.get(`reports/clinic-history/${ this.petSelected }`, { responseType: 'blob', params: { folios }}).then(response => {
+            this.$http.get(`reports/clinic-history/${ this.petSelectedId }`, { responseType: 'blob', params: { folios }}).then(response => {
               this.loadingResults = false
-              this.clinicHsitoryPdf  = URL.createObjectURL(response.data)
+              this.clinicHistoryPdf  = URL.createObjectURL(response.data)
             }).catch( error => {
               this.loadingResults = false
               if (error.response.status == 422) {
@@ -223,7 +234,7 @@
             let folios = this.foliosSelected.map(folio => {
               return folio.number_folio
             })
-            this.$http.get(`clinic-histories/${ this.petSelected }/send-for-email`, { params: { folios }}).then(response => {
+            this.$http.get(`clinic-histories/${ this.petSelectedId }/send-for-email`, { params: { folios }}).then(response => {
               this.loadingResults = false
               this.$toastr.success('El correo se envió con éxito')
             }).catch( error => {
@@ -234,35 +245,11 @@
               this.$toastr.error('El correo no se pudo enviar')
             })
           },
-          setOwnerSelected (payload) {
-            this.ownerSelected = payload
-          },
-          petOwnerSelected(payload) {
-            this.petSelected = payload
-            this.folios = []
-            this.foliosSelected = []
-            if (payload) {
-              this.loadingResults = true
-              this.clinicHsitoryPdf = ''
-              this.$http.get(`reports/clinic-history-folios/${ payload }`).then( response => {
-                this.folios = response.data
-                this.loadingResults = false
-                if (this.folios.length == 0) {
-                  this.$toastr.info('La mascota no tiene registros de historia clínica')
-                }
-              }).catch(() => {
-                this.loadingResults = false
-              })
-            }
-          },
           selectAllFolios () {
             this.foliosSelected = this.folios
           },
           unSelectAllFolios () {
             this.foliosSelected = []
-          },
-          setStateFromLoading (payload) {
-            //this.loadingResults = payload
           },
           formatDate (date) {
             return moment(date).format('LLL')

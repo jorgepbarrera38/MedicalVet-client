@@ -150,8 +150,6 @@ import LoginVue from '../../login/Login.vue'
             type: Boolean,
             default: false
           },
-          /*identification: '',
-          pet_id: '',*/
           clearData: false,
           sizeFromColumnField: ''
         },
