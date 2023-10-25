@@ -19,7 +19,7 @@
       </div>
       <!--Inicio de resultados de vacunas y desparasitaciones-->
       <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-6">
           <div class="tile">
             <div class="tile-title-w-btn">
               <h3 class="tile-title">Productos y servicios <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
@@ -28,7 +28,7 @@
               </button>
               
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive" style="max-height: 300px;">
               <table class="table table-hover table-sm">
                 <thead>
                   <tr>
@@ -78,12 +78,12 @@
             </div>
           </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-6">
           <div class="tile">
             <div class="tile-title-w-btn">
               <h3 class="tile-title">Facturar</h3>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive" style="max-height: 300px;">
               <table class="table table-hover table-sm">
                 <thead>
                   <tr>
@@ -125,7 +125,7 @@
                             <button class="btn btn-success btn-sm mr-1" @click="addProductOrServiceToBill(productAndService)" v-if="!productAndService.checked">
                               <i class="fa fa-check"></i>
                             </button>
-                            <button class="btn btn-warning btn-sm" @click="deleteProductOrServiceFromBill(productAndService)" v-else>
+                            <button class="btn btn-warning btn-sm" @click="deleteProductOrServiceFromBill2(productAndService)" v-else>
                               <i class="fa fa-times"></i>
                             </button>
                           </div>
@@ -134,7 +134,21 @@
                 </tbody>
               </table>
             </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="">Entregado</label>
+                  <input type="number" class="form-control" v-model="moneyGiven">
+                </div>
+              </div>
+            </div>
+
             <h3>Total: ${{ calculateTotalBill() }}</h3>
+            
+            <h3>Entregado: ${{ moneyGiven }}</h3>
+
+
             <button class="btn btn-primary btn-sm" @click="bill" :disabled="saving || !productsAndServicesChecked.length">
                     <i class="fa fa-fw fa-lg fa fa-save"></i> Grabar <span v-if="saving" class="spinner-border spinner-border-sm ml-1"></span>
               </button>
@@ -148,7 +162,7 @@
 <script>
     import SearchOwnersAndPets from '../_components/SearchOwnersAndPets'
     import { VueLoading } from 'vue-loading-template'
-    import moment from 'moment'
+    import moment, { relativeTimeThreshold } from 'moment'
     moment.locale('es')
     export default {
         components: {
@@ -168,7 +182,8 @@
                 loadingResults: false,
                 exportingVaccinesInPdf: false,
 
-                saving: false
+                saving: false,
+                moneyGiven: 0
             }
         },
         methods: {
@@ -179,8 +194,6 @@
               this.productsAndServices.forEach(productAndService => {
                   this.$set(productAndService, 'checked', this.productsAndServicesChecked.find(productAndServiceChecked => productAndServiceChecked.id == productAndService.id) ? true : false)
               })
-
-              console.log(this.productsAndServices);
 
               if (!this.productsAndServices.length) {
                 this.$toastr.info('No existen productos o servicios pendientes por facturar')
@@ -206,10 +219,11 @@
           },
           bill () {
             this.saving = true
-            this.$http.post(`billings/${ this.petSelectedId }/bill`, { productsAndServicesChecked: this.productsAndServicesChecked} ).then(response => {
+            this.$http.post(`billings/${ this.petSelectedId }/bill`, { productsAndServicesChecked: this.productsAndServicesChecked, moneyGiven: this.moneyGiven } ).then(response => {
               
             this.productsAndServices = []
             this.productsAndServicesChecked = []
+            this.moneyGiven = 0
             this.loadingResults = true
             this.getPendingBilling()
                       
@@ -217,7 +231,6 @@
             this.saving = false
             }).catch(error => {
               this.saving = false
-              console.log(error.response.data.message);
               if (error.response.status == 422) {
                 this.$toastr.error(error.response.data.message)
               }
@@ -231,6 +244,13 @@
           deleteProductOrServiceFromBill (productAndService) {
             productAndService.checked = false
             this.productsAndServicesChecked.splice(this.productsAndServicesChecked.findIndex(productAndServiceChecked => productAndServiceChecked.id == productAndService.id), 1)
+          },
+          deleteProductOrServiceFromBill2 (productAndService) {
+            this.productsAndServicesChecked.splice(this.productsAndServicesChecked.findIndex(productAndServiceChecked => productAndServiceChecked.id == productAndService.id), 1)
+            let productAndServiceFound = this.productsAndServices.find(productAndService1 => productAndService1.id == productAndService.id)
+            if (productAndServiceFound) {
+              productAndServiceFound.checked = false
+            }
           },
           calculateTotalBill () {
             let total = 0;
