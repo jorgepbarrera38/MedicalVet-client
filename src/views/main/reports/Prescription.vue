@@ -27,10 +27,10 @@
                   </div>
                 </div>
                 <button :disabled="!petSelectedId || !prescriptionSelected || exportingPrescriptionInPdf || loadingResults" class="btn btn-primary btn-sm mr-1" @click="exportPrescriptionInPdf">
-                  <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingPrescriptionInPdf" class="spinner-border spinner-border-sm"></span>
+                  <i class="fa fa-fw fa-lg fa-print"></i>Exportar <span v-if="exportingPrescriptionInPdf" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>
                 <button :disabled="!petSelectedId || !prescriptionSelected || sendingPrescriptionForEmail || loadingResults" class="btn btn-primary btn-sm" @click="sendPrescriptionFromPetForEmail">
-                  <i class="fa fa-fw fa-lg fa-envelope"></i>Enviar por email <span v-if="sendingPrescriptionForEmail" class="spinner-border spinner-border-sm"></span>
+                  <i class="fa fa-fw fa-lg fa-envelope"></i>Enviar por email <span v-if="sendingPrescriptionForEmail" class="spinner-border spinner-border-sm ml-1"></span>
                 </button>
               </div>              
             </div>

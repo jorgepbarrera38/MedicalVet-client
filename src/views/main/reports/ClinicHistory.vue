@@ -44,17 +44,17 @@
                     </div>
                     <div class="mt-2">
                       <button :disabled="!petSelectedId || loadingResults || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="getClinicHistoryFromPet">
-                        <i class="fa fa-fw fa-lg fa-search"></i>Consultar
+                        <i class="fa fa-fw fa-lg fa-search"></i> Consultar
                         <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1"></span>
                       </button>
                       &nbsp;&nbsp;&nbsp;
-                      <button :disabled="!petSelectedId || loadingResults || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="showModalWithAttachments">
-                        <i class="fa fa-fw fa-lg fa-file-archive-o"></i>
-                        Archivos adjuntos
+                      <button :disabled="!petSelectedId || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="showModalWithAttachments">
+                        <i class="fa fa-fw fa-lg fa-file-archive-o"></i> Archivos adjuntos
                       </button>
                       &nbsp;&nbsp;&nbsp;
-                      <button :disabled="!petSelectedId || loadingResults || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="sendClinicHistoryFromPetForEmail">
-                        <i class="fa fa-fw fa-lg fa-envelope"></i>Enviar por email
+                      <button :disabled="!petSelectedId || sendingClinicHistoryForEmail || foliosSelected.length == 0" class="btn btn-primary btn-sm mb-1" @click="sendClinicHistoryFromPetForEmail">
+                        <i class="fa fa-fw fa-lg fa-envelope"></i> Enviar por email
+                        <span v-if="sendingClinicHistoryForEmail" class="spinner-border spinner-border-sm ml-1"></span>
                       </button>
                     </div>
                     <!--Motivo-->
@@ -135,6 +135,7 @@
                 folios: [],
                 foliosSelected: [],
                 loadingResults: false,
+                sendingClinicHistoryForEmail: false,
                 configViewerPdf: {
                   //toolbar: true,
                   sidebar: {
@@ -230,15 +231,15 @@
 
             if (this.foliosSelected.length == 0) return this.$toastr.error('Seleccione los folios que desea enviar')
             
-            this.loadingResults = true
+            this.sendingClinicHistoryForEmail = true
             let folios = this.foliosSelected.map(folio => {
               return folio.number_folio
             })
             this.$http.get(`clinic-histories/${ this.petSelectedId }/send-for-email`, { params: { folios }}).then(response => {
-              this.loadingResults = false
+              this.sendingClinicHistoryForEmail = false
               this.$toastr.success('El correo se envió con éxito')
             }).catch( error => {
-              this.loadingResults = false
+              this.sendingClinicHistoryForEmail = false
               if (error.response.status == 422) {
                 return this.$toastr.info(error.response.data.message)
               }
