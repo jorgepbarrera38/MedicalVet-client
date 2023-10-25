@@ -74,7 +74,7 @@
                         <td nowrap>{{ product.clinic_history.number_folio }}</td>
                         <td nowrap>
                           <div v-if="canUpdateAndDelete(product.clinic_history.user.username)">
-                            <button class="btn btn-info btn-sm mr-1" v-if="!product.edit"
+                            <button class="btn btn-warning btn-sm mr-1" v-if="!product.edit"
                               :disabled="!hasPermission('clinic-histories.edit-quantity-products-applied')"
                               @click="product.edit = true">
                               <i class="fa fa-edit"></i>
@@ -88,7 +88,7 @@
                             <button class="btn btn-danger btn-sm" v-if="product.edit"
                               :disabled="!hasPermission('clinic-histories.edit-quantity-products-applied') || product.updating"
                               @click="product.edit = false; product.quantity = product.quantityOld">
-                              <i class="fa fa-close"></i>
+                              <i class="fa fa-times-circle"></i>
                             </button>
                             <button class="btn btn-danger btn-sm" v-if="!product.edit"
                               :disabled="!hasPermission('clinic-histories.delete-products-applied') || product.deleting"
@@ -135,7 +135,7 @@
                         <td nowrap>{{ service.clinic_history.number_folio }}</td>
                         <td nowrap>
                           <div v-if="canUpdateAndDelete(service.clinic_history.user.username)">
-                            <button class="btn btn-info btn-sm mr-1" v-if="!service.edit"
+                            <button class="btn btn-warning btn-sm mr-1" v-if="!service.edit"
                               :disabled="!hasPermission('clinic-histories.edit-quantity-services-applied')"
                               @click="service.edit = true">
                               <i class="fa fa-edit"></i>
@@ -149,7 +149,7 @@
                             <button class="btn btn-danger btn-sm" v-if="service.edit"
                               :disabled="!hasPermission('clinic-histories.edit-quantity-services-applied') || service.updating"
                               @click="service.edit = false; service.quantity = service.quantityOld">
-                              <i class="fa fa-close"></i>
+                              <i class="fa fa-times-circle"></i>
                             </button>
                             <button class="btn btn-danger btn-sm" v-if="!service.edit"
                               :disabled="!hasPermission('clinic-histories.delete-services-applied') || service.deleting"
