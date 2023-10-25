@@ -94,6 +94,7 @@
                     <th>Precio</th>
                     <th>Cantidad</th>
                     <th>Subtotal</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -118,6 +119,16 @@
                         </td>
                         <td>
                           {{ productAndService.quantity * productAndService.price  }}
+                        </td>
+                        <td>
+                          <div>
+                            <button class="btn btn-success btn-sm mr-1" @click="addProductOrServiceToBill(productAndService)" v-if="!productAndService.checked">
+                              <i class="fa fa-check"></i>
+                            </button>
+                            <button class="btn btn-warning btn-sm" @click="deleteProductOrServiceFromBill(productAndService)" v-else>
+                              <i class="fa fa-times"></i>
+                            </button>
+                          </div>
                         </td>
                     </tr>
                 </tbody>
@@ -165,9 +176,11 @@
             this.$http.get(`billings/${ this.petSelectedId }/get-pending-billing`).then(response => {
               
               this.productsAndServices = response.data.productsAndServices
-              this.productsAndServices.forEach(productOrService => {
-                  this.$set(productOrService, 'checked', false)
+              this.productsAndServices.forEach(productAndService => {
+                  this.$set(productAndService, 'checked', this.productsAndServicesChecked.find(productAndServiceChecked => productAndServiceChecked.id == productAndService.id) ? true : false)
               })
+
+              console.log(this.productsAndServices);
 
               if (!this.productsAndServices.length) {
                 this.$toastr.info('No existen productos o servicios pendientes por facturar')
@@ -213,6 +226,7 @@
           addProductOrServiceToBill (productAndService) {
             productAndService.checked = true
             this.productsAndServicesChecked.push(productAndService)
+            this.productsAndServicesChecked.sort((a, b) => b.id - a.id)
           },
           deleteProductOrServiceFromBill (productAndService) {
             productAndService.checked = false
