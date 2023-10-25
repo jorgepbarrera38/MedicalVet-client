@@ -132,6 +132,9 @@
             this.petSelectedId = petId
             this.prescriptionsFromPet = []
             this.prescriptionSelected = ''
+            this.prescriptionFromPet = {
+                clinic_history_prescription_details: []
+              }
             if (this.petSelectedId) {
               this.getPrescriptionsFromPet()
             }
@@ -164,8 +167,9 @@
         },
         watch: {
           prescriptionSelected (prescriptionSelectedId) {
-            console.log(prescriptionSelectedId);
-            this.getPrescriptionFromPet()
+            if (prescriptionSelectedId) {
+              this.getPrescriptionFromPet()
+            }
           }
         }
     }
