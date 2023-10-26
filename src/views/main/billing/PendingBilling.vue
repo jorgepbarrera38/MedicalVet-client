@@ -154,7 +154,7 @@
             <h3>Entregado: ${{ moneyGiven }}</h3>
 
 
-            <button class="btn btn-primary btn-sm" @click="bill" :disabled="saving || !productsAndServicesChecked.length">
+            <button class="btn btn-primary btn-sm" @click="bill" :disabled="saving || !productsAndServicesChecked.length || !petSelectedId">
                     <i class="fa fa-fw fa-lg fa fa-save"></i> Grabar <span v-if="saving" class="spinner-border spinner-border-sm ml-1"></span>
               </button>
           </div>
