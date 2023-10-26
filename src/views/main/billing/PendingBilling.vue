@@ -82,6 +82,11 @@
           <div class="tile">
             <div class="tile-title-w-btn">
               <h3 class="tile-title">Facturar</h3>
+              
+              <ProductAndServiceToAddModal 
+                @product-or-service-selected="productOrServiceSelected"
+              />
+
             </div>
             <div class="table-responsive" style="max-height: 300px;">
               <table class="table table-hover table-sm">
@@ -153,6 +158,7 @@
                     <i class="fa fa-fw fa-lg fa fa-save"></i> Grabar <span v-if="saving" class="spinner-border spinner-border-sm ml-1"></span>
               </button>
           </div>
+
         </div>
       </div>
       <!--Inicio de resultados de vacunas y desparasitaciones-->
@@ -163,11 +169,13 @@
     import SearchOwnersAndPets from '../_components/SearchOwnersAndPets'
     import { VueLoading } from 'vue-loading-template'
     import moment, { relativeTimeThreshold } from 'moment'
+    import ProductAndServiceToAddModal from './components/ProductAndServiceToAddModal'
     moment.locale('es')
     export default {
         components: {
           VueLoading, 
           SearchOwnersAndPets,
+          ProductAndServiceToAddModal
         },
         data() {
             return {
@@ -260,6 +268,44 @@
             })
 
             return total
+          },
+          productOrServiceSelected (productOrService) {
+
+            let a = {
+                      "id":137,
+                      "datetime":"2023-10-25 18:20:47",
+                      "code":"p4",
+                      "description":"Desparasitante 1",
+                      "product_id":4,
+                      "service_id":null,
+                      "price":13000,
+                      "quantity":1,
+                      "owner_id":2,
+                      "pet_id":4,
+                      "billed":0,
+                      "created_at":"2023-10-25T23:20:47.000000Z",
+                      "updated_at":"2023-10-25T23:20:47.000000Z",
+                      "checked": true
+                    }
+
+            let b = {
+              "id": null,
+                "datetime":"1992-10-31 18:20:47",
+                "code": productOrService.code,
+                "description": productOrService.name,
+                "product_id": productOrService.type == 'Product' ? productOrService.id : null,
+                "service_id": productOrService.type == 'Service' ? productOrService.id : null,
+                "price": productOrService.price,
+                "quantity": productOrService.quantity,
+                "owner_id": null,
+                "pet_id": null,
+                "billed": null,
+                "created_at": null,
+                "updated_at": null,
+                "checked": true,
+            }
+
+            this.productsAndServicesChecked.push(b)
           }
         }
     }
