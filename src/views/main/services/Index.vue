@@ -36,7 +36,7 @@
                   <tr v-for="service in services.data" :key="service.id">
                     <td nowrap>{{ service.code }}</td>
                     <td nowrap>{{ service.name }}</td>
-                    <td nowrap>{{ service.price }}</td>
+                    <td nowrap>${{ service.price | convertMoney }}</td>
                     <td nowrap>
                       <button class="btn btn-primary btn-sm" 
                         :disabled="!hasPermission('services.update')"

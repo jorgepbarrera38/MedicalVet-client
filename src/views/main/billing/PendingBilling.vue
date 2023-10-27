@@ -56,7 +56,7 @@
                           {{ productAndService.description }}
                         </td>
                         <td>
-                          {{ productAndService.price }}
+                          ${{ productAndService.price | convertMoney }}
                         </td>
                         <td>
                           {{ productAndService.quantity }}
@@ -117,13 +117,13 @@
                           {{ productAndService.description }}
                         </td>
                         <td>
-                          {{ productAndService.price }}
+                          ${{ productAndService.price | convertMoney  }}
                         </td>
                         <td>
                           {{ productAndService.quantity }}
                         </td>
                         <td>
-                          {{ productAndService.quantity * productAndService.price  }}
+                          ${{ productAndService.quantity * productAndService.price | convertMoney  }}
                         </td>
                         <td>
                           <div>
@@ -149,9 +149,9 @@
               </div>
             </div>
 
-            <h3>Total: ${{ calculateTotalBill() }}</h3>
+            <h3>Total: ${{ calculateTotalBill() | convertMoney }}</h3>
             
-            <h3>Entregado: ${{ moneyGiven }}</h3>
+            <h3>Entregado: ${{ Number(moneyGiven) | convertMoney }}</h3>
 
 
             <button class="btn btn-primary btn-sm" @click="bill" :disabled="saving || !productsAndServicesChecked.length || !petSelectedId">
@@ -216,6 +216,7 @@
             this.productsAndServices = []
             this.productsAndServicesChecked = []
             this.petSelectedId = ''
+            this.moneyGiven = 0
             if (petId) {
               this.loadingResults = true
               this.petSelectedId = petId

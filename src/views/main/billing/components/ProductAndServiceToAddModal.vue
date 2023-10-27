@@ -45,11 +45,11 @@
                             </th>
                             <td nowrap>{{ productOrService.code }}</td>
                             <td nowrap>{{ productOrService.name }}</td>
-                            <td nowrap>{{ productOrService.price }}</td>
+                            <td nowrap>${{ productOrService.price | convertMoney }}</td>
                             <td nowrap>
                                 <input type="number" class="form-control" v-model="productOrService.quantity">
                             </td>
-                            <td>{{ productOrService.price * productOrService.quantity }}</td>
+                            <td>${{ productOrService.price * productOrService.quantity | convertMoney }}</td>
                           </tr>
                         </tbody>
                       </table>

@@ -77,6 +77,11 @@ Vue.prototype.$limitedVersion = false
 
 Vue.config.productionTip = false
 
+Vue.filter('convertMoney', (value) => {
+  //return new Intl.NumberFormat().format(value)
+  return value.toLocaleString('en-US');
+})
+
 new Vue({
   router,
   render: h => h(App)

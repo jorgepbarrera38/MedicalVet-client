@@ -38,7 +38,7 @@
                   <tr v-for="product in products.data" :key="product.id">
                     <td nowrap>{{ product.code }}</td>
                     <td nowrap>{{ product.name }}</td>
-                    <td nowrap>{{ product.price }}</td>
+                    <td nowrap>${{ product.price | convertMoney }}</td>
                     <td nowrap>
                       <input type="checkbox" :checked="product.vaccine">
                     </td>
