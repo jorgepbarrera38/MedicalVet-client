@@ -153,7 +153,7 @@
             
             <h3>Entregado: ${{ Number(moneyGiven) | convertMoney }}</h3>
 
-
+            <input type="checkbox" v-model="printBill"> Imprimir factura <br> <br>
             <button class="btn btn-primary btn-sm" @click="bill" :disabled="saving || !productsAndServicesChecked.length || !petSelectedId">
                     <i class="fa fa-fw fa-lg fa fa-save"></i> Grabar <span v-if="saving" class="spinner-border spinner-border-sm ml-1"></span>
               </button>
@@ -162,20 +162,22 @@
         </div>
       </div>
       <!--Inicio de resultados de vacunas y desparasitaciones-->
+      
     </div>
 </template>
 
 <script>
     import SearchOwnersAndPets from '../_components/SearchOwnersAndPets'
     import { VueLoading } from 'vue-loading-template'
-    import moment, { relativeTimeThreshold } from 'moment'
+    import moment from 'moment'
     import ProductAndServiceToAddModal from './components/ProductAndServiceToAddModal'
+    import "vue-pdf-app/dist/icons/main.css"
     moment.locale('es')
     export default {
         components: {
           VueLoading, 
           SearchOwnersAndPets,
-          ProductAndServiceToAddModal
+          ProductAndServiceToAddModal,
         },
         data() {
             return {
@@ -191,7 +193,9 @@
                 exportingVaccinesInPdf: false,
 
                 saving: false,
-                moneyGiven: 0
+                moneyGiven: 0,
+
+                printBill: true
             }
         },
         methods: {
@@ -228,8 +232,10 @@
           },
           bill () {
             this.saving = true
-            this.$http.post(`billings/${ this.petSelectedId }/bill`, { productsAndServicesChecked: this.productsAndServicesChecked, moneyGiven: this.moneyGiven } ).then(response => {
+            this.$http.post(`billings/${ this.petSelectedId }/bill`, 
+                { productsAndServicesChecked: this.productsAndServicesChecked, moneyGiven: this.moneyGiven }, { responseType: 'blob' } ).then(response => {
               
+            //console.log(response.data);
             this.productsAndServices = []
             this.productsAndServicesChecked = []
             this.moneyGiven = 0
@@ -238,11 +244,18 @@
                       
             this.$toastr.success('Factura generada')
             this.saving = false
+            if (this.printBill) {
+              
+              window.open(URL.createObjectURL(response.data), '_blank')
+            }
+
             }).catch(error => {
               this.saving = false
-              if (error.response.status == 422) {
-                this.$toastr.error(error.response.data.message)
-              }
+              
+                error.response.data.text().then( response => {
+                  this.$toastr.error(JSON.parse(response).message)
+                })
+              
             })
           },
           addProductOrServiceToBill (productAndService) {
