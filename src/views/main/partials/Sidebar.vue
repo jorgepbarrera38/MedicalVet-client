@@ -257,6 +257,11 @@
                         <i class="icon fa fa-circle-o"></i> Pendiente por facturar
                     </a>
                 </li>
+                <li>
+                    <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'billing.bill_consultation' })" class="treeview-item">
+                        <i class="icon fa fa-circle-o"></i> Consulta de facturas
+                    </a>
+                </li>
             </ul>
         </li>
 
