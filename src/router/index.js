@@ -76,6 +76,7 @@ import informedConsentTemplateCustomize from '../views/main/informed_consent_tem
 import InformedConsentsIndex from '../views/main/informed_consents/Index.vue'
 import BillingPendingBilling from '../views/main/billing/PendingBilling.vue'
 import BillingBillConsultation from '../views/main/billing/BillConsultation.vue'
+import BillingBillReport from '../views/main/billing/BillReport.vue'
 
 Vue.use(VueRouter)
 
@@ -423,6 +424,11 @@ const routes = [
         path: '/facturacion/consulta-de-facturas',
         name: 'billing.bill_consultation',
         component: BillingBillConsultation
+      },
+      {
+        path: '/facturacion/reporte-de-facturacion',
+        name: 'billing.bill_report',
+        component: BillingBillReport
       },
     ]
   },

@@ -23,7 +23,7 @@
                     <th>Factura No.</th>
                     <th>Cliente </th>
                     <th>Total</th>
-                    <th>Anulada</th>
+                    <th>Estado</th>
                     <th></th>
                     </thead>
                     <tbody>
@@ -41,7 +41,7 @@
                         <td nowrap>{{ bill.number_bill }}</td>
                         <td nowrap>{{ bill.owner.identification + ' - ' +  bill.owner.names + ' ' +  bill.owner.surnames }}</td>
                         <td nowrap>${{ bill.total | convertMoney }}</td>
-                        <td nowrap>{{ bill.cancelled }}</td>
+                        <td nowrap>{{ bill.cancelled ? 'Anulada' : 'Generada' }}</td>
                         <td nowrap>
                         <!--!hasPermission('appointments.cancel')-->
                         <button :disabled="bill.cancelled == 1 || bill.cancelling"
@@ -55,6 +55,10 @@
                 </table>
 
             </div>
+            <pagination class="my-2" align="right" :limit="-1" :data="allBills" @pagination-change-page="getAllBills">
+              <span slot="prev-nav">&lt; Anterior</span>
+              <span slot="next-nav">Siguiente &gt;</span>
+            </pagination>
             <!--<pagination class="my-2" align="right" :limit="-1" :data="allBills" @pagination-change-page="getAllAppointments">
               <span slot="prev-nav">&lt; Anterior</span>
               <span slot="next-nav">Siguiente &gt;</span>

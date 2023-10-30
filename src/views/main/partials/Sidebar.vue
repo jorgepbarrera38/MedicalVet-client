@@ -262,6 +262,11 @@
                         <i class="icon fa fa-circle-o"></i> Consulta de facturas
                     </a>
                 </li>
+                <li>
+                    <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'billing.bill_report' })" class="treeview-item">
+                        <i class="icon fa fa-circle-o"></i> Reporte de facturación
+                    </a>
+                </li>
             </ul>
         </li>
 
