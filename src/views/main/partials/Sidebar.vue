@@ -130,6 +130,16 @@
                         <i class="icon fa fa-circle-o"></i> Consentimiento informado
                     </a>
                 </li>
+                <li v-if="hasPermission('reports.consultations')">
+                    <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'reports.consultations' })" class="treeview-item">
+                        <i class="icon fa fa-circle-o"></i> Informe de atenciónes
+                    </a>
+                </li>
+                <li v-if="hasPermission('reports.services-provided')">
+                    <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'reports.services_provided' })" class="treeview-item">
+                        <i class="icon fa fa-circle-o"></i> Informe de servicios prestados
+                    </a>
+                </li>
             </ul>
         </li>
 
@@ -224,25 +234,16 @@
             </ul>
         </li>-->
 
-        <li class="treeview" id="reports">
+        <!--<li class="treeview" id="reports">
             <a class="app-menu__item" href="#" data-toggle="treeview" @click.prevent="explodeOrImplode('reports')">
                 <i class="app-menu__icon fa fa-list-ul"></i>
                 <span class="app-menu__label">Reportes</span>
                 <i class="treeview-indicator fa fa-angle-right"></i>
             </a>
             <ul class="treeview-menu">
-                <li v-if="hasPermission('reports.consultations')">
-                    <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'reports.consultations' })" class="treeview-item">
-                        <i class="icon fa fa-circle-o"></i> Informe de atenciónes
-                    </a>
-                </li>
-                <li v-if="hasPermission('reports.services-provided')">
-                    <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'reports.services_provided' })" class="treeview-item">
-                        <i class="icon fa fa-circle-o"></i> Informe de servicios prestados
-                    </a>
-                </li>
+                
             </ul>
-        </li>
+        </li>-->
 
         <li class="treeview" id="billing">
             <a class="app-menu__item" href="#" data-toggle="treeview" @click.prevent="explodeOrImplode('billing')">
