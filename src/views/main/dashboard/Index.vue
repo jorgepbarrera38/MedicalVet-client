@@ -50,12 +50,24 @@
           <div class="col-md-6 col-lg-3">
             <div @mouseover="shadowClinicalHistories = true"
                 @mouseleave="shadowClinicalHistories = false" 
-                :class="{ 'widget-small': true, info: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowClinicalHistories }" style="cursor:pointer" 
+                :class="{ 'widget-small': true, primary: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowClinicalHistories }" style="cursor:pointer" 
                 @click="hasPermission('clinic-histories.store') ? $router.push({ name: 'clinic_histories.create' }) : $toastr.error('No tiene permisos para esta acción')">
               <i class="icon fa fa-file-text fa-3x"></i>
               <div class="info">
                 <h4>Historias clínicas</h4>
                 <p><b>{{ clinicHistoriesQuantity }}</b></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div @mouseover="shadowBills = true"
+                @mouseleave="shadowBills = false"
+              :class="{ 'widget-small': true, info: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowBills }" style="cursor:pointer" 
+              @click="$router.push({ name: 'billing.pending_billing' })">
+              <i class="icon fa fa-money fa-3x"></i>
+              <div class="info">
+                <h4>Facturación</h4>
+                <p>Total mes: <b>${{ totalBillCurrentMonth | convertMoney }}</b></p>
               </div>
             </div>
           </div>
@@ -143,6 +155,7 @@
       data() {
         return {
           petsQuantity: '',
+          totalBillCurrentMonth: '',
           ownersQuantity: '',
           clinicHistoriesQuantity: '',
           appointmentsQuantity: '',
@@ -151,6 +164,7 @@
           shadowOwners: false,
           shadowPets: false,
           shadowClinicalHistories: false,
+          shadowBills: false,
           shadowNextVaccines: false,
           shadowAppointments: false,
           loadingData: true,
@@ -161,6 +175,7 @@
           this.$http.get('dashboard/get-data').then( response => {
             this.vaccines = response.data.vaccines
             this.petsQuantity = response.data.petsQuantity
+            this.totalBillCurrentMonth = response.data.totalBillCurrentMonth
             this.ownersQuantity = response.data.ownersQuantity
             this.clinicHistoriesQuantity = response.data.clinicHistoriesQuantity
             this.appointmentsQuantity = response.data.appointmentsQuantity

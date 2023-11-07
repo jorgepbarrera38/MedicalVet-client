@@ -61,7 +61,7 @@
             </div>
             <!--Fin modal acerca de-->
             <!-- Navbar-->
-            <header class="app-header"><span class="app-header__logo">Medical Vet</span>
+            <header class="app-header"><span class="app-header__logo" style="cursor: pointer;" @click="$router.push({ name: 'dashboard.index' })">Medical Vet</span>
               <!-- Sidebar toggle button-->
               <a class="app-sidebar__toggle" href="#" @click.prevent="hideOrShowNavBarMovil"></a>
               <!-- Navbar Right Menu-->
