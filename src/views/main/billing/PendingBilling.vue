@@ -153,7 +153,7 @@
             
             <h3>Entregado: ${{ Number(moneyGiven) | convertMoney }}</h3>
 
-            <input type="checkbox" v-model="printBill"> Imprimir factura <br> <br>
+            <!--<input type="checkbox" v-model="printBill"> Imprimir factura <br> <br>-->
             <button class="btn btn-primary btn-sm" @click="bill" :disabled="saving || !productsAndServicesChecked.length || !petSelectedId">
                     <i class="fa fa-fw fa-lg fa fa-save"></i> Grabar <span v-if="saving" class="spinner-border spinner-border-sm ml-1"></span>
               </button>
@@ -195,7 +195,7 @@
                 saving: false,
                 moneyGiven: 0,
 
-                printBill: true
+                printBill: false
             }
         },
         methods: {
@@ -235,7 +235,6 @@
             this.$http.post(`billings/${ this.petSelectedId }/bill`, 
                 { productsAndServicesChecked: this.productsAndServicesChecked, moneyGiven: this.moneyGiven }, { responseType: 'blob' } ).then(response => {
               
-            //console.log(response.data);
             this.productsAndServices = []
             this.productsAndServicesChecked = []
             this.moneyGiven = 0
@@ -285,26 +284,9 @@
           },
           productOrServiceSelected (productOrService) {
 
-            let a = {
-                      "id":137,
-                      "datetime":"2023-10-25 18:20:47",
-                      "code":"p4",
-                      "description":"Desparasitante 1",
-                      "product_id":4,
-                      "service_id":null,
-                      "price":13000,
-                      "quantity":1,
-                      "owner_id":2,
-                      "pet_id":4,
-                      "billed":0,
-                      "created_at":"2023-10-25T23:20:47.000000Z",
-                      "updated_at":"2023-10-25T23:20:47.000000Z",
-                      "checked": true
-                    }
-
             let b = {
               "id": null,
-                "datetime":"1992-10-31 18:20:47",
+                "datetime": moment(),
                 "code": productOrService.code,
                 "description": productOrService.name,
                 "product_id": productOrService.type == 'Product' ? productOrService.id : null,

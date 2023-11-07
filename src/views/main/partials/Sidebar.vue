@@ -254,6 +254,11 @@
             <ul class="treeview-menu">
                 <!-- v-if="hasPermission('reports.consultations')"-->
                 <li>
+                    <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'billing.billing_authorization' })" class="treeview-item">
+                        <i class="icon fa fa-circle-o"></i> Autorización de facturación
+                    </a>
+                </li>
+                <li>
                     <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'billing.pending_billing' })" class="treeview-item">
                         <i class="icon fa fa-circle-o"></i> Pendiente por facturar
                     </a>

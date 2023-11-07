@@ -57,7 +57,7 @@
                             <tbody>
                             <tr v-for="bill in bills.data" :key="'bill' + bill.id">
                                 <td nowrap>{{ formatDate(bill.date) }}</td>
-                                <td nowrap>{{ bill.number_bill }}</td>
+                                <td nowrap>{{ bill.prefix_and_number_bill }}</td>
                                 <td nowrap>{{ bill.owner.identification + ' - ' +  bill.owner.names + ' ' +  bill.owner.surnames }}</td>
                                 <td nowrap>${{ bill.total | convertMoney }}</td>
                                 <td nowrap>{{ bill.cancelled ? 'Anulada' : 'Generada' }}</td>
