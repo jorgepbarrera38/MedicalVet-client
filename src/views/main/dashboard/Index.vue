@@ -6,11 +6,11 @@
           </div>
       </div>
       <div class="row">
-        <div class="col-md-12" v-if="loadingData">
+        <!--<div class="col-md-12" v-if="loadingData">
           <vue-loading type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
-        </div>
+        </div>-->
 
-        <template v-else>
+        <template>
           <div class="col-md-6 col-lg-3">
             <div @mouseover="shadowOwners = true"
                 @mouseleave="shadowOwners = false"
@@ -19,7 +19,10 @@
               <i class="icon fa fa-users fa-3x"></i>
               <div class="info">
                 <h4>Propietarios</h4>
-                <p><b>{{ ownersQuantity }}</b></p>
+                <p>
+                  <span v-if="loadingData" class="spinner-border spinner-border-sm"></span>
+                  <b v-else>{{ ownersQuantity }}</b>
+                </p>
               </div>
             </div>
           </div>
@@ -31,7 +34,10 @@
               <i class="icon fa fa-paw fa-3x"></i>
               <div class="info">
                 <h4>Mascotas</h4>
-                <p><b>{{ petsQuantity }}</b></p>
+                <p>
+                  <span v-if="loadingData" class="spinner-border spinner-border-sm"></span>
+                  <b v-else>{{ petsQuantity }}</b>
+                </p>
               </div>
             </div>
           </div>
@@ -43,7 +49,10 @@
               <i class="icon fa fa-stethoscope fa-3x"></i>
               <div class="info">
                 <h4>Citas</h4>
-                <p>Pendientes hoy: <b>{{ appointmentsQuantity }}</b></p>
+                <p>
+                  
+                  Pendientes hoy: <span v-if="loadingData" class="spinner-border spinner-border-sm"></span><b v-else>{{ appointmentsQuantity }}</b>
+                </p>
               </div>
             </div>
           </div>
@@ -55,7 +64,10 @@
               <i class="icon fa fa-file-text fa-3x"></i>
               <div class="info">
                 <h4>Historias clínicas</h4>
-                <p><b>{{ clinicHistoriesQuantity }}</b></p>
+                <p>
+                  <span v-if="loadingData" class="spinner-border spinner-border-sm"></span>
+                  <b v-else>{{ clinicHistoriesQuantity }}</b>
+                </p>
               </div>
             </div>
           </div>
@@ -67,7 +79,31 @@
               <i class="icon fa fa-money fa-3x"></i>
               <div class="info">
                 <h4>Facturación</h4>
-                <p>Total mes: <b>${{ totalBillCurrentMonth | convertMoney }}</b></p>
+                <p>Total mes: <span v-if="loadingData" class="spinner-border spinner-border-sm"></span><b v-else>${{ totalBillCurrentMonth | convertMoney }}</b></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div @mouseover="shadowPrescriptions = true"
+                @mouseleave="shadowPrescriptions = false"
+              :class="{ 'widget-small': true, warning: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowPrescriptions }" style="cursor:pointer" 
+              @click="$router.push({ name: 'reports.prescription' })">
+              <i class="icon fa fa-list fa-3x"></i>
+              <div class="info">
+                <h4>Recetas veterinarias</h4>
+                <!--<p>Pendientes hoy: <b></b></p>-->
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div @mouseover="shadowVaccines = true"
+                @mouseleave="shadowVaccines = false"
+              :class="{ 'widget-small': true, primary: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowVaccines }" style="cursor:pointer" 
+              @click="$router.push({ name: 'clinic_histories.vaccine' })">
+              <i class="icon fa fa-eyedropper fa-3x"></i>
+              <div class="info">
+                <h4>Vacuna y desparasitación</h4>
+                <!--<p>Total mes: <b>${{ totalBillCurrentMonth | convertMoney }}</b></p>-->
               </div>
             </div>
           </div>
@@ -78,13 +114,17 @@
                 @click="hasPermission('clinic-histories.store') ? showModalWithNextVaccines() : $toastr.error('No tiene permisos para esta acción')">
               <i class="icon fa fa-exclamation fa-3x"></i>
               <div class="info">
-                <h4>Vacunas</h4>
+                <h4>Próximas vacunas</h4>
                 <p>
-                  Próximos 
-                  <span v-if="daysAlertVaccines">{{ daysAlertVaccines }}</span>
-                  <span v-else>7</span>
-                  días:
-                  <b>{{ vaccines.length }}</b></p>
+                  <span v-if="loadingData" class="spinner-border spinner-border-sm"></span>
+                  <span v-else>
+                    Próximos 
+                    <span v-if="daysAlertVaccines">{{ daysAlertVaccines }}</span>
+                    <span v-else>7</span>
+                    días:
+                    <b>{{ vaccines.length }}</b>
+                  </span>
+                </p>
               </div>
             </div>
           </div>
@@ -165,6 +205,8 @@
           shadowPets: false,
           shadowClinicalHistories: false,
           shadowBills: false,
+          shadowPrescriptions: false,
+          shadowVaccines: false,
           shadowNextVaccines: false,
           shadowAppointments: false,
           loadingData: true,
