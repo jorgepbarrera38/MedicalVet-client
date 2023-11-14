@@ -27,13 +27,102 @@
           <div class="tile">
             <div class="bs-component">
               <ul class="nav nav-tabs">
-                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home">Citas</a></li>
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#profile">Agenda de citas</a></li>
+                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#profile">Agenda de citas</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#home">Citas</a></li>
                 
               </ul>
               <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade active show" id="profile">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-4 mt-3">
+                        <!--<h4 class="tile-title">Asignación</h4>-->
+                        <v-date-picker is-expanded v-model="date"/>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-8 mt-3">
+                      <!--
+                        <div class="tile-title-w-btn">
+                          <button @click="searchingAppointments = true; getAppointments()"
+                            class="btn btn-primary btn-sm">
+                            <i class="fa fa-fw fa-lg fa-refresh"></i>
+                          </button>
+                        </div>
+                        -->
+                        <div class="row mb-2">
+                          <div class="col-md-4">
+                            <input type="text" class="form-control" placeholder="Buscar propietario o mascota" v-model="searchAppointment">
+                          </div>
+                          <div class="col-md-4">
+                              <select name="" class="form-control" v-model="consultingroomSearchAppointment">
+                                  <option v-for="consultingroom in consultingrooms" :value="consultingroom.id" :key="`consultingroomlist-${consultingroom.id}`">
+                                    {{ consultingroom.name }}
+                                  </option>
+                              </select>
+                          </div>
+                        </div>
+                        <vue-loading v-if="searchingAppointments" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
+                        <div class="table-responsive" v-else style="max-height: 350px;">
+                          <table class="table table-sm table-hover">
+                            <thead>
+                              <th>Propietario</th>
+                              <th>Mascota</th>
+                              <th>Consultorio</th>
+                              <th>Actividad</th>
+                              <th nowrap>Fecha inicio cita</th>
+                              <th nowrap>Fecha fin cita</th>
+                              <th></th>
+                            </thead>
+                            <tbody>
+                              <!--v-if="!appointmentsFiltered.length"-->
+                                <tr class="table-success" style="cursor:pointer" 
+                                  @click="openScheduleFromAppointment(date, consultingroomSearchAppointment)">
+                                  <td colspan="8">
+                                        Agregar cita
+                                  </td>
+                                </tr>
+                                <template v-for="(appointment, index) in appointmentsFiltered">
+                                  <tr :key="'appointment' + appointment.id" :title="appointment.observations ? appointment.observations : 'No hay observaciónes'">
+                                    <td nowrap>{{ appointment.pet.owner.identification + ' - ' + appointment.pet.owner.names + ' ' + appointment.pet.owner.surnames }}</td>
+                                    <td nowrap>{{ appointment.pet.name }}</td>
+                                    <td nowrap>{{ appointment.consultingroom.name }}</td>
+                                    <td nowrap>{{ appointment.activity.name }}</td>
+                                    <td nowrap>{{ formatDate(appointment.date_time_start) }}</td>
+                                    <td nowrap>{{ formatDate(appointment.date_time_finish) }}</td>
+                                    <td nowrap>
+                                      <!--<button :disabled="!hasPermission('appointments.fulfill')"
+                                        class="btn btn-success btn-sm mr-1" @click="fulfillAppointment(appointment)" title="Cumplir">
+                                        <i class="fa fa-fw fa-lg fa-check"></i>
+                                      </button>
+                                      <button :disabled="!hasPermission('appointments.unfulfill')"
+                                        class="btn btn-info btn-sm mr-1" @click="unFulfillAppointment(appointment)" title="Incumplir">
+                                        <i class="fa fa-fw fa-lg fa-clock-o"></i>
+                                      </button>-->
+                                      <button :disabled="!hasPermission('appointments.cancel')"
+                                        class="btn btn-danger btn-sm" @click="preCancelAppointment(appointment.id)" title="Cancelar">
+                                        <i class="fa fa-fw fa-lg fa-times-circle"></i>
+                                      </button>
+                                    </td>
+                                  </tr>
+                                  <tr :key="'appointment2-' + appointment.id" class="table-success" style="cursor:pointer" v-if="appointmentsFiltered[index + 1] ? appointmentsFiltered[index].date_time_finish != appointmentsFiltered[index + 1].date_time_start : true"
+                                    @click="openScheduleFromAppointment(appointmentsFiltered[index].date_time_finish, appointment.consultingroom_id)">
+                                    <td colspan="8">
+                                          {{ formatDate(appointmentsFiltered[index].date_time_finish) }}  
+                                          <span v-if="appointmentsFiltered[index + 1]">
+                                            - {{ formatDate(appointmentsFiltered[index + 1].date_time_start) }}
+                                          </span>
+                                    </td>
+                                  </tr>
+                                </template>
+                                
+                            </tbody>
+                          </table>
+                        </div>
+                        
+                    </div>
+                  </div>
+                </div>
+                <!--Agenda de citas-->
                 <!--Citas de la mascota-->
-                <div class="tab-pane fade active show" id="home">
+                <div class="tab-pane fade" id="home">
                   <div class="row mt-3">
                     <div class="col-md-12">
                       <vue-loading v-if="searchingAppointmentsFromPet" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>
@@ -163,95 +252,7 @@
                   </div>
                 </div>
                 <!-- Fin modal agendar cita -->
-                <div class="tab-pane fade" id="profile">
-                  <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-4 mt-3">
-                        <!--<h4 class="tile-title">Asignación</h4>-->
-                        <v-date-picker is-expanded v-model="date"/>
-                    </div>
-                    <div class="col-sm-12 col-md-12 col-lg-8 mt-3">
-                      <!--
-                        <div class="tile-title-w-btn">
-                          <button @click="searchingAppointments = true; getAppointments()"
-                            class="btn btn-primary btn-sm">
-                            <i class="fa fa-fw fa-lg fa-refresh"></i>
-                          </button>
-                        </div>
-                        -->
-                        <div class="row mb-2">
-                          <div class="col-md-4">
-                            <input type="text" class="form-control" placeholder="Buscar propietario o mascota" v-model="searchAppointment">
-                          </div>
-                          <div class="col-md-4">
-                              <select name="" class="form-control" v-model="consultingroomSearchAppointment">
-                                  <option v-for="consultingroom in consultingrooms" :value="consultingroom.id" :key="`consultingroomlist-${consultingroom.id}`">
-                                    {{ consultingroom.name }}
-                                  </option>
-                              </select>
-                          </div>
-                        </div>
-                        <vue-loading v-if="searchingAppointments" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
-                        <div class="table-responsive" v-else style="max-height: 350px;">
-                          <table class="table table-sm table-hover">
-                            <thead>
-                              <th>Propietario</th>
-                              <th>Mascota</th>
-                              <th>Consultorio</th>
-                              <th>Actividad</th>
-                              <th nowrap>Fecha inicio cita</th>
-                              <th nowrap>Fecha fin cita</th>
-                              <th></th>
-                            </thead>
-                            <tbody>
-                              <!--v-if="!appointmentsFiltered.length"-->
-                                <tr class="table-success" style="cursor:pointer" 
-                                  @click="openScheduleFromAppointment(date, consultingroomSearchAppointment)">
-                                  <td colspan="8">
-                                        Agregar cita
-                                  </td>
-                                </tr>
-                                <template v-for="(appointment, index) in appointmentsFiltered">
-                                  <tr :key="'appointment' + appointment.id" :title="appointment.observations ? appointment.observations : 'No hay observaciónes'">
-                                    <td nowrap>{{ appointment.pet.owner.identification + ' - ' + appointment.pet.owner.names + ' ' + appointment.pet.owner.surnames }}</td>
-                                    <td nowrap>{{ appointment.pet.name }}</td>
-                                    <td nowrap>{{ appointment.consultingroom.name }}</td>
-                                    <td nowrap>{{ appointment.activity.name }}</td>
-                                    <td nowrap>{{ formatDate(appointment.date_time_start) }}</td>
-                                    <td nowrap>{{ formatDate(appointment.date_time_finish) }}</td>
-                                    <td nowrap>
-                                      <!--<button :disabled="!hasPermission('appointments.fulfill')"
-                                        class="btn btn-success btn-sm mr-1" @click="fulfillAppointment(appointment)" title="Cumplir">
-                                        <i class="fa fa-fw fa-lg fa-check"></i>
-                                      </button>
-                                      <button :disabled="!hasPermission('appointments.unfulfill')"
-                                        class="btn btn-info btn-sm mr-1" @click="unFulfillAppointment(appointment)" title="Incumplir">
-                                        <i class="fa fa-fw fa-lg fa-clock-o"></i>
-                                      </button>-->
-                                      <button :disabled="!hasPermission('appointments.cancel')"
-                                        class="btn btn-danger btn-sm" @click="preCancelAppointment(appointment.id)" title="Cancelar">
-                                        <i class="fa fa-fw fa-lg fa-times-circle"></i>
-                                      </button>
-                                    </td>
-                                  </tr>
-                                  <tr :key="'appointment2-' + appointment.id" class="table-success" style="cursor:pointer" v-if="appointmentsFiltered[index + 1] ? appointmentsFiltered[index].date_time_finish != appointmentsFiltered[index + 1].date_time_start : true"
-                                    @click="openScheduleFromAppointment(appointmentsFiltered[index].date_time_finish, appointment.consultingroom_id)">
-                                    <td colspan="8">
-                                          {{ formatDate(appointmentsFiltered[index].date_time_finish) }}  
-                                          <span v-if="appointmentsFiltered[index + 1]">
-                                            - {{ formatDate(appointmentsFiltered[index + 1].date_time_start) }}
-                                          </span>
-                                    </td>
-                                  </tr>
-                                </template>
-                                
-                            </tbody>
-                          </table>
-                        </div>
-                        
-                    </div>
-                  </div>
-                </div>
-                <!--Agenda de citas-->
+                
               </div>
             </div>
           </div>
