@@ -72,7 +72,7 @@
               <div class="row" v-if="user.signature">
                 <div class="col-md-4">
                   <div class="form-group">
-                    <img :src="$hostFiles + user.signature" width="190" alt="">
+                    <img :src="$APP_URL + user.signature" width="190" alt="">
                   </div>
                 </div>
               </div>

@@ -98,7 +98,7 @@
                               :key="`pets-from-owner-${index}`">
                               <td nowrap>
                                 <img style="border-radius:10%"
-                                    width="50" :src="pet.photo ? $hostFiles + pet.photo : avatarPet" alt="">
+                                    width="50" :src="pet.photo ? $APP_URL + pet.photo : avatarPet" alt="">
                               </td>
                               <td>{{ pet.name }}</td>
                               <td>{{ pet.species.name }}</td>
@@ -150,7 +150,7 @@
               showComponentToEditPet: false,
               idFromPetToEdit: '',
               search: '',
-              avatarPet: require('../../../assets/avatar_pet.jpg')
+              avatarPet: 'img/avatar_pet.jpg'
           }
       },
       methods: {

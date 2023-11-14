@@ -93,7 +93,7 @@
                           <td nowrap>{{ folio.number_folio }}</td>
                           <td nowrap>
                             <li v-for="attachment in folio.clinic_history_attachments" :key="`attach-${ attachment.id }`">
-                              <a :href="$hostFiles + attachment.file" target="_blank">
+                              <a :href="$APP_URL + attachment.file" target="_blank">
                                 {{ attachment.attachment_type.name }}
                               </a>
                             </li>

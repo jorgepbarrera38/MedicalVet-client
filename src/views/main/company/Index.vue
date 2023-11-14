@@ -60,7 +60,7 @@
                         <div class="row" v-if="company.logo">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <img :src="$hostFiles + company.logo" width="180">
+                                    <img :src="$APP_URL + company.logo" width="180">
                                 </div>
                             </div>
                         </div>

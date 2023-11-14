@@ -1,6 +1,6 @@
 <template>
     <aside class="app-sidebar">
-      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="../../../assets/avatar.svg" 
+      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="img/avatar.svg" 
             width="60px" height="60px" alt="User Image">
         <div>
           <p class="app-sidebar__user-name">{{ namesUser }}</p>

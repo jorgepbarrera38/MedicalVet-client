@@ -73,7 +73,7 @@
                   <div class="col-md-12">
                     <center>
                       <img style="border-radius:10%"
-                            width="150" :src="infoFromPetAndOwner.photo ? $hostFiles + infoFromPetAndOwner.photo : avatarPet" alt="">
+                            width="150" :src="infoFromPetAndOwner.photo ? $APP_URL + infoFromPetAndOwner.photo : avatarPet" alt="">
                     </center>
                   </div>
                 </div>
@@ -1429,7 +1429,7 @@
                 services: [],
                 dewormings: [],
                 errors: null,
-                avatarPet: require('../../../assets/avatar_pet.jpg'),
+                avatarPet: 'img/avatar_pet.jpg',
                 infoFromPetAndOwner: {
                   id: '', 
                   name: '', 
@@ -1996,7 +1996,7 @@
                 this.dewormings = []
 
                 this.errors = null
-                this.avatarPet = require('../../../assets/avatar_pet.jpg')
+                this.avatarPet = 'img/avatar_pet.jpg'
                 this.infoFromPetAndOwner = {
                   id: '', 
                   name: '', 

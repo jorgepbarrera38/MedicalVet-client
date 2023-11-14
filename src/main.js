@@ -61,28 +61,33 @@ toastr.options = {
 
 Vue.prototype.$toastr = toastr
 
-let production = false
+let production = true
 
 if (production) {
-  axios.defaults.baseURL = '/api'
-  Vue.prototype.$hostFiles = '/'
+  axios.defaults.baseURL = 'api'
 } else {
   axios.defaults.baseURL = 'http://localhost:8000/api'
-  Vue.prototype.$hostFiles = 'http://localhost:8000/'
 }
 
-Vue.prototype.$http = axios
+/*Configuración general de cada cliente*/
+axios.get('config-app').then( response => {
+  
+  Vue.prototype.$APP_URL = response.data.APP_URL
 
-Vue.prototype.$limitedVersion = false
+  Vue.prototype.$http = axios
 
-Vue.config.productionTip = false
+  Vue.prototype.$limitedVersion = false
 
-Vue.filter('convertMoney', (value) => {
-  //return new Intl.NumberFormat().format(value)
-  return value.toLocaleString('en-US');
+  Vue.config.productionTip = false
+
+  Vue.filter('convertMoney', (value) => {
+    //return new Intl.NumberFormat().format(value)
+    return value.toLocaleString('en-US');
+  })
+
+  new Vue({
+    router,
+    render: h => h(App)
+  }).$mount('#app')
+
 })
-
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')

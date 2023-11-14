@@ -41,7 +41,8 @@
                   <tr v-for="pet in pets.data" :key="pet.id">
                     <td nowrap>
                       <img style="border-radius:10%"
-                          width="50" :src="pet.photo ? $hostFiles + pet.photo : avatarPet" alt="">
+                          width="50" :src="pet.photo ? $APP_URL + pet.photo : avatarPet" alt="">
+                          
                     </td>
                     <td nowrap>{{ pet.name }}</td>
                     <td>{{ pet.owner.identification + ' - ' + pet.owner.names + ' ' + pet.owner.surnames }}</td>
@@ -99,7 +100,7 @@
                   <div class="modal-body">
                       <center>
                         <img style="border-radius:10%" class="mb-3"
-                          width="150" :src="petSelected.photo ? $hostFiles + petSelected.photo : avatarPet" alt="">
+                          width="150" :src="petSelected.photo ? $APP_URL + petSelected.photo : avatarPet" alt="">
                       </center>
                       <table class="table table-hover table-sm">
                         <tr>
@@ -173,7 +174,7 @@
                 observations: ''
               },
               search: '',
-              avatarPet: require('../../../assets/avatar_pet.jpg')
+              avatarPet: 'img/avatar_pet.jpg'
           }
       },
       methods: {
