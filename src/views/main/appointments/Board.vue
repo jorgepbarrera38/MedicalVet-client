@@ -11,6 +11,25 @@
             <div class="tile-title-w-btn">
               <h3 class="tile-title">Tablero de citas</h3>
             </div>
+            <div class="row">
+              <div class="col-md-2">
+                <div class="form-group">
+                  <input type="date" class="form-control" v-model="filterByDate.initialDate">
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <input type="date" class="form-control" v-model="filterByDate.finalDate">
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <button class="btn btn-primary btn-sm" @click="getAppointmentsByDate">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
             <vue-loading v-if="loading" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>
             <div class="table-responsive" v-else :style="`max-height: ${getHeightFromWindow}px;`">        
 
@@ -27,7 +46,32 @@
                     <th></th>
                     </thead>
                     <tbody>
-                    <tr v-for="appointment in allApointments" :key="'appointmentFromPet' + appointment.id" :title="appointment.observations ? appointment.observations : 'No hay observaciónes'">
+                      <tr>
+                        <td>
+                          <input type="text" class="form-control form-control-sm" v-model="searchBy.owner">
+                        </td>  
+                        <td>
+                          <input type="text" class="form-control form-control-sm" v-model="searchBy.pet">
+                        </td>  
+                        <td>
+                          <select class="form-control form-control-sm" v-model="searchBy.consultingroom_id">
+                            <option value="">Todos</option>
+                            <option :value="consultingroom.id" v-for="consultingroom in consultingrooms">{{ consultingroom.name }}</option>                            
+                          </select>
+                        </td>  
+                        <td>
+                          <select class="form-control form-control-sm" v-model="searchBy.activity_id">
+                            <option value="">Todos</option>
+                            <option :value="activity.id" v-for="activity in activities">{{ activity.name }}</option>                            
+                          </select>
+                        </td>  
+                        <td></td>  
+                        <td></td>  
+                        <td></td>  
+                        <td></td>  
+                        <td></td>  
+                      </tr>
+                    <tr v-for="appointment in allApointmentsFiltered" :key="'appointmentFromPet' + appointment.id" :title="appointment.observations ? appointment.observations : 'No hay observaciónes'">
                         <td nowrap>{{ appointment.pet.owner.identification + ' - ' + appointment.pet.owner.names + ' ' + appointment.pet.owner.surnames }}</td>
                         <td nowrap>{{ appointment.pet.name }}</td>
                         <td nowrap>{{ appointment.consultingroom.name }}</td>
@@ -136,6 +180,10 @@
       },
       data() {
           return {
+              filterByDate: {
+                initialDate: '',
+                finalDate: '',
+              },
               allApointments: [],
               loading: true,
               errorsToCancelAppointment: null,
@@ -145,6 +193,14 @@
               },
               reasonCancellations: [],
               cancelingAppointment: false,
+              searchBy: {
+                owner: '',
+                pet: '',
+                consultingroom_id: '',
+                activity_id: '',
+              },
+              consultingrooms: [],
+              activities: [],
           }
       },
       methods: {
@@ -153,13 +209,44 @@
                 this.reasonCancellations = response.data
             })
         },
-        getAllAppointments (page = 1) {
-            this.$http.get('appointments/get-all-appointments?page=' + page).then( response => {
+        getAllAppointments () {
+            this.$http.get('appointments/get-all-appointments').then( response => {
                 this.allApointments = response.data
 
                 this.allApointments.forEach(appointment => {
                     this.$set(appointment, 'fulfilling', false);
                     this.$set(appointment, 'unFulfilling', false);
+
+                    if (!this.consultingrooms.find(consultingroom => consultingroom.id == appointment.consultingroom.id)) {
+                      this.consultingrooms.push(appointment.consultingroom)
+                    }
+
+                    if (!this.activities.find(activity => activity.id == appointment.activity.id)) {
+                      this.activities.push(appointment.activity)
+                    }
+                })
+
+                this.loading = false
+            })
+        },
+        getAppointmentsByDate () {
+          console.log(this.filterByDate);
+
+          this.loading = true
+            this.$http.get(`appointments/get-appointments-by-date?initialDate=${this.filterByDate.initialDate}&finalDate=${this.filterByDate.finalDate}&`).then( response => {
+                this.allApointments = response.data
+
+                this.allApointments.forEach(appointment => {
+                    this.$set(appointment, 'fulfilling', false);
+                    this.$set(appointment, 'unFulfilling', false);
+
+                    if (!this.consultingrooms.find(consultingroom => consultingroom.id == appointment.consultingroom.id)) {
+                      this.consultingrooms.push(appointment.consultingroom)
+                    }
+
+                    if (!this.activities.find(activity => activity.id == appointment.activity.id)) {
+                      this.activities.push(appointment.activity)
+                    }
                 })
 
                 this.loading = false
@@ -168,7 +255,6 @@
         formatDate (date) {
             return moment(date).format('DD-MMM-Y, h:mm a')
         },
-
         fulfillAppointment (appointment) {
             appointment.fulfilling = true
             this.$http.put(`appointments/${appointment.id}/fulfill-appointment`).then( response => {
@@ -220,7 +306,29 @@
       computed: {
         getHeightFromWindow () {
             return window.innerHeight - 300
+        },
+        allApointmentsFiltered () {
+          let appointments = this.allApointments.filter(appointment => {
+                                      return (
+                                          appointment.pet.owner.identification.toLowerCase().includes(this.searchBy.owner.toLowerCase()) || 
+                                          appointment.pet.owner.names.toLowerCase().includes(this.searchBy.owner.toLowerCase()) ||
+                                          appointment.pet.owner.surnames.toLowerCase().includes(this.searchBy.owner.toLowerCase())                      
+                                        ) 
+                                        
+                                        && appointment.pet.name.toLowerCase().includes(this.searchBy.pet.toLowerCase())
+                                      })
+            
+            if (this.searchBy.consultingroom_id) {
+              appointments = appointments.filter(appointment => appointment.consultingroom.id == this.searchBy.consultingroom_id)
+            }
+
+            if (this.searchBy.activity_id) {
+              appointments = appointments.filter(appointment => appointment.activity.id == this.searchBy.activity_id)
+            }
+                                  
+            return appointments
         }
+
       }
     }
 </script>
