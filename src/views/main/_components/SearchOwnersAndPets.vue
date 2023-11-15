@@ -31,10 +31,13 @@
                   <div class="modal-body">
 
                       <form @submit.prevent="searchingOwnerInModalTable=true;getOwners()" class="row">
-                        <div class="form-group col-md-9">
-                          <input type="text" class="form-control" v-model="search">
+                        <div class="form-group col-md-5">
+                          <input type="text" class="form-control" v-model="search" placeholder="Identificación o nombres propietario">
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
+                          <input type="text" class="form-control" v-model="petSearch" placeholder="Nombre mascota">
+                        </div>
+                        <div class="form-group col-md-2">
                           <button :disabled="searchingOwnerInModalTable" class="btn btn-primary" type="submit">
                             <i class="fa fa-search"></i> Buscar
                           </button>
@@ -168,6 +171,7 @@ import LoginVue from '../../login/Login.vue'
                 searchingOwnerByIdentification: false,
                 petsFromOwner: [],
                 search: '',
+                petSearch: '',
                 searchingOwnerInModalTable: true,
                 updateListOwnersFromPetCreateComponent: false
             }
@@ -215,7 +219,7 @@ import LoginVue from '../../login/Login.vue'
             },
             getOwners (page = 1) {
               
-              this.$http.get(`clinic-histories/get-owners?q=${ this.search }&page=${ page }`).then( response => {
+              this.$http.get(`clinic-histories/get-owners?q=${ this.search }&petSearch=${ this.petSearch }&page=${ page }`).then( response => {
                 this.owners = response.data
                 this.searchingOwnerInModalTable = false
               })
