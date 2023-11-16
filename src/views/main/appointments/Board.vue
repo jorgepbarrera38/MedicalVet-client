@@ -230,7 +230,14 @@
             })
         },
         getAppointmentsByDate () {
-          console.log(this.filterByDate);
+          
+          if (!this.filterByDate.initialDate || !this.filterByDate.finalDate) {
+            return this.$toastr.error('Escoge fecha inicial y fecha final')
+          }
+
+          if (this.filterByDate.initialDate > this.filterByDate.finalDate) {
+            return this.$toastr.error('La fecha final debe ser mayor o igual a la fecha inicial')
+          }
 
           this.loading = true
             this.$http.get(`appointments/get-appointments-by-date?initialDate=${this.filterByDate.initialDate}&finalDate=${this.filterByDate.finalDate}&`).then( response => {
