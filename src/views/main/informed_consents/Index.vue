@@ -1,182 +1,141 @@
 <template>
-    <div>
-        <div class="app-title">
-            <div>
-              <h1><i class="fa fa-file-text"></i> Historia clínica</h1>
-            </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4">
-            <div class="tile">
-              <h3 class="tile-title">Consentimiento informado</h3>
-              <SearchOwnersAndPets 
-                @owner-selected="setOwnerSelected"
-                @pet-selected="petOwnerSelected"
-                @searching="setStateFromLoading"
-                :identification="this.$route.query.identification"
-                :pet_id="this.$route.query.pet"
-                :sizeFromColumnField="12">
-              </SearchOwnersAndPets>
-              <div class="row">
-                <div class="form-group col-md-12">
-                  <label for="">Procedimiento</label>
-                  <textarea rows="3" class="form-control" v-model="process" maxlength="400"></textarea>
-                </div>
-                <div class="form-group col-md-12">
-                  <label for="">Riesgos, consecuentas y efectos colaterales</label>
-                  <textarea rows="3" class="form-control" v-model="risks" maxlength="400"></textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="">Consentimiento informado</label>
-                <select class="form-control" v-model="informedConsentTemplateSelected">
-                  <option value="">Seleccione opción</option>
-                  <option :value="informedConsentTemplate.id" v-for="informedConsentTemplate in informedConsentTemplates" 
-                        :key="informedConsentTemplate.id">
-                        {{ informedConsentTemplate.name }}
-                  </option>
-                </select>
-              </div>
-              <div>
-                <button :disabled="!ownerSelected || !petSelected || !informedConsentTemplateSelected || loadingResults" class="btn btn-primary btn-sm mb-1" @click="getInformedConsentPdf">
-                  <i class="fa fa-fw fa-lg fa-search"></i>Generar
-                </button>
-              </div>
-              <!--Motivo-->
-            </div>
-            <vue-loading v-if="loadingResults" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>    
+  <div>
+      <div class="app-title">
+          <div>
+            <h1><i class="fa fa-file-text"></i> Hsitoria clínica</h1>
           </div>
-          <div class="col-md-8">
-            <div class="tile" style="height:80vh">
-                <vue-pdf-app :pdf="informedConsentPdf" :title="true" :config="configViewerPdf"></vue-pdf-app>
-                <!--<iframe :src="informedConsentPdf" style="border:none"
-                    width="100%" height="100%" >
-                </iframe>-->
+      </div>
+      <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+          <div class="tile-title-w-btn">
+            <h3 class="tile-title">Consentimientos informados</h3>
+            <button @click="$router.push({ name: 'informed_consent.create' })"
+              class="btn btn-success btn-sm">
+              <i class="fa fa-fw fa-lg fa-plus"></i>Nuevo
+            </button>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-sm-6">
+              <Search @data-search="getProductsFiltered" label="Identificación o nombres del propietario"/>
             </div>
+          </div>
+          <vue-loading v-if="loading" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>
+          <div class="table-responsive" v-else>
+            <table class="table table-hover table-sm">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Propietario</th>
+                  <th>Mascota</th>
+                  <th>Procedimiento</th>
+                  <th>Riesgos</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="informedConsent in informedConsents.data" :key="informedConsent.id">
+                  <td nowrap>{{ formatDate(informedConsent.registration_date) }}</td>
+                  <td nowrap>{{ informedConsent.pet.owner.identification + ' - ' + informedConsent.pet.owner.names + ' ' + informedConsent.pet.owner.surnames }}</td>
+                  <td nowrap>{{ informedConsent.pet.name }}</td>
+                  <td nowrap>{{ informedConsent.procedure.substring(0, 60) }}</td>
+                  <td nowrap>{{ informedConsent.risks.substring(0, 60) }}</td>
+                  <td nowrap>
+                    <button class="btn btn-primary btn-sm" 
+                      :disabled="informedConsent.printing"
+                      @click="printInformedConsent(informedConsent)">
+                      <i class="fa fa-fw fa-lg fa fa-print"></i>
+                    </button>
+                    &nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-danger btn-sm" 
+                      :disabled="informedConsent.deleting"
+                      @click="deleteInformedConsent(informedConsent)">
+                      <i class="fa fa-fw fa-lg fa fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <pagination class="my-2" align="right" :limit="-1" :data="informedConsents" @pagination-change-page="getInformedConsents">
+            <span slot="prev-nav">&lt; Anterior</span>
+            <span slot="next-nav">Siguiente &gt;</span>
+          </pagination>
         </div>
       </div>
     </div>
+  </div>
 </template>
+
 <script>
-    import SearchOwnersAndPets from './../_components/SearchOwnersAndPets'
-    import { VueLoading } from 'vue-loading-template'
-    import moment from 'moment'
-    moment.locale('es')
-    import VuePdfApp from "vue-pdf-app"
-    export default {
-        components: {
-          VueLoading, SearchOwnersAndPets, VuePdfApp
-        },
-        created () {
-          this.getInformedConsentTemplates()
-        },
-        mounted () {
-          document.getElementsByClassName('toolbar')[0].style.setProperty('z-index', 0)
-        },
-        data() {
-            return {
-                owners: [],
-                ownerSelected: '',
-                petsFromOwner: '',
-                petSelected: '',
-                informedConsentTemplateSelected: '',
-                process: '',
-                risks: '',
-                informedConsentPdf: undefined,
-                informedConsentTemplates: [],
-                loadingResults: false,
-                configViewerPdf: {
-                  //toolbar: true,
-                  sidebar: {
-                    viewThumbnail: true,
-                    viewOutline: false,
-                    viewAttachments: false,
-                  },
-                  secondaryToolbar: {
-                    secondaryPresentationMode: false,
-                    secondaryOpenFile: false,
-                    secondaryPrint: true,
-                    secondaryDownload: true,
-                    secondaryViewBookmark: false,
-                    firstPage: false,
-                    lastPage: false,
-                    pageRotateCw: false,
-                    pageRotateCcw: false,
-                    cursorSelectTool: false,
-                    cursorHandTool: false,
-                    scrollVertical: false,
-                    scrollHorizontal: false,
-                    scrollWrapped: false,
-                    spreadNone: false,
-                    spreadOdd: false,
-                    spreadEven: false,
-                    documentProperties: false,
-                  },
-                  toolbar: {
-                    toolbarViewerLeft: {
-                      findbar: true,
-                      previous: true,
-                      next: true,
-                      pageNumber: true,
-                    },
-                    toolbarViewerRight: {
-                      presentationMode: true,
-                      openFile: false,
-                      print: true,
-                      download: true,
-                      viewBookmark: false,
-                    },
-                    toolbarViewerMiddle: {
-                      zoomOut: true,
-                      zoomIn: true,
-                      scaleSelectContainer: true,
-                    },
-                  },
-                  errorWrapper: true,
-                }
-            }
-        },
-        methods: {
-          getInformedConsentTemplates () {
-            this.$http.get(`informed-consents/get-informed-consents-templates`).then(response => {
-              this.informedConsentTemplates = response.data
-            })
-          },
-          getInformedConsentPdf () {
+  import hasPermission from '../_utilities/hasPermission'
+  import { VueLoading } from 'vue-loading-template'
+  import Search from '../_components/Search'
+  import moment, { relativeTimeThreshold } from 'moment'
+  export default {
+    mixins: [ hasPermission ],
+    components: {
+      VueLoading, Search
+    },
+    created () {
+        this.getInformedConsents()
+    },
+    data() {
+        return {
+            informedConsents: {},
+            search: '',
+            loading: true
+        }
+    },
+    methods: {
+      getProductsFiltered (payload) {
+        this.loading = true
+        this.search = payload
+        this.getInformedConsents(1)
+      },
+      getInformedConsents (page = 1) {
+        this.$http.get('clinic-histories/informed-consents?search=' + this.search + '&page=' + page).then( response => {
+            this.informedConsents = response.data
+            this.informedConsents.data.forEach(informedConsent => {
+              this.$set(informedConsent, 'printing', false)
+              this.$set(informedConsent, 'deleting', false)
+            });
 
-            this.loadingResults = true
-            this.informedConsentPdf = ''
+            this.loading = false
+        }).catch( () => {
+          this.loading = false
+        })
+      },
+      printInformedConsent (informedConsent) {
+        informedConsent.printing = true
+        this.$http.get(`clinic-histories/informed-consents/${ informedConsent.id }/print`, { responseType: 'blob' }).then( response => {
+          
+          let urlInformedConsent = URL.createObjectURL(response.data)
+          window.open(urlInformedConsent, '_blank')
 
-            this.$http.get(`informed-consents/${ this.petSelected }/${ this.informedConsentTemplateSelected }`, 
-                        { responseType: 'blob', params: { process: this.process, risks: this.risks }}).then(response => {
-              this.loadingResults = false
-              //this.informedConsentPdf  = URL.createObjectURL(response.data)
-              var reader = new FileReader();
-              let _this = this
-              reader.readAsDataURL(response.data); 
-              reader.onloadend = function() {
-                  var base64data = reader.result;                
-                  _this.informedConsentPdf = base64data
-              }
-            }).catch( error => {
-              this.loadingResults = false
-              if(error.response.status == 422) {
-                error.response.data.text().then(message => this.$toastr.error(JSON.parse(message).message))
-              }
-            })
-          },
-          setOwnerSelected (payload) {
-            this.ownerSelected = payload
-          },
-          petOwnerSelected(payload) {
-            this.petSelected = payload
-          },
-          setStateFromLoading (payload) {
-            this.loadingResults = payload
-          },
-          formatDate (date) {
-            return moment(date).format('LLL')
-          },
+          informedConsent.printing = false
+          
+        }).catch(() => {
+          this.$toastr.error('El consentimiento informado no se pudo imprimir')
+          informedConsent.printing = false
+        })
+      },
+      deleteInformedConsent (informedConsent) {
+        informedConsent.deleting = true
+        this.$http.delete(`clinic-histories/informed-consents/${ informedConsent.id }`).then( response => {
+            this.getInformedConsents()
+            this.$toastr.success('Consentimiento informado eliminado')
+        }).catch( errors => {
+            this.$toastr.error('El consentimiento informado no se pudo eliminar')
+        })
+      },
+      formatDate (date) {
+            return moment(date).format('DD-MMM-Y, h:mm a')
         },
-    }
+    },
+  }
 </script>
+
+<style lang="scss" scoped>
+
+</style>

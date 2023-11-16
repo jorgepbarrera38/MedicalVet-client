@@ -127,7 +127,7 @@
                 </li>
                 <li v-if="hasPermission('clinic-histories.show-product-and-services-applied')">
                     <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'informed_consent.index' })" class="treeview-item">
-                        <i class="icon fa fa-circle-o"></i> Consentimiento informado
+                        <i class="icon fa fa-circle-o"></i> Consentimientos informados
                     </a>
                 </li>
                 <li v-if="hasPermission('reports.consultations')">
@@ -183,7 +183,7 @@
                 </li>
                 <li v-if="hasPermission('informed-consent-templates.index')">
                     <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'informed_consent_template.index' })" class="treeview-item">
-                        <i class="icon fa fa-circle-o"></i> Plantillas de consentimiento informado
+                        <i class="icon fa fa-circle-o"></i> Plantillas de consentimientos informados
                     </a>
                 </li>
             </ul>

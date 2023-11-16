@@ -11,7 +11,7 @@
         </div>-->
 
         <template>
-          <div class="col-md-6 col-lg-3">
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
             <div @mouseover="shadowOwners = true"
                 @mouseleave="shadowOwners = false"
               :class="{ 'widget-small': true, primary: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowOwners }" style="cursor:pointer" 
@@ -26,7 +26,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-lg-3">
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
             <div @mouseover="shadowPets = true"
                 @mouseleave="shadowPets = false"
               :class="{ 'widget-small': true, info: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowPets }" style="cursor:pointer" 
@@ -41,7 +41,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-lg-3">
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
             <div @mouseover="shadowAppointments = true"
                 @mouseleave="shadowAppointments = false"
               :class="{ 'widget-small': true, warning: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowAppointments }" style="cursor:pointer" 
@@ -54,7 +54,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-lg-3">
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
             <div @mouseover="shadowAppointmentsBoard = true"
                 @mouseleave="shadowAppointmentsBoard = false"
               :class="{ 'widget-small': true, primary: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowAppointmentsBoard }" style="cursor:pointer" 
@@ -69,7 +69,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-lg-3">
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
             <div @mouseover="shadowClinicalHistories = true"
                 @mouseleave="shadowClinicalHistories = false" 
                 :class="{ 'widget-small': true, warning: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowClinicalHistories }" style="cursor:pointer" 
@@ -84,7 +84,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-lg-3">
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
             <div @mouseover="shadowBills = true"
                 @mouseleave="shadowBills = false"
               :class="{ 'widget-small': true, primary: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowBills }" style="cursor:pointer" 
@@ -96,7 +96,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-lg-3">
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
             <div @mouseover="shadowPrescriptions = true"
                 @mouseleave="shadowPrescriptions = false"
               :class="{ 'widget-small': true, info: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowPrescriptions }" style="cursor:pointer" 
@@ -108,7 +108,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-lg-3">
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
             <div @mouseover="shadowVaccines = true"
                 @mouseleave="shadowVaccines = false"
               :class="{ 'widget-small': true, primary: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowVaccines }" style="cursor:pointer" 
@@ -120,7 +120,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-lg-3">
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
             <div @mouseover="shadowNextVaccines = true"
                 @mouseleave="shadowNextVaccines = false" 
                 :class="{ 'widget-small': true, danger: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowNextVaccines }" style="cursor:pointer" 
@@ -137,6 +137,19 @@
                     días:
                     <b>{{ vaccines.length }}</b>
                   </span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
+            <div @mouseover="informedConsents = true"
+                @mouseleave="informedConsents = false"
+              :class="{ 'widget-small': true, warning: true, 'coloured-icon': true, 'shadow  bg-white rounded': informedConsents }" style="cursor:pointer" 
+              @click="$router.push({ name: 'informed_consent.index' })">
+              <i class="icon fa fa-pencil-square-o fa-3x"></i>
+              <div class="info">
+                <h4>Consentimientos informados</h4>
+                <p>
                 </p>
               </div>
             </div>
@@ -223,6 +236,7 @@
           shadowNextVaccines: false,
           shadowAppointments: false,
           shadowAppointmentsBoard: false,
+          informedConsents: false,
           loadingData: true,
         }
       },
