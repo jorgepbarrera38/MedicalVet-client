@@ -50,6 +50,19 @@
               <div class="info">
                 <h4>Citas</h4>
                 <p>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div @mouseover="shadowAppointmentsBoard = true"
+                @mouseleave="shadowAppointmentsBoard = false"
+              :class="{ 'widget-small': true, primary: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowAppointmentsBoard }" style="cursor:pointer" 
+              @click="$router.push({ name: 'appointments.board' })">
+              <i class="icon fa fa-list-alt fa-3x"></i>
+              <div class="info">
+                <h4>Tablero de citas</h4>
+                <p>
                   
                   Pendientes hoy: <span v-if="loadingData" class="spinner-border spinner-border-sm"></span><b v-else>{{ appointmentsQuantity }}</b>
                 </p>
@@ -59,7 +72,7 @@
           <div class="col-md-6 col-lg-3">
             <div @mouseover="shadowClinicalHistories = true"
                 @mouseleave="shadowClinicalHistories = false" 
-                :class="{ 'widget-small': true, primary: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowClinicalHistories }" style="cursor:pointer" 
+                :class="{ 'widget-small': true, warning: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowClinicalHistories }" style="cursor:pointer" 
                 @click="hasPermission('clinic-histories.store') ? $router.push({ name: 'clinic_histories.create' }) : $toastr.error('No tiene permisos para esta acción')">
               <i class="icon fa fa-file-text fa-3x"></i>
               <div class="info">
@@ -74,7 +87,7 @@
           <div class="col-md-6 col-lg-3">
             <div @mouseover="shadowBills = true"
                 @mouseleave="shadowBills = false"
-              :class="{ 'widget-small': true, info: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowBills }" style="cursor:pointer" 
+              :class="{ 'widget-small': true, primary: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowBills }" style="cursor:pointer" 
               @click="$router.push({ name: 'billing.pending_billing' })">
               <i class="icon fa fa-money fa-3x"></i>
               <div class="info">
@@ -86,7 +99,7 @@
           <div class="col-md-6 col-lg-3">
             <div @mouseover="shadowPrescriptions = true"
                 @mouseleave="shadowPrescriptions = false"
-              :class="{ 'widget-small': true, warning: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowPrescriptions }" style="cursor:pointer" 
+              :class="{ 'widget-small': true, info: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowPrescriptions }" style="cursor:pointer" 
               @click="$router.push({ name: 'reports.prescription' })">
               <i class="icon fa fa-list fa-3x"></i>
               <div class="info">
@@ -209,6 +222,7 @@
           shadowVaccines: false,
           shadowNextVaccines: false,
           shadowAppointments: false,
+          shadowAppointmentsBoard: false,
           loadingData: true,
         }
       },
