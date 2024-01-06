@@ -51,6 +51,12 @@
             <div class="col-md-12">
               <Prescription :prescriptions="pet.prescriptions" />
             </div>
+            <div class="col-md-12">
+              <Vaccine :vaccines="pet.vaccines" :dewormings="pet.dewormings" />
+            </div>
+            <div class="col-md-12">
+              <ProductServiceApplied :products_applied="pet.products_applied" :services_applied="pet.services_applied" />
+            </div>
 
           </div>
         </div>
@@ -63,10 +69,12 @@
     import moment from 'moment'
     import Appointment from './components/Appointment.vue'
     import Prescription from './components/Prescription.vue'
+    import Vaccine from './components/Vaccine.vue'
+    import ProductServiceApplied from './components/ProductServiceApplied.vue'
     moment.locale('es')    
     export default {
       components: {
-        VueLoading, Appointment, Prescription
+        VueLoading, Appointment, Prescription, Vaccine, ProductServiceApplied
       },
       created () {
           this.getPet()

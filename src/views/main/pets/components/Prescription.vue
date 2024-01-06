@@ -1,7 +1,7 @@
 <template>
     <div class="tile">
         <div class="tile-title-w-btn">
-            <h3 class="tile-title">Recetas veterinarias</h3>
+            <h3 class="tile-title"><i class="fa fa-file-text"></i> Recetas veterinarias</h3>
         </div>
         <!---->
 
@@ -18,7 +18,7 @@
                     <td nowrap>{{ prescription.id }}</td>
                     <td nowrap>{{ formatDate(prescription.created_at) }}</td>
                     <td nowrap>{{ prescription.observations }}</td>
-                    <td>
+                    <td nowrap>
                         <button class="btn btn-info btn-sm mr-1" @click="showPrescriptionInModal(prescription)">
                             <i class="fa fa-fw fa-lg fa fa-eye"></i>
                         </button>

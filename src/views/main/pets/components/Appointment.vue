@@ -1,7 +1,7 @@
 <template>
     <div class="tile">
         <div class="tile-title-w-btn">
-            <h3 class="tile-title">Histórico de citas</h3>
+            <h3 class="tile-title"><i class="fa fa-stethoscope"></i> Histórico de citas</h3>
         </div>
         <!---->
 
