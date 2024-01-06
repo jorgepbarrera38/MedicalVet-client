@@ -41,6 +41,8 @@
                   <button @click="getPet">Update</button>
           </div>
 
+          <Record :records="pet.records" />
+
         </div>
         <div class="col-md-8">
           <div class="row">
@@ -71,10 +73,11 @@
     import Prescription from './components/Prescription.vue'
     import Vaccine from './components/Vaccine.vue'
     import ProductServiceApplied from './components/ProductServiceApplied.vue'
+    import Record from './components/Record.vue'
     moment.locale('es')    
     export default {
       components: {
-        VueLoading, Appointment, Prescription, Vaccine, ProductServiceApplied
+        VueLoading, Appointment, Prescription, Vaccine, ProductServiceApplied, Record
       },
       created () {
           this.getPet()
