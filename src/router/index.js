@@ -28,6 +28,7 @@ import UnitiesIndex from '../views/main/unities/Index.vue'
 import UnitiesCreate from '../views/main/unities/Create.vue'
 import UnitiesEdit from '../views/main/unities/Edit.vue'
 import PetsIndex from '../views/main/pets/Index.vue'
+import PetsShow from '../views/main/pets/Show.vue'
 import PetsCreate from '../views/main/pets/Create.vue'
 import PetsEdit from '../views/main/pets/Edit.vue'
 import DiagnosesIndex from '../views/main/diagnoses/Index.vue'
@@ -251,6 +252,11 @@ const routes = [
         path: '/mascotas',
         name: 'pets.index',
         component: PetsIndex
+      },
+      {
+        path: '/mascotas/:id',
+        name: 'pets.show',
+        component: PetsShow
       },
       {
         path: '/mascotas/crear',

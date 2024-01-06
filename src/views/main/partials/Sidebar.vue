@@ -135,11 +135,11 @@
                         <i class="icon fa fa-circle-o"></i> Informe de atenciónes
                     </a>
                 </li>
-                <li v-if="hasPermission('reports.services-provided')">
+                <!--<li v-if="hasPermission('reports.services-provided')">
                     <a href="" @click.prevent="hideNavBarMovil();$router.push({ name: 'reports.services_provided' })" class="treeview-item">
                         <i class="icon fa fa-circle-o"></i> Informe de servicios prestados
                     </a>
-                </li>
+                </li>-->
             </ul>
         </li>
 

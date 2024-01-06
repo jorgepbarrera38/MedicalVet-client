@@ -16,11 +16,25 @@
                 <i class="fa fa-fw fa-lg fa-plus"></i>Nuevo
               </button>
             </div>
+
             <div class="row">
-              <div class="col-md-4 col-sm-6">
-                <Search @data-search="getPetsFiltered" label="Nombre de la mascota"/>
+              <div class="col-md-12">
+
+                <form class="form-inline" @submit.prevent="loading = true; getPets()">
+                  <!--<label class="sr-only" for="inlineFormInputName2">Name</label>-->
+                  <input type="text" class="form-control mb-3 mr-sm-2" style="min-width: 280px;" id="inlineFormInputName2" placeholder="Identificación o nombres propietario" v-model="search.ownerIdOrName">
+                  
+                  <!--<label class="sr-only" for="inlineFormInputGroupUsername2">Username</label>-->
+                  <input type="text" class="form-control mb-3 mr-sm-2" style="min-width: 220px;"  id="inlineFormInputName2" placeholder="Nombre de la mascota" v-model="search.petName">
+
+                  <button type="submit" class="btn btn-primary mb-3">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </form>
+                
               </div>
             </div>
+
             <vue-loading v-if="loading" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>
             <div class="table-responsive" v-if="!loading">
               <table class="table table-hover table-sm">
@@ -173,18 +187,21 @@
                 size: '',
                 observations: ''
               },
-              search: '',
+              search: {
+                petName: '',
+                ownerIdOrName: '',
+              },
               avatarPet: 'img/avatar_pet.jpg'
           }
       },
       methods: {
-        getPetsFiltered (payload) {
+        /*getPetsFiltered (payload) {
           this.loading = true
           this.search = payload
           this.getPets(1)
-        },
+        },*/
         getPets (page = 1) {
-          this.$http.get('pets?search=' + this.search + '&page=' + page).then( response => {
+          this.$http.get('pets?ownerIdOrName=' + this.search.ownerIdOrName + ' &petName=' + this.search.petName + ' &page=' + page).then( response => {
             this.pets = response.data
             this.loading = false
           }).catch( () => {
@@ -205,8 +222,9 @@
           })
         },
         showPet (pet) {
-          this.petSelected = pet
-          $('#petModal').modal('show')
+          this.$router.push({ name: 'pets.show', params: { id: pet.id } })
+          /*this.petSelected = pet
+          $('#petModal').modal('show')*/
         },
         getAge (dateBorn) {
           let message = moment(dateBorn).fromNow();
