@@ -21,24 +21,40 @@
               </div>
                   
               <div>
-                <b>Propietario: </b> {{ pet.owner.identification + ' - ' + pet.owner.names + ' ' + pet.owner.surnames }}
-                <hr>
-                <b>Especie: </b> {{ pet.species.name }}
-                <hr>
-                <b>Raza: </b> {{ pet.race.name }}
-                <hr>
-                <b>Fecha nac: </b> {{ pet.date_born }}
-                <hr>
-                <b>Sexo: </b> {{ pet.sex }}
-                <hr>
-                <b>Color: </b> {{ pet.color }}
-                <hr>
-                <b>Tamaño: </b> {{ pet.size }}
-                <hr>
-                <b>Observaciónes: </b> {{ pet.observations }}
-                <hr>
+                <div class="row">
+                  <div class="col-md-12">
+                    <b>Propietario: </b> {{ pet.owner.identification + ' - ' + pet.owner.names + ' ' + pet.owner.surnames }}
+                    <hr>
+                  </div>
+                  <div class="col-md-4">
+                    <img style="border-radius:10%"
+                              width="100%" :src="pet.photo ? $APP_URL + pet.photo : avatarPet" alt="">
+                  </div>
+                  <div class="col-md-8">
+                    <b>Nombre: </b> {{ pet.name }}
+                    <hr>
+                    <b>Especie: </b> {{ pet.species.name }}
+                    <hr>
+                    <b>Raza: </b> {{ pet.race.name }}
+                    <hr>
+                    <b>Sexo: </b> {{ pet.sex }}
+                    <hr>
+                  </div>
+                  <div class="col-md-12">
+                    <b>Fecha nac: </b> {{ pet.date_born }}
+                    <hr>
+                    <b>Color: </b> {{ pet.color }}
+                    <hr>
+                    <b>Tamaño: </b> {{ pet.size }}
+                    <hr>
+                    <b>Observaciónes: </b> {{ pet.observations }}
+                    <hr>
+                  </div>
+                </div>
+
+
               </div>
-                  <button @click="getPet">Update</button>
+                  <!--<button @click="getPet">Update</button>-->
           </div>
 
           <Record :records="pet.records" />
