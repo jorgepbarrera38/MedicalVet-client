@@ -2,6 +2,7 @@
     <div class="tile">
         <div class="tile-title-w-btn">
             <h3 class="tile-title"><i class="fa fa-file-text"></i> Recetas veterinarias</h3>
+            <!--<PrescriptionCreate :pet_id="pet_id"/>-->
         </div>
         <!---->
 
@@ -75,9 +76,13 @@
 </template>
 <script>
 import moment from 'moment'
+import PrescriptionCreate from './PrescriptionCreate.vue'
 moment.locale('es')
     export default {
-        props: [ 'prescriptions' ],
+        props: [ 'pet_id', 'prescriptions' ],
+        components: {
+          PrescriptionCreate,
+        },
         data() {
             return {
                 prescriptionSelected: {},

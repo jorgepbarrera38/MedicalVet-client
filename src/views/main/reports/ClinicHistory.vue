@@ -229,7 +229,7 @@
               return this.$toastr.error('Esta funcionalidad no está disponible en la versión limitada')
             }
 
-            if (this.foliosSelected.length == 0) return this.$toastr.error('Seleccione los folios que desea enviar')
+            if (this.foliosSelected.length == 0) return this.$toastr.info('Seleccione los folios que desea enviar')
             
             this.sendingClinicHistoryForEmail = true
             let folios = this.foliosSelected.map(folio => {

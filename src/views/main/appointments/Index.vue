@@ -32,6 +32,8 @@
                 
               </ul>
               <div class="tab-content" id="myTabContent">
+
+                <!--Inicio agendar citas-->
                 <div class="tab-pane fade active show" id="profile">
                   <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-4 mt-3">
@@ -39,14 +41,6 @@
                         <v-date-picker is-expanded v-model="date"/>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-8 mt-3">
-                      <!--
-                        <div class="tile-title-w-btn">
-                          <button @click="searchingAppointments = true; getAppointments()"
-                            class="btn btn-primary btn-sm">
-                            <i class="fa fa-fw fa-lg fa-refresh"></i>
-                          </button>
-                        </div>
-                        -->
                         <div class="row mb-2">
                           <div class="col-md-4">
                             <input type="text" class="form-control" placeholder="Buscar propietario o mascota" v-model="searchAppointment">
@@ -120,8 +114,9 @@
                     </div>
                   </div>
                 </div>
-                <!--Agenda de citas-->
-                <!--Citas de la mascota-->
+                <!--Fin agendar citas-->
+                
+                <!--Inicio citas de la mascota-->
                 <div class="tab-pane fade" id="home">
                   <div class="row mt-3">
                     <div class="col-md-12">
@@ -175,7 +170,7 @@
                   </div>
                 </div>
                 <!--Fin citas de la mascota-->
-                <!--Agenda de citas-->
+
                 <!-- Modal agendar cita -->
                 <div class="modal fade bd-example-modal-lg" id="appointmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog modal-lg" role="document">

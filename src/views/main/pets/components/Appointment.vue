@@ -1,7 +1,10 @@
 <template>
     <div class="tile">
         <div class="tile-title-w-btn">
-            <h3 class="tile-title"><i class="fa fa-stethoscope"></i> Histórico de citas</h3>
+            <h3 class="tile-title"><i class="fa fa-stethoscope"></i> Citas</h3>
+            <!--<button class="btn btn-primary btn-sm" @click="newAppointment()">
+                <i class="fa fa-fw fa-lg fa fa-plus"></i> Asignar
+            </button>-->
         </div>
         <!---->
 
@@ -65,6 +68,9 @@ moment.locale('es')
             //return date;
             return moment(date).format('DD-MMM-Y, h:mm a')
           },
+          newAppointment () {
+            this.$router.push({ name: 'appointments.index' })
+          }
         }
     }
 </script>

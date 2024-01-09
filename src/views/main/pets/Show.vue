@@ -58,6 +58,7 @@
           </div>
 
           <Record :records="pet.records" />
+          <Attachment :clinicHistoryAttachments="pet.clinicHistoryAttachments" />
 
         </div>
         <div class="col-md-8">
@@ -67,13 +68,16 @@
               <Appointment :appointments="pet.appointments" />
             </div>
             <div class="col-md-12">
-              <Prescription :prescriptions="pet.prescriptions" />
+              <Prescription :prescriptions="pet.prescriptions" :pet_id="pet.id" />
             </div>
             <div class="col-md-12">
               <Vaccine :vaccines="pet.vaccines" :dewormings="pet.dewormings" />
             </div>
             <div class="col-md-12">
               <ProductServiceApplied :products_applied="pet.products_applied" :services_applied="pet.services_applied" />
+            </div>
+            <div class="col-md-12">
+              <ClinicHistory :clinicHistories="pet.clinicHistories" :pet_id="pet.id" />
             </div>
 
           </div>
@@ -90,10 +94,12 @@
     import Vaccine from './components/Vaccine.vue'
     import ProductServiceApplied from './components/ProductServiceApplied.vue'
     import Record from './components/Record.vue'
+    import Attachment from './components/Attachment.vue'
+    import ClinicHistory from './components/ClinicHistory.vue'
     moment.locale('es')    
     export default {
       components: {
-        VueLoading, Appointment, Prescription, Vaccine, ProductServiceApplied, Record
+        VueLoading, Appointment, Prescription, Vaccine, ProductServiceApplied, Record, Attachment, ClinicHistory
       },
       created () {
           this.getPet()
