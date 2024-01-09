@@ -17,7 +17,7 @@
                 <tr v-for="prescription in prescriptions" :key="'prescriptionFromPet' + prescription.id">
                     <td nowrap>{{ prescription.id }}</td>
                     <td nowrap>{{ formatDate(prescription.created_at) }}</td>
-                    <td nowrap>{{ prescription.observations }}</td>
+                    <td nowrap>{{ prescription.observations.substring(0, 60) }}...</td>
                     <td nowrap>
                         <button class="btn btn-info btn-sm mr-1" @click="showPrescriptionInModal(prescription)">
                             <i class="fa fa-fw fa-lg fa fa-eye"></i>

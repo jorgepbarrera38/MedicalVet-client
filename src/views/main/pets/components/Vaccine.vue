@@ -66,6 +66,10 @@ moment.locale('es')
               return moment(date).format('DD-MMM-Y')
           },
           exportVaccinesInPdf () {
+            if (!this.vaccines.length) {
+                return this.$toastr.info('No hay registros')
+            }
+
             this.exportingVaccinesInPdf = true
 
             this.$http.get(`reports/vaccine/${ this.vaccines[0].pet_id }/export-pdf`, { responseType: 'blob'}).then(response => {

@@ -130,11 +130,11 @@
                             {{ service.quantity }}
                           </span>
                         </td>
-                        <td nowrap>{{ formatDate(service.clinic_history.created_at) }}</td>
-                        <td nowrap>{{ service.clinic_history.user.identification + ' - ' + service.clinic_history.user.names + ' ' + service.clinic_history.user.surnames }}</td>
-                        <td nowrap>{{ service.clinic_history.number_folio }}</td>
+                        <td nowrap>{{ formatDate(service.created_at) }}</td>
+                        <td nowrap>{{ service.user ? service.user.identification + ' - ' + service.user.names + ' ' + service.user.surnames : '' }}</td>
+                        <td nowrap>{{ service.clinic_history ? service.clinic_history.number_folio : '' }}</td>
                         <td nowrap>
-                          <div v-if="canUpdateAndDelete(service.clinic_history.user.username)">
+                          <div>
                             <button class="btn btn-warning btn-sm mr-1" v-if="!service.edit"
                               :disabled="!hasPermission('clinic-histories.edit-quantity-services-applied')"
                               @click="service.edit = true">
@@ -212,12 +212,15 @@
                   edit: false
                 }
               })
+              console.log(response.data);
               this.services = response.data.services.map(service => {
                 return {
                   id: service.id,
                   clinic_history: service.clinic_history,
                   quantity: service.quantity,
                   service: service.service,
+                  created_at: service.created_at,
+                  user: service.user,
                   quantityOld: service.quantity,
                   updating: false, 
                   deleting: false,
