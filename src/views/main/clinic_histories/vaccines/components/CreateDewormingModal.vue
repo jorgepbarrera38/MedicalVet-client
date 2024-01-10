@@ -1,8 +1,5 @@
 <template>
-    <div class="float-right">
-        <button class="btn btn-success btn-sm" @click="showModalForRegisterDeworming">
-                <i class="fa fa-fw fa-lg fa-plus"></i> Registrar
-        </button>
+    <div>
         <!--inicio modal desparasitaciónes-->
         <div class="modal fade bd-example-modal-lg" id="modalForRegisterDeworming" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">

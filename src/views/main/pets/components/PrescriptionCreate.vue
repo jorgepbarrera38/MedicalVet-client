@@ -1,7 +1,7 @@
 <template>
     <div>
       <button class="btn btn-primary btn-sm" @click="addPrescription()">
-          <i class="fa fa-fw fa-lg fa fa-plus"></i> Nuevo
+          <i class="fa fa-fw fa-lg fa fa-plus"></i>
       </button>
       <div class="modal fade" id="addPrescriptionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg" role="document">

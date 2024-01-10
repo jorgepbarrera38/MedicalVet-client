@@ -1,8 +1,5 @@
 <template>
     <div class="float-right">
-        <button class="btn btn-success btn-sm" @click="showModalForRegisterVaccine">
-                <i class="fa fa-fw fa-lg fa-plus"></i> Registrar
-        </button>
         <!--inicio modal vacunas-->
         <div class="modal fade bd-example-modal-lg" id="modalForRegisterVaccine" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -41,10 +38,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary mr-1" @click="registerVaccine" :disabled="saving || ($limitedVersion && quantityVaccinesCreated === null)">
+                    <button type="button" class="btn btn-primary btn-sm mr-1" @click="registerVaccine" :disabled="saving || ($limitedVersion && quantityVaccinesCreated === null)">
                         <i  class="fa fa-fw fa-lg fa fa-save"></i> Registrar <span v-if="saving" class="spinner-border spinner-border-sm ml-1"></span>
                     </button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
             </div>

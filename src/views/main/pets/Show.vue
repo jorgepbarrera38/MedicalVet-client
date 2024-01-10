@@ -71,7 +71,7 @@
               <Prescription :prescriptions="pet.prescriptions" :pet_id="pet.id" @prescriptionSaved="getPet()"/>
             </div>
             <div class="col-md-12">
-              <Vaccine :vaccines="pet.vaccines" :dewormings="pet.dewormings" />
+              <Vaccine :vaccines="pet.vaccines" :dewormings="pet.dewormings" :pet_id="pet.id" @vaccineRegistered="getPet()" @dewormingRegistered="getPet()"/>
             </div>
             <div class="col-md-12">
               <ProductServiceApplied :products_applied="pet.products_applied" :services_applied="pet.services_applied" />

@@ -4,7 +4,7 @@
             <h3 class="tile-title"><i class="fa fa-file-text"></i> Historia clínica</h3>
             <button class="btn btn-primary btn-sm" @click="exportClinicHistoryInPdf" :disabled="exportingClinicHistoryInPdf">
                 <span class="spinner-border spinner-border-sm ml-1" v-if="exportingClinicHistoryInPdf"></span>
-                <i class="fa fa-fw fa-lg fa fa-print" v-else></i> Exportar
+                <i class="fa fa-fw fa-lg fa fa-print" v-else></i>
             </button>
         </div>
         <!---->

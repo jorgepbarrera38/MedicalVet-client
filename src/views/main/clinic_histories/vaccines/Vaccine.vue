@@ -34,8 +34,12 @@
       <div class="row">
         <div class="col-md-12">
           <div class="tile">
-            
-            <h3 class="tile-title">Vacunas <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
+            <div class="tile-title-w-btn">
+              <h3 class="tile-title">Vacunas <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
+              <button class="btn btn-primary btn-sm" @click="showModalForRegisterVaccine()">
+                      <i class="fa fa-fw fa-lg fa-plus"></i> Registrar
+              </button>
+            </div>
             <CreateVaccineModal v-if="petSelected" :pet_id="petSelected" @vaccineRegistered="loadingResults = true; getVaccinesFromPet()"/>
             
             <div class="table-responsive" style="max-height: 200px;">
@@ -107,8 +111,12 @@
         </div>
          <div class="col-md-12">
           <div class="tile">
-
-              <h3 class="tile-title">Desparasitaciones <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
+              <div class="tile-title-w-btn">
+                <h3 class="tile-title">Desparasitaciones <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h3>
+                <button class="btn btn-primary btn-sm" @click="showModalForRegisterDeworming()">
+                        <i class="fa fa-fw fa-lg fa-plus"></i> Registrar
+                </button>
+              </div>
               <CreateDewormingModal v-if="petSelected" :pet_id="petSelected" @dewormingRegistered="loadingResults = true; getVaccinesFromPet()"/>
 
             <div class="table-responsive" style="max-height: 200px;">
@@ -327,6 +335,12 @@
             vaccineFromPet.next_date_copy = vaccineFromPet.next_date
             //vaccineFromPet.product_id_copy = vaccineFromPet.product.id
             //vaccineFromPet.product_name_copy = vaccineFromPet.product.name
+          },
+          showModalForRegisterVaccine () {
+              $('#modalForRegisterVaccine').modal('show')
+          },
+          showModalForRegisterDeworming () {
+              $('#modalForRegisterDeworming').modal('show')
           },
           updateVaccine (vaccineFromPet) {
             vaccineFromPet.updating = true

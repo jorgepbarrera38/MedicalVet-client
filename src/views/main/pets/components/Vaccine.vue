@@ -2,10 +2,18 @@
     <div class="tile">
         <div class="tile-title-w-btn">
             <h3 class="tile-title"><i class="fa fa-medkit"></i> Vacunas y desparasitaciones</h3>
-            <button class="btn btn-primary btn-sm" @click="exportVaccinesInPdf()" :disabled="exportingVaccinesInPdf">
-                <span class="spinner-border spinner-border-sm ml-1" v-if="exportingVaccinesInPdf"></span>
-                <i class="fa fa-fw fa-lg fa fa-print" v-else></i> Exportar
-            </button>
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm mr-1" @click="showModalForRegisterVaccine">
+                    <i class="fa fa-fw fa-lg fa fa-plus"></i> Vacuna
+                </button>
+                <button class="btn btn-primary btn-sm mr-1" @click="showModalForRegisterDeworming">
+                    <i class="fa fa-fw fa-lg fa fa-plus"></i> Desparasitación
+                </button>
+                <button class="btn btn-primary btn-sm" @click="exportVaccinesInPdf()" :disabled="exportingVaccinesInPdf">
+                    <span class="spinner-border spinner-border-sm ml-1" v-if="exportingVaccinesInPdf"></span>
+                    <i class="fa fa-fw fa-lg fa fa-print" v-else></i>
+                </button>
+            </div>
         </div>
         <!---->
 
@@ -27,6 +35,7 @@
                 </tbody>
             </table>
         </div>   
+        <CreateVaccineModal :pet_id="pet_id" @vaccineRegistered="$emit('vaccineRegistered')"/>
         
         <!--Desparasitaciones-->
 
@@ -48,14 +57,20 @@
                 </tbody>
             </table>
         </div>    
+        <CreateDewormingModal :pet_id="pet_id" @dewormingRegistered="$emit('dewormingRegistered')"/>
 
     </div>
 </template>
 <script>
 import moment from 'moment'
+import CreateVaccineModal from '../../clinic_histories/vaccines/components/CreateVaccineModal.vue'
+import CreateDewormingModal from '../../clinic_histories/vaccines/components/CreateDewormingModal.vue'
 moment.locale('es')
     export default {
-        props: [ 'vaccines', 'dewormings' ],
+        props: [ 'pet_id', 'vaccines', 'dewormings' ],
+        components: {
+            CreateVaccineModal, CreateDewormingModal
+        },
         data() {
             return {
                 exportingVaccinesInPdf: false,
@@ -80,6 +95,12 @@ moment.locale('es')
               this.exportingVaccinesInPdf = false
             })
           },
+          showModalForRegisterVaccine () {
+            $('#modalForRegisterVaccine').modal('show')
+          },
+          showModalForRegisterDeworming () {
+            $('#modalForRegisterDeworming').modal('show')
+        },
         }
     }
 </script>

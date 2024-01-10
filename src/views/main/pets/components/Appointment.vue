@@ -3,10 +3,10 @@
         <div class="tile-title-w-btn">
             <h3 class="tile-title"><i class="fa fa-stethoscope"></i> Citas</h3>
             <button class="btn btn-secondary btn-sm" @click="showAppointmentCreateComponent = false" v-if="showAppointmentCreateComponent">
-                <i class="fa fa-fw fa-lg fa fa-undo"></i> Lista de citas
+                <i class="fa fa-fw fa-lg fa fa-undo"></i>
             </button>
             <button class="btn btn-primary btn-sm" @click="showAppointmentCreateComponent = true" v-else>
-                <i class="fa fa-fw fa-lg fa fa-plus"></i> Asignar
+                <i class="fa fa-fw fa-lg fa fa-plus"></i>
             </button>
         </div>
         
