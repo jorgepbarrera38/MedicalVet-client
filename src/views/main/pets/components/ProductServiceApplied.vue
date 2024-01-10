@@ -1,11 +1,15 @@
 <template>
     <div class="tile">
 
-        <!--Productos aplicados-->
-
+        
         <div class="tile-title-w-btn">
             <h3 class="tile-title"><i class="fa fa-heartbeat"></i> Productos y servicios aplicados</h3>
+            <button class="btn btn-primary btn-sm mr-1" @click="showModalForRegisterServiceApplied">
+                <i class="fa fa-fw fa-lg fa fa-plus"></i> Servicio
+            </button>
         </div>
+        
+        <!--Productos aplicados-->
 
         <div class="table-responsive" style="max-height: 220px;">
             <table class="table table-sm table-hover">
@@ -42,14 +46,19 @@
                 </tbody>
             </table>
         </div>
+        <ServiceAppliedCreateComponent :pet_id="pet_id" @serviceAppliedRegistered="$emit('serviceAppliedRegistered')" />
         
     </div>
 </template>
 <script>
 import moment from 'moment'
+import ServiceAppliedCreateComponent from '../../reports/ServiceAppliedCreateComponent.vue'
 moment.locale('es')
     export default {
-        props: [ 'products_applied', 'services_applied'],
+        props: [ 'pet_id', 'products_applied', 'services_applied'],
+        components: {
+            ServiceAppliedCreateComponent,
+        },
         data() {
             return {
                 prescriptionSelected: {},
@@ -76,6 +85,9 @@ moment.locale('es')
               this.exportingPrescriptionInPdf = false
             })
           },
+          showModalForRegisterServiceApplied () {
+            $('#modalServicesApplied').modal('show')
+          }
         }
     }
 </script>
