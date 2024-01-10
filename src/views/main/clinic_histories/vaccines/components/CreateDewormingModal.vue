@@ -38,10 +38,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary mr-1" @click="registerDeworming" :disabled="saving || ($limitedVersion && quantityDewormingsCreated === null)">
+                    <button type="button" class="btn btn-primary btn-sm mr-1" @click="registerDeworming" :disabled="saving || ($limitedVersion && quantityDewormingsCreated === null)">
                         <i  class="fa fa-fw fa-lg fa fa-save"></i> Registrar <span v-if="saving" class="spinner-border spinner-border-sm ml-1"></span>
                     </button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
             </div>
