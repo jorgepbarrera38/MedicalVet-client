@@ -2,7 +2,7 @@
     <div class="tile">
         <div class="tile-title-w-btn">
             <h3 class="tile-title"><i class="fa fa-file-text"></i> Recetas veterinarias</h3>
-            <!--<PrescriptionCreate :pet_id="pet_id"/>-->
+            <PrescriptionCreate :pet_id="pet_id" @prescriptionSaved="$emit('prescriptionSaved')"/>
         </div>
         <!---->
 

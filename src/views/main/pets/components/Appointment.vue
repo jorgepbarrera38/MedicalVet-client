@@ -2,13 +2,19 @@
     <div class="tile">
         <div class="tile-title-w-btn">
             <h3 class="tile-title"><i class="fa fa-stethoscope"></i> Citas</h3>
-            <!--<button class="btn btn-primary btn-sm" @click="newAppointment()">
+            <button class="btn btn-secondary btn-sm" @click="showAppointmentCreateComponent = false" v-if="showAppointmentCreateComponent">
+                <i class="fa fa-fw fa-lg fa fa-undo"></i> Lista de citas
+            </button>
+            <button class="btn btn-primary btn-sm" @click="showAppointmentCreateComponent = true" v-else>
                 <i class="fa fa-fw fa-lg fa fa-plus"></i> Asignar
-            </button>-->
+            </button>
         </div>
+        
+        <AppointmentCreateComponent :pet_id="pet_id" @appointmentSaved="$emit('appointmentSaved')" v-if="showAppointmentCreateComponent" />
+
         <!---->
 
-        <div class="table-responsive" style="max-height: 220px;">
+        <div class="table-responsive" style="max-height: 220px;" v-else>
             <table class="table table-sm table-hover">
                 <thead>
                 <th>Consultorio</th>
@@ -60,17 +66,21 @@
 </template>
 <script>
 import moment from 'moment'
+import AppointmentCreateComponent from '../../appointments/AppointmentCreateComponent.vue'
 moment.locale('es')
     export default {
-        props: [ 'appointments' ],
+        props: [ 'pet_id', 'appointments' ],
+        components: { AppointmentCreateComponent },
+        data() {
+            return {
+                showAppointmentCreateComponent: false,
+            }
+        },
         methods: {
             formatDate (date) {
             //return date;
             return moment(date).format('DD-MMM-Y, h:mm a')
           },
-          newAppointment () {
-            this.$router.push({ name: 'appointments.index' })
-          }
         }
     }
 </script>

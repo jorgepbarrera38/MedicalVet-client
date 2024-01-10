@@ -93,6 +93,9 @@ import moment from 'moment'
 moment.locale('es')
     export default {
         props: ['pet_id'],
+        created () {
+          this.getProducts()
+        },
         data() {
             return {
               productToAddToPrescription: {
@@ -110,6 +113,13 @@ moment.locale('es')
             }
         },
         methods: {
+          getProducts () {
+            this.$http.get('prescriptions/get-products').then( response => {
+              
+              this.products = response.data
+
+            })
+          },
           addPrescription () {
             $('#addPrescriptionModal').modal('show')
           },
@@ -148,8 +158,6 @@ moment.locale('es')
             this.savingPrescription = true
             
             this.$http.post(`prescriptions/${ this.pet_id }`, {...this.newPrescription} ).then( response => {
-              this.getPrescriptionsFromPet()
-              console.log(response.data);
               this.savingPrescription = false
                 this.productToAddToPrescription = {
                   product: {},
@@ -164,6 +172,7 @@ moment.locale('es')
 
                 this.errors = null
                 this.$toastr.success('Prescripción registrada')
+                this.$emit('prescriptionSaved')
             }).catch( error => {
                 this.savingPrescription = false
                 if (error.response.status == 422) {

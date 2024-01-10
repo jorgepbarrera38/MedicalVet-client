@@ -65,10 +65,10 @@
           <div class="row">
             
             <div class="col-md-12">
-              <Appointment :appointments="pet.appointments" />
+              <Appointment :appointments="pet.appointments" :pet_id="pet.id" @appointmentSaved="getPet()" />
             </div>
             <div class="col-md-12">
-              <Prescription :prescriptions="pet.prescriptions" :pet_id="pet.id" />
+              <Prescription :prescriptions="pet.prescriptions" :pet_id="pet.id" @prescriptionSaved="getPet()"/>
             </div>
             <div class="col-md-12">
               <Vaccine :vaccines="pet.vaccines" :dewormings="pet.dewormings" />
@@ -96,10 +96,11 @@
     import Record from './components/Record.vue'
     import Attachment from './components/Attachment.vue'
     import ClinicHistory from './components/ClinicHistory.vue'
+
     moment.locale('es')    
     export default {
       components: {
-        VueLoading, Appointment, Prescription, Vaccine, ProductServiceApplied, Record, Attachment, ClinicHistory
+        VueLoading, Appointment, Prescription, Vaccine, ProductServiceApplied, Record, Attachment, ClinicHistory,
       },
       created () {
           this.getPet()
