@@ -17,7 +17,7 @@
         </div>
         <!---->
 
-        <div class="table-responsive" style="max-height: 220px;">
+        <div class="table-responsive mb-3" style="max-height: 220px;">
             <table class="table table-sm table-hover">
                 <thead>
                     <th>Vacuna</th>

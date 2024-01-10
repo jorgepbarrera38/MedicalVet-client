@@ -70,7 +70,7 @@
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label for="">Observaciónes</label>
+                      <label for="">Observaciónes (*)</label>
                       <textarea rows="4" class="form-control" v-model="newPrescription.observations" maxlength="800"></textarea>                                                    
                     </div>
                   </div>
