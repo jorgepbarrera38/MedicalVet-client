@@ -171,14 +171,14 @@ moment.locale('es')
                 }
 
                 this.errors = null
-                this.$toastr.success('Prescripción registrada')
+                this.$toastr.success('Receta veterinaria registrada')
                 this.$emit('prescriptionSaved')
             }).catch( error => {
                 this.savingPrescription = false
                 if (error.response.status == 422) {
                   this.errors = error.response.data.errors
                 } else {
-                  this.$toastr.error('La prescripción no pudo ser registrada')
+                  this.$toastr.error('La receta veterinaria no pudo ser registrada')
                 }
               })
 

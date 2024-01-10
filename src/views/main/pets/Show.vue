@@ -57,6 +57,7 @@
                   <!--<button @click="getPet">Update</button>-->
           </div>
 
+          <ClinicHistory :clinicHistories="pet.clinicHistories" :pet_id="pet.id" />
           <Record :records="pet.records" />
           <Attachment :clinicHistoryAttachments="pet.clinicHistoryAttachments" />
 
@@ -75,9 +76,6 @@
             </div>
             <div class="col-md-12">
               <ProductServiceApplied :products_applied="pet.products_applied" :services_applied="pet.services_applied" />
-            </div>
-            <div class="col-md-12">
-              <ClinicHistory :clinicHistories="pet.clinicHistories" :pet_id="pet.id" />
             </div>
 
           </div>
