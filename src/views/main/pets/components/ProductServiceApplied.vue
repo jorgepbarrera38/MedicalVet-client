@@ -37,7 +37,7 @@
                 <tr v-for="service_applied in services_applied" :key="'services_appliedFromPet' + service_applied.id">
                     <td nowrap>{{ service_applied.service.code + ' - ' + service_applied.service.name }}</td>
                     <td nowrap>{{ service_applied.quantity }}</td>
-                    <td nowrap>{{ formatDate(service_applied.created_at) }}</td>
+                    <td nowrap>{{ formatDate(service_applied.application_date) }}</td>
                 </tr>
                 </tbody>
             </table>

@@ -106,7 +106,14 @@
         </div>
         <div class="col-md-12">
           <div class="tile">
-            <h4 class="tile-title">Servicios aplicados <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h4>
+            <div class="tile-title-w-btn">
+                <h4 class="tile-title">Servicios aplicados <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h4>
+                <button class="btn btn-primary btn-sm" @click="registerServiceApplied()">
+                    <i class="fa fa-fw fa-lg fa fa-plus"></i>
+                </button>
+              </div>
+              <ServiceAppliedCreateComponent :pet_id="petSelected" @serviceAppliedRegistered="getProductsAndServicesFromPet()"/>
+
             <div class="table-responsive" style="max-height: 200px;">
               <table class="table table-hover table-sm">
                 <thead>
@@ -130,7 +137,7 @@
                             {{ service.quantity }}
                           </span>
                         </td>
-                        <td nowrap>{{ formatDate(service.created_at) }}</td>
+                        <td nowrap>{{ formatDate(service.application_date) }}</td>
                         <td nowrap>{{ service.user ? service.user.identification + ' - ' + service.user.names + ' ' + service.user.surnames : '' }}</td>
                         <td nowrap>{{ service.clinic_history ? service.clinic_history.number_folio : '' }}</td>
                         <td nowrap>
@@ -173,11 +180,12 @@
     import hasPermission from '../_utilities/hasPermission'
     import SearchOwnersAndPets from './../_components/SearchOwnersAndPets'
     import moment from 'moment'
+    import ServiceAppliedCreateComponent from './ServiceAppliedCreateComponent.vue'
     moment.locale('es')
     export default {
         mixins: [ hasPermission ],
         components: {
-          SearchOwnersAndPets
+          SearchOwnersAndPets, ServiceAppliedCreateComponent
         },
         data() {
             return {
@@ -194,6 +202,9 @@
             }
         },
         methods: {
+          registerServiceApplied () {
+            $('#modalServicesApplied').modal('show')
+          },
           getProductsAndServicesFromPet () {
             this.$http.get(`reports/products-and-services-applied/${ this.petSelected }`).then(response => {
               this.loadingResults = false
@@ -212,14 +223,14 @@
                   edit: false
                 }
               })
-              console.log(response.data);
+              
               this.services = response.data.services.map(service => {
                 return {
                   id: service.id,
                   clinic_history: service.clinic_history,
                   quantity: service.quantity,
                   service: service.service,
-                  created_at: service.created_at,
+                  application_date: service.application_date,
                   user: service.user,
                   quantityOld: service.quantity,
                   updating: false, 

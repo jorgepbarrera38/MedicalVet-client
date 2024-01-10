@@ -996,7 +996,7 @@
                             </div>
                           </div>
                         </div>
-                        <!--Servicios-->
+                        <!--Inicio servicios aplicados-->
                         <div class="tab-pane fade" id="services">
                           <div class="tab-pane fade active p-2 show" id="products">
                           <div class="row">
@@ -1059,6 +1059,7 @@
                           </div>
                         </div>
                         </div>
+                        <!--Fin servicios aplicados-->
                       </div>
                     </div>
                   </div>

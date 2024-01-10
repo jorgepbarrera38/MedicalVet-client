@@ -50,7 +50,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="service in services" :key="service.id">
-                                <td>{{ formatDate(service.created_at) }}</td>
+                                <td>{{ formatDate(service.application_date) }}</td>
                                 <td>{{ service.service.name }}</td>
                                 <td>{{ service.quantity }}</td>
                                 <td>{{ service.clinic_history.pet.owner.identification + ' - ' + service.clinic_history.pet.owner.names + ' - ' + service.clinic_history.pet.owner.surnames }}</td>
