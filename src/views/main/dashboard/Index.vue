@@ -12,21 +12,6 @@
 
         <template>
           <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
-            <div @mouseover="shadowOwners = true"
-                @mouseleave="shadowOwners = false"
-              :class="{ 'widget-small': true, primary: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowOwners }" style="cursor:pointer" 
-              @click="hasPermission('owners.index') ? $router.push({ name: 'owners.index' }) : $toastr.error('No tiene permisos para esta acción')">
-              <i class="icon fa fa-users fa-3x"></i>
-              <div class="info">
-                <h4>Propietarios</h4>
-                <p>
-                  <span v-if="loadingData" class="spinner-border spinner-border-sm"></span>
-                  <b v-else>{{ ownersQuantity }}</b>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
             <div @mouseover="shadowPets = true"
                 @mouseleave="shadowPets = false"
               :class="{ 'widget-small': true, info: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowPets }" style="cursor:pointer" 
@@ -37,6 +22,21 @@
                 <p>
                   <span v-if="loadingData" class="spinner-border spinner-border-sm"></span>
                   <b v-else>{{ petsQuantity }}</b>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
+            <div @mouseover="shadowOwners = true"
+                @mouseleave="shadowOwners = false"
+              :class="{ 'widget-small': true, primary: true, 'coloured-icon': true, 'shadow  bg-white rounded': shadowOwners }" style="cursor:pointer" 
+              @click="hasPermission('owners.index') ? $router.push({ name: 'owners.index' }) : $toastr.error('No tiene permisos para esta acción')">
+              <i class="icon fa fa-users fa-3x"></i>
+              <div class="info">
+                <h4>Propietarios</h4>
+                <p>
+                  <span v-if="loadingData" class="spinner-border spinner-border-sm"></span>
+                  <b v-else>{{ ownersQuantity }}</b>
                 </p>
               </div>
             </div>
