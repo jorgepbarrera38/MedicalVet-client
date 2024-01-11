@@ -1,6 +1,5 @@
 <template>
     <div>
-      <h1>{{ pet_id }}</h1>
         <div class="row">
           <div class="col-md-12">
             <div class="tile">

@@ -3,8 +3,11 @@
         <div class="tile-title-w-btn">
             <h3 class="tile-title"><i class="fa fa-file-text"></i> Historia clínica</h3>
             <div class="btn-group">
-              <button class="btn btn-primary btn-sm mr-1" @click="showComponentToCreateClinicHistory = true">
+              <button class="btn btn-primary btn-sm mr-1" @click="showComponentToCreateClinicHistory = true" v-if="showComponentToCreateClinicHistory == false">
                 <i class="fa fa-fw fa-lg fa fa-plus"></i>
+              </button>
+              <button class="btn btn-danger btn-sm mr-1" @click="showComponentToCreateClinicHistory = false" v-else>
+                <i class="fa fa-fw fa-lg fa fa-undo"></i>
               </button>
               <button class="btn btn-primary btn-sm" @click="exportClinicHistoryInPdf" :disabled="exportingClinicHistoryInPdf">
                   <span class="spinner-border spinner-border-sm ml-1" v-if="exportingClinicHistoryInPdf"></span>
@@ -15,7 +18,13 @@
         </div>
         <!---->
 
-        <div class="table-responsive" style="max-height: 220px;">
+        <!---->
+        <ClinicHistoryCreateComponent v-if="showComponentToCreateClinicHistory" 
+                                      :pet_id="pet_id" 
+                                      @clinicHistorySaved="$emit('clinicHistorySaved'); showComponentToCreateClinicHistory = false"/>
+        <!--@folioOpened="folioOpened()" @folioClosed="folioClosed()"-->
+
+        <div class="table-responsive" style="max-height: 220px;" v-else>
             <table class="table table-sm table-hover">
                 <thead>
                     <th nowrap>
@@ -39,12 +48,7 @@
             </table>
         </div>
 
-        <!---->
-
-        <ClinicHistoryCreateComponent v-if="showComponentToCreateClinicHistory" 
-                                      :pet_id="pet_id" 
-                                      @clinicHistorySaved="$emit('clinicHistorySaved'); showComponentToCreateClinicHistory = false"/>
-        <!--@folioOpened="folioOpened()" @folioClosed="folioClosed()"-->
+        
         
     </div>
 </template>
