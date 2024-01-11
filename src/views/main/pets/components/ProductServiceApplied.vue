@@ -4,14 +4,24 @@
         
         <div class="tile-title-w-btn">
             <h3 class="tile-title"><i class="fa fa-heartbeat"></i> Productos y servicios aplicados</h3>
-            <button class="btn btn-primary btn-sm mr-1" @click="showModalForRegisterServiceApplied">
-                <i class="fa fa-fw fa-lg fa fa-plus"></i> Servicio
-            </button>
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm mr-1" @click="showModalForRegisterProductApplied">
+                    <i class="fa fa-fw fa-lg fa fa-plus"></i> Producto
+                </button>
+                <button class="btn btn-primary btn-sm mr-1" @click="showModalForRegisterServiceApplied">
+                    <i class="fa fa-fw fa-lg fa fa-plus"></i> Servicio
+                </button>
+                <!---->
+                <button class="btn btn-primary btn-sm" @click="exportProductsAndServicesInPdf()" :disabled="exportingProductsAndServicesInPdf">
+                    <span class="spinner-border spinner-border-sm ml-1" v-if="exportingProductsAndServicesInPdf"></span>
+                    <i class="fa fa-fw fa-lg fa fa-print" v-else></i>
+                </button>
+            </div>
         </div>
         
         <!--Productos aplicados-->
 
-        <div class="table-responsive" style="max-height: 220px;">
+        <div class="table-responsive mb-3" style="max-height: 220px;">
             <table class="table table-sm table-hover">
                 <thead>
                     <th>Producto</th>
@@ -22,11 +32,12 @@
                 <tr v-for="product_applied in products_applied" :key="'products_appliedFromPet' + product_applied.id">
                     <td nowrap>{{ product_applied.product.code + ' - ' + product_applied.product.name }}</td>
                     <td nowrap>{{ product_applied.quantity }}</td>
-                    <td nowrap>{{ formatDate(product_applied.created_at) }}</td>
+                    <td nowrap>{{ formatDate(product_applied.application_date) }}</td>
                 </tr>
                 </tbody>
             </table>
         </div>
+        <ProductAppliedCreateComponent :pet_id="pet_id" @productAppliedRegistered="$emit('productAppliedRegistered')" />
 
         <!--Servicios aplicados-->
         
@@ -53,16 +64,17 @@
 <script>
 import moment from 'moment'
 import ServiceAppliedCreateComponent from '../../reports/ServiceAppliedCreateComponent.vue'
+import ProductAppliedCreateComponent from '../../reports/ProductAppliedCreateComponent.vue'
 moment.locale('es')
     export default {
         props: [ 'pet_id', 'products_applied', 'services_applied'],
         components: {
-            ServiceAppliedCreateComponent,
+            ServiceAppliedCreateComponent, ProductAppliedCreateComponent
         },
         data() {
             return {
                 prescriptionSelected: {},
-                exportingPrescriptionInPdf: false,
+                exportingProductsAndServicesInPdf: false,
             }
         },
         methods: {
@@ -70,24 +82,26 @@ moment.locale('es')
             //return date;
             return moment(date).format('DD-MMM-Y, h:mm a')
           },
-          showPrescriptionInModal (prescription) {
-            this.prescriptionSelected = prescription
-            $('#prescriptionModal').modal('show')
-          },
-          exportPrescriptionInPdf (prescription) {
-            prescription.exportingPrescriptionInPdf = true
-            this.$http.get(`reports/prescriptions/${ prescription.id }/export-prescription-in-pdf`, { responseType: 'blob'}).then(response => {
-              this.exportingPrescriptionInPdf = false
-                window.open(URL.createObjectURL(response.data), '_blank')
-                prescription.exportingPrescriptionInPdf = false
-            }).catch( error => {
-              this.$toastr.info('Ocurrió un error')
-              this.exportingPrescriptionInPdf = false
-            })
-          },
           showModalForRegisterServiceApplied () {
             $('#modalServicesApplied').modal('show')
-          }
+          },
+          showModalForRegisterProductApplied () {
+            $('#modalProductsApplied').modal('show')
+          },
+          exportProductsAndServicesInPdf () {
+            this.exportingProductsAndServicesInPdf = true
+
+            this.$http.get(`reports/products-and-services-applied/${ this.pet_id }/export-pdf`, { params: {}, responseType: 'blob' }).then(response => {
+              this.exportingProductsAndServicesInPdf = false
+              window.open(URL.createObjectURL(response.data), '_blank')
+            }).catch( error => {
+              this.exportingProductsAndServicesInPdf = false
+              if (error.response.status == 422) {
+                return this.$toastr.info(error.response.data.message)
+              }
+              this.$toastr.error('El archivo no se pudo generar')
+            })
+          },
         }
     }
 </script>

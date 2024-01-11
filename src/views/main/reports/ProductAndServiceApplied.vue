@@ -42,10 +42,18 @@
             </div>
           </div>
       </div>
+
       <div class="row">
         <div class="col-md-12">
           <div class="tile">
-            <h5 class="tile-title">Productos aplicados <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h5>
+            <div class="tile-title-w-btn">
+              <h5 class="tile-title">Productos aplicados <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h5>
+              <button class="btn btn-primary btn-sm" @click="registerProductApplied()">
+                  <i class="fa fa-fw fa-lg fa fa-plus"></i>
+              </button>
+            </div>
+            <ProductAppliedCreateComponent :pet_id="petSelected" @productAppliedRegistered="getProductsAndServicesFromPet()"/>
+
             <div class="table-responsive" style="max-height: 200px;">
               <table class="table table-hover table-sm">
                 <thead>
@@ -69,11 +77,11 @@
                             {{ product.quantity }}
                           </span>
                         </td>
-                        <td nowrap>{{ formatDate(product.clinic_history.created_at) }}</td>
-                        <td nowrap>{{ product.clinic_history.user.identification + ' - ' + product.clinic_history.user.names + ' ' + product.clinic_history.user.surnames }}</td>
-                        <td nowrap>{{ product.clinic_history.number_folio }}</td>
+                        <td nowrap>{{ formatDate(product.application_date) }}</td>
+                        <td nowrap>{{ product.user ? product.user.identification + ' - ' + product.user.names + ' ' + product.user.surnames : '' }}</td>
+                        <td nowrap>{{ product.clinic_history ? product.clinic_history.number_folio : '' }}</td>
                         <td nowrap>
-                          <div v-if="canUpdateAndDelete(product.clinic_history.user.username)">
+                          <div>
                             <button class="btn btn-warning btn-sm mr-1" v-if="!product.edit"
                               :disabled="!hasPermission('clinic-histories.edit-quantity-products-applied')"
                               @click="product.edit = true">
@@ -107,12 +115,12 @@
         <div class="col-md-12">
           <div class="tile">
             <div class="tile-title-w-btn">
-                <h4 class="tile-title">Servicios aplicados <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h4>
-                <button class="btn btn-primary btn-sm" @click="registerServiceApplied()">
-                    <i class="fa fa-fw fa-lg fa fa-plus"></i>
-                </button>
-              </div>
-              <ServiceAppliedCreateComponent :pet_id="petSelected" @serviceAppliedRegistered="getProductsAndServicesFromPet()"/>
+              <h4 class="tile-title">Servicios aplicados <span v-if="loadingResults" class="spinner-border spinner-border-sm ml-1 mb-1"></span></h4>
+              <button class="btn btn-primary btn-sm" @click="registerServiceApplied()">
+                  <i class="fa fa-fw fa-lg fa fa-plus"></i>
+              </button>
+            </div>
+            <ServiceAppliedCreateComponent :pet_id="petSelected" @serviceAppliedRegistered="getProductsAndServicesFromPet()"/>
 
             <div class="table-responsive" style="max-height: 200px;">
               <table class="table table-hover table-sm">
@@ -181,11 +189,12 @@
     import SearchOwnersAndPets from './../_components/SearchOwnersAndPets'
     import moment from 'moment'
     import ServiceAppliedCreateComponent from './ServiceAppliedCreateComponent.vue'
+    import ProductAppliedCreateComponent from './ProductAppliedCreateComponent.vue'
     moment.locale('es')
     export default {
         mixins: [ hasPermission ],
         components: {
-          SearchOwnersAndPets, ServiceAppliedCreateComponent
+          SearchOwnersAndPets, ServiceAppliedCreateComponent, ProductAppliedCreateComponent
         },
         data() {
             return {
@@ -205,6 +214,9 @@
           registerServiceApplied () {
             $('#modalServicesApplied').modal('show')
           },
+          registerProductApplied () {
+            $('#modalProductsApplied').modal('show')
+          },
           getProductsAndServicesFromPet () {
             this.$http.get(`reports/products-and-services-applied/${ this.petSelected }`).then(response => {
               this.loadingResults = false
@@ -217,6 +229,8 @@
                   clinic_history: product.clinic_history,
                   quantity: product.quantity,
                   product: product.product,
+                  application_date: product.application_date,
+                  user: product.user,
                   quantityOld: product.quantity,
                   updating: false,
                   deleting: false,

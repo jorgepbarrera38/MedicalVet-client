@@ -4,10 +4,10 @@
             <h3 class="tile-title"><i class="fa fa-medkit"></i> Vacunas y desparasitaciones</h3>
             <div class="btn-group">
                 <button class="btn btn-primary btn-sm mr-1" @click="showModalForRegisterVaccine">
-                    <i class="fa fa-fw fa-lg fa fa-plus"></i> Vacuna
+                    <i class="fa fa-fw fa-lg fa fa-plus"></i> Vac.
                 </button>
                 <button class="btn btn-primary btn-sm mr-1" @click="showModalForRegisterDeworming">
-                    <i class="fa fa-fw fa-lg fa fa-plus"></i> Desparasitación
+                    <i class="fa fa-fw fa-lg fa fa-plus"></i> Desp.
                 </button>
                 <button class="btn btn-primary btn-sm" @click="exportVaccinesInPdf()" :disabled="exportingVaccinesInPdf">
                     <span class="spinner-border spinner-border-sm ml-1" v-if="exportingVaccinesInPdf"></span>

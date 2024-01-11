@@ -143,7 +143,7 @@
                   <tbody>
                     <tr v-for="record in recordsFromPet" :key="'recordFromPet' + record.id">
                       <td nowrap>{{ record.description }}</td>
-                      <td nowrap>{{ formatDate(clinicHistory.created_at) }}</td>
+                      <td nowrap>{{ formatDate(record.clinic_history.created_at) }}</td>
                       <td>{{ record.clinic_history.number_folio }}</td>
                     </tr>
                   </tbody>
