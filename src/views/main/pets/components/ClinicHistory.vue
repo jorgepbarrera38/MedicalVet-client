@@ -2,10 +2,16 @@
     <div class="tile">
         <div class="tile-title-w-btn">
             <h3 class="tile-title"><i class="fa fa-file-text"></i> Historia clínica</h3>
-            <button class="btn btn-primary btn-sm" @click="exportClinicHistoryInPdf" :disabled="exportingClinicHistoryInPdf">
-                <span class="spinner-border spinner-border-sm ml-1" v-if="exportingClinicHistoryInPdf"></span>
-                <i class="fa fa-fw fa-lg fa fa-print" v-else></i>
-            </button>
+            <div class="btn-group">
+              <button class="btn btn-primary btn-sm mr-1" @click="showComponentToCreateClinicHistory = true">
+                <i class="fa fa-fw fa-lg fa fa-plus"></i>
+              </button>
+              <button class="btn btn-primary btn-sm" @click="exportClinicHistoryInPdf" :disabled="exportingClinicHistoryInPdf">
+                  <span class="spinner-border spinner-border-sm ml-1" v-if="exportingClinicHistoryInPdf"></span>
+                  <i class="fa fa-fw fa-lg fa fa-print" v-else></i>
+              </button>
+
+            </div>
         </div>
         <!---->
 
@@ -34,18 +40,28 @@
         </div>
 
         <!---->
+
+        <ClinicHistoryCreateComponent v-if="showComponentToCreateClinicHistory" 
+                                      :pet_id="pet_id" 
+                                      @clinicHistorySaved="$emit('clinicHistorySaved'); showComponentToCreateClinicHistory = false"/>
+        <!--@folioOpened="folioOpened()" @folioClosed="folioClosed()"-->
         
     </div>
 </template>
 <script>
 import moment from 'moment'
+import ClinicHistoryCreateComponent from '../../clinic_histories/ClinicHistoryCreateComponent.vue'
 moment.locale('es')
     export default {
         props: [ 'pet_id', 'clinicHistories' ],
+        components: {
+          ClinicHistoryCreateComponent,
+        },
         data() {
             return {
               foliosSelectedToExport: [],
               exportingClinicHistoryInPdf: false,
+              showComponentToCreateClinicHistory: false,
             }
         },
         methods: {

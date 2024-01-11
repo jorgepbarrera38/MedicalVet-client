@@ -57,7 +57,7 @@
                   <!--<button @click="getPet">Update</button>-->
           </div>
 
-          <ClinicHistory :clinicHistories="pet.clinicHistories" :pet_id="pet.id" />
+          <ClinicHistory :clinicHistories="pet.clinicHistories" :pet_id="pet.id" @clinicHistorySaved="getPet()"/>
           <Record :records="pet.records" />
           <Attachment :clinicHistoryAttachments="pet.clinicHistoryAttachments" />
 
