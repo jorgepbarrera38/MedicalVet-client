@@ -73,7 +73,6 @@ moment.locale('es')
         },
         data() {
             return {
-                prescriptionSelected: {},
                 exportingProductsAndServicesInPdf: false,
             }
         },
@@ -89,6 +88,10 @@ moment.locale('es')
             $('#modalProductsApplied').modal('show')
           },
           exportProductsAndServicesInPdf () {
+            if (!this.products_applied.length && !this.services_applied.length) {
+                return this.$toastr.info('No hay registros')
+            }
+
             this.exportingProductsAndServicesInPdf = true
 
             this.$http.get(`reports/products-and-services-applied/${ this.pet_id }/export-pdf`, { params: {}, responseType: 'blob' }).then(response => {
