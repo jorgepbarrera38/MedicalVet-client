@@ -59,6 +59,7 @@
 
           
           <Record :records="pet.records" />
+          <Diagnosis :diagnoses="pet.diagnoses" />
           <Attachment :clinicHistoryAttachments="pet.clinicHistoryAttachments" />
 
         </div>
@@ -99,11 +100,12 @@
     import Record from './components/Record.vue'
     import Attachment from './components/Attachment.vue'
     import ClinicHistory from './components/ClinicHistory.vue'
+    import Diagnosis from './components/Diagnosis.vue'
 
     moment.locale('es')    
     export default {
       components: {
-        VueLoading, Appointment, Prescription, Vaccine, ProductServiceApplied, Record, Attachment, ClinicHistory,
+        VueLoading, Appointment, Prescription, Vaccine, ProductServiceApplied, Record, Attachment, ClinicHistory, Diagnosis
       },
       created () {
           this.getPet()
