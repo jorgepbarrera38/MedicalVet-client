@@ -21,16 +21,16 @@
             <table class="table table-sm table-hover">
                 <thead>
                     <th>Vacuna</th>
-                    <th nowrap>Fecha de registro</th>
                     <th nowrap>Fecha de aplicación	</th>
                     <th nowrap>Fecha de siguiente vacuna</th>
+                    <th nowrap>Fecha de registro</th>
                 </thead>
                 <tbody>
                 <tr v-for="vaccine in vaccines" :key="'vaccineFromPet' + vaccine.id">
                     <td nowrap>{{ vaccine.product.code + ' - ' + vaccine.product.name }}</td>
-                    <td nowrap>{{ formatDate(vaccine.registration_date) }}</td>
                     <td nowrap>{{ formatDate(vaccine.application_date) }}</td>
                     <td nowrap>{{ formatDate(vaccine.next_date) }}</td>
+                    <td nowrap>{{ formatDate(vaccine.registration_date) }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -43,16 +43,16 @@
             <table class="table table-sm table-hover">
                 <thead>
                     <th>Desparasitante</th>
-                    <th nowrap>Fecha de registro</th>
                     <th nowrap>Fecha de aplicación	</th>
                     <th nowrap>Fecha de siguiente desparasitación</th>
+                    <th nowrap>Fecha de registro</th>
                 </thead>
                 <tbody>
                 <tr v-for="vaccine in dewormings" :key="'vaccineFromPet' + vaccine.id">
                     <td nowrap>{{ vaccine.product.code + ' - ' + vaccine.product.name }}</td>
-                    <td nowrap>{{ formatDate(vaccine.registration_date) }}</td>
                     <td nowrap>{{ formatDate(vaccine.application_date) }}</td>
                     <td nowrap>{{ formatDate(vaccine.next_date) }}</td>
+                    <td nowrap>{{ formatDate(vaccine.registration_date) }}</td>
                 </tr>
                 </tbody>
             </table>
