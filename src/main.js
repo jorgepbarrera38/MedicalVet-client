@@ -66,7 +66,7 @@ let production = false
 if (production) {
   axios.defaults.baseURL = 'api'
 } else {
-  axios.defaults.baseURL = 'http://172.16.1.63:8000/api'
+  axios.defaults.baseURL = 'http://localhost:8000/api'
 }
 
 /*Configuración general de cada cliente*/
