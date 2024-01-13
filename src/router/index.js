@@ -254,14 +254,14 @@ const routes = [
         component: PetsIndex
       },
       {
-        path: '/mascotas/:id',
-        name: 'pets.show',
-        component: PetsShow
-      },
-      {
         path: '/mascotas/crear',
         name: 'pets.create',
         component: PetsCreate
+      },
+      {
+        path: '/mascotas/:id',
+        name: 'pets.show',
+        component: PetsShow
       },
       {
         path: '/mascotas/:id/editar',

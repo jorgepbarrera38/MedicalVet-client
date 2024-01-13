@@ -100,6 +100,7 @@
           </div>
 
           
+          <Hospitalization :hospitalizations="pet.hospitalizations" />
           <Record :records="pet.records" />
           <Diagnosis :diagnoses="pet.diagnoses" />
           <Attachment :clinicHistoryAttachments="pet.clinicHistoryAttachments" />
@@ -146,6 +147,7 @@
     import HospitalizationCreateComponent from './components/HospitalizationCreateComponent.vue'
     import HospitalizationFinalizeComponent from './components/HospitalizationFinalizeComponent.vue'
     import HospitalizationEditComponent from './components/HospitalizationEditComponent.vue'
+    import Hospitalization from './components/Hospitalization.vue'
 
     moment.locale('es')    
     export default {
@@ -153,7 +155,7 @@
         VueLoading, Appointment, Prescription, Vaccine, 
         ProductServiceApplied, Record, Attachment, 
         ClinicHistory, Diagnosis, HospitalizationCreateComponent, 
-        HospitalizationFinalizeComponent, HospitalizationEditComponent
+        HospitalizationFinalizeComponent, HospitalizationEditComponent, Hospitalization
       },
       created () {
           this.getPet()

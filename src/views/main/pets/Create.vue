@@ -8,7 +8,32 @@
         <div class="row">
         <div class="col-md-12">
           <div class="tile">
-            <h3 class="tile-title">Nueva mascota</h3>
+            <div class="tile-title-w-btn">
+              <h3 class="tile-title">Nueva mascota</h3>
+              <button class="btn btn-primary btn-sm" @click="showModalForCreateOwner()">
+                <i class="fa fa-users"></i>
+              </button>
+              <!--inicio modal crear propietarios y mascotas-->
+              <div class="modal fade bd-example-modal-lg" id="modalForCreateOwner" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Nuevo propietario</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <OwnerCreate :showAsComponent="true" @owner-registered="getDataToCreatePet()"/>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--Fin modal buscar propietarios y mascotas-->
+            </div>
             <div class="alert alert-danger" v-if="errors">
               <li v-for="(error, index) in errors" :key="index">
                 {{ error[0] }}
@@ -125,9 +150,10 @@
 
 <script>
     import { VueLoading } from 'vue-loading-template'
+    import OwnerCreate from '../owners/Create.vue'
     export default {
         components: {
-          VueLoading
+          VueLoading, OwnerCreate
         },
         props: {
           showAsComponent: {
@@ -241,6 +267,9 @@
             this.errors = null
 
             this.pet.photo.remove()
+          },
+          showModalForCreateOwner () {
+            $('#modalForCreateOwner').modal('show')
           }
         },
         watch: {
