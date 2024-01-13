@@ -8,16 +8,27 @@
         <vue-loading v-if="loading" type="spiningDubbles" color="#d9544e" :size="{ width: '50px', height: '50px' }"></vue-loading>
 
         <div class="row" v-else>
+
+          
           <div class="col-md-4">
 
             <div class="tile">
               <div class="tile-title-w-btn">
                 <h3 class="tile-title">Información de la mascota</h3>
-                <button
-                  @click="$router.back()"
-                  class="btn btn-secondary btn-sm">
-                  <i class="fa fa-fw fa-lg fa-undo"></i>Atrás
-                </button>
+                
+                <div class="btn-group">
+                  <button
+                      @click="refreshingInfoFromPet = true; getPet()" :disabled="refreshingInfoFromPet"
+                      class="btn btn-primary btn-sm mr-1">
+                      <span v-if="refreshingInfoFromPet" class="spinner-border spinner-border-sm"></span>
+                      <i class="fa fa-fw fa-lg fa-refresh" v-else></i>
+                    </button>
+                  <button
+                    @click="$router.back()"
+                    class="btn btn-secondary btn-sm">
+                    <i class="fa fa-fw fa-lg fa-undo"></i>Atrás
+                  </button>
+                </div>
               </div>
                   
               <div>
@@ -49,6 +60,37 @@
                     <hr>
                     <b>Observaciónes: </b> {{ pet.observations }}
                     <hr>
+                  </div>
+                  <div class="col-md-12">
+                    <button v-if="!pet.hospitalization"
+                      @click="showModalToHospitalizePet()"
+                      class="btn btn-primary btn-sm mr-1">
+                      <i class="fa fa-fw fa-lg fa-hospital-o"></i>Hospitalizar
+                    </button>
+
+                    
+                    <div class="alert alert-success mb-0" v-if="pet.hospitalization">
+                      <h5>Mascota hospitalizada</h5>
+                      <b>Fecha y hora hospit: </b>{{ formatDate(pet.hospitalization.initial_date) }}
+                      <div class="mb-3">
+                        <b>Servicio: </b>{{ pet.hospitalization.service.code + ' - ' + pet.hospitalization.service.name }}
+                      </div>
+
+                      <button v-if="pet.hospitalization"
+                        @click="showModalToEditHospitalizePet()"
+                        class="btn btn-primary btn-sm mr-1">
+                        <i class="fa fa-fw fa-lg fa-edit"></i>Editar
+                      </button>
+                      
+                      <button @click="showModalToFinalizeHospitalization()"
+                          class="btn btn-primary btn-sm ">
+                          <i class="fa fa-fw fa-lg fa-sign-out"></i>Dar egreso
+                        </button>
+                    </div>
+                    
+                    <HospitalizationCreateComponent :pet_id="pet.id" @petHospitalized="petHospitalized()"/>
+                    <HospitalizationEditComponent :pet_id="pet.id" :hospitalizationInfoFromPet="pet.hospitalization" @hospitalizationUpdated="hospitalizationUpdated()"/>
+                    <HospitalizationFinalizeComponent :pet_id="pet.id" :hospitalizationInfoFromPet="pet.hospitalization" @hospitalizationFinished="hospitalizationFinished()"/>
                   </div>
                 </div>
 
@@ -101,11 +143,17 @@
     import Attachment from './components/Attachment.vue'
     import ClinicHistory from './components/ClinicHistory.vue'
     import Diagnosis from './components/Diagnosis.vue'
+    import HospitalizationCreateComponent from './components/HospitalizationCreateComponent.vue'
+    import HospitalizationFinalizeComponent from './components/HospitalizationFinalizeComponent.vue'
+    import HospitalizationEditComponent from './components/HospitalizationEditComponent.vue'
 
     moment.locale('es')    
     export default {
       components: {
-        VueLoading, Appointment, Prescription, Vaccine, ProductServiceApplied, Record, Attachment, ClinicHistory, Diagnosis
+        VueLoading, Appointment, Prescription, Vaccine, 
+        ProductServiceApplied, Record, Attachment, 
+        ClinicHistory, Diagnosis, HospitalizationCreateComponent, 
+        HospitalizationFinalizeComponent, HospitalizationEditComponent
       },
       created () {
           this.getPet()
@@ -113,8 +161,9 @@
       data() {
           return {
               pet: {},
+              refreshingInfoFromPet: false,
               loading: true,
-              avatarPet: 'img/avatar_pet.jpg'
+              avatarPet: 'img/avatar_pet.jpg',
           }
       },
       methods: {
@@ -126,10 +175,36 @@
             });
             console.log(this.pet);
             this.loading = false
+            this.refreshingInfoFromPet = false
           }).catch( () => {
             this.loading = false
           })
         },
+        showModalToHospitalizePet () {
+          $('#hospitalizeModal').modal('show')
+        },
+        petHospitalized () {
+          this.getPet()
+          $('#hospitalizeModal').modal('hide')
+        },
+        showModalToEditHospitalizePet () {
+          $('#hospitalizeEditModal').modal('show')
+        },
+        hospitalizationUpdated () {
+          this.getPet()
+          $('#hospitalizeEditModal').modal('hide')
+        },
+        showModalToFinalizeHospitalization () {
+          $('#finalizeHospitalizationModal').modal('show')
+        },
+        hospitalizationFinished () {
+          this.getPet()
+          $('#finalizeHospitalizationModal').modal('hide')
+        },
+        formatDate (date) {
+            //return date;
+            return moment(date).format('DD-MMM-Y, h:mm a')
+          },
       },
     }
 </script>
