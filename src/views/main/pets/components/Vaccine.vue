@@ -24,6 +24,7 @@
                     <th nowrap>Fecha de aplicación	</th>
                     <th nowrap>Fecha de siguiente vacuna</th>
                     <th nowrap>Fecha de registro</th>
+                    <th></th>
                 </thead>
                 <tbody>
                 <tr v-for="vaccine in vaccines" :key="'vaccineFromPet' + vaccine.id">
@@ -31,6 +32,12 @@
                     <td nowrap>{{ formatDate(vaccine.application_date) }}</td>
                     <td nowrap>{{ formatDate(vaccine.next_date) }}</td>
                     <td nowrap>{{ formatDate(vaccine.registration_date) }}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" @click="deleteVaccine(vaccine)" :disabled="vaccine.deleting">
+                            <span v-if="vaccine.deleting" class="spinner-border spinner-border-sm"></span>
+                            <i class="fa fa-trash" v-else></i>
+                        </button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -46,13 +53,20 @@
                     <th nowrap>Fecha de aplicación	</th>
                     <th nowrap>Fecha de siguiente desparasitación</th>
                     <th nowrap>Fecha de registro</th>
+                    <th></th>
                 </thead>
                 <tbody>
-                <tr v-for="vaccine in dewormings" :key="'vaccineFromPet' + vaccine.id">
-                    <td nowrap>{{ vaccine.product.code + ' - ' + vaccine.product.name }}</td>
-                    <td nowrap>{{ formatDate(vaccine.application_date) }}</td>
-                    <td nowrap>{{ formatDate(vaccine.next_date) }}</td>
-                    <td nowrap>{{ formatDate(vaccine.registration_date) }}</td>
+                <tr v-for="deworming in dewormings" :key="'dewormingFromPet' + deworming.id">
+                    <td nowrap>{{ deworming.product.code + ' - ' + deworming.product.name }}</td>
+                    <td nowrap>{{ formatDate(deworming.application_date) }}</td>
+                    <td nowrap>{{ formatDate(deworming.next_date) }}</td>
+                    <td nowrap>{{ formatDate(deworming.registration_date) }}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" @click="deleteDeworming(deworming)" :disabled="deworming.deleting">
+                            <span v-if="deworming.deleting" class="spinner-border spinner-border-sm"></span>
+                            <i class="fa fa-trash" v-else></i>
+                        </button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -100,7 +114,35 @@ moment.locale('es')
           },
           showModalForRegisterDeworming () {
             $('#modalForRegisterDeworming').modal('show')
-        },
+          },
+          deleteVaccine (vaccine) {
+            vaccine.deleting = true
+
+            this.$http.delete(`vaccines/${ vaccine.id }`).then( () => {
+              this.$emit('vaccineOrDewormingDeleted')
+              this.$toastr.success('Vacuna eliminada')
+            }).catch( (error) => {
+              vaccine.deleting = false
+              if (error.response.status == 422) {
+                return this.$toastr.error(error.response.data[0])
+              }
+              this.$toastr.error('La vacuna no se pudo eliminar')
+            })
+          },
+          deleteDeworming (deworming) {
+            deworming.deleting = true
+
+            this.$http.delete(`dewormings/${ deworming.id }`).then( () => {
+              this.$emit('vaccineOrDewormingDeleted')
+              this.$toastr.success('Desparasitación eliminada')
+            }).catch( (error) => {
+              deworming.deleting = false
+              if (error.response.status == 422) {
+                return this.$toastr.error(error.response.data[0])
+              }
+              this.$toastr.error('La desparasitación no se pudo eliminar')
+            })
+          }
         }
     }
 </script>

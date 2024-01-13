@@ -19,9 +19,10 @@
                     <td nowrap>{{ formatDate(hospitalization.final_date) }}</td>
                     <td nowrap>{{ hospitalization.service.code + ' - ' + hospitalization.service.name }}</td>
                     <td>
-                        <!--<button class="btn btn-danger btn-sm" @click="deleteHospitalization(hospitalization)">
-                            <i class="fa fa-trash"></i>
-                        </button>-->
+                        <button class="btn btn-danger btn-sm" @click="deleteHospitalization(hospitalization)" :disabled="hospitalization.deleting">
+                            <span v-if="hospitalization.deleting" class="spinner-border spinner-border-sm"></span>
+                            <i class="fa fa-trash" v-else></i>
+                        </button>
                     </td>
                 </tr>
                 </tbody>
@@ -42,14 +43,18 @@ moment.locale('es')
         },
         methods: {
             formatDate (date) {
-            //return date;
             return moment(date).format('DD-MMM-Y, h:mm a')
           },
           deleteHospitalization (hospitalization) {
-            this.$http.delete(`hospitalizations/${hospitalization.id}`).then( response => {
-                this.$toastr.error('Registro de hospitalización eliminado')
+            hospitalization.deleting = true
+            this.$http.delete(`hospitalizations/${hospitalization.id}/delete`).then( response => {
+                this.$toastr.success('Registro de hospitalización eliminado')
                 this.$emit('hospitalizationDeleted')
             }).catch(error => {
+                hospitalization.deleting = false
+                if (error.response.status == 422) {
+                    return this.$toastr.error(error.response.data[0])
+                }
                 this.$toastr.error('La hospitalización no se pudo eliminar')
             })
           }

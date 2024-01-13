@@ -116,7 +116,10 @@
               <Prescription :prescriptions="pet.prescriptions" :pet_id="pet.id" @prescriptionSaved="getPet()"/>
             </div>
             <div class="col-md-12">
-              <Vaccine :vaccines="pet.vaccines" :dewormings="pet.dewormings" :pet_id="pet.id" @vaccineRegistered="getPet()" @dewormingRegistered="getPet()"/>
+              <Vaccine :vaccines="pet.vaccines" :dewormings="pet.dewormings" :pet_id="pet.id" 
+                  @vaccineRegistered="getPet()" 
+                  @dewormingRegistered="getPet()" 
+                  @vaccineOrDewormingDeleted="getPet()"/>
             </div>
             <div class="col-md-12">
               <ProductServiceApplied :products_applied="pet.products_applied" :services_applied="pet.services_applied" :pet_id="pet.id" 
@@ -172,10 +175,25 @@
         getPet () {
           this.$http.get(`pets/${ this.$route.params.id }`).then( response => {
             this.pet = response.data
+            
             this.pet.prescriptions.forEach(prescription => {
               this.$set(prescription, 'exportingPrescriptionInPdf', false)
-            });
+            })
+            
+            this.pet.vaccines.forEach(vaccine => {
+              this.$set(vaccine, 'deleting', false)
+            })
+
+            this.pet.dewormings.forEach(deworming => {
+              this.$set(deworming, 'deleting', false)
+            })
+
+            this.pet.hospitalizations.forEach(hospitalization => {
+              this.$set(hospitalization, 'deleting', false)
+            })
+
             console.log(this.pet);
+
             this.loading = false
             this.refreshingInfoFromPet = false
           }).catch( () => {
