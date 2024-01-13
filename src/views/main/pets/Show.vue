@@ -100,7 +100,7 @@
           </div>
 
           
-          <Hospitalization :hospitalizations="pet.hospitalizations" />
+          <Hospitalization :hospitalizations="pet.hospitalizations" @hospitalizationDeleted="getPet()"/>
           <Record :records="pet.records" />
           <Diagnosis :diagnoses="pet.diagnoses" />
           <Attachment :clinicHistoryAttachments="pet.clinicHistoryAttachments" />

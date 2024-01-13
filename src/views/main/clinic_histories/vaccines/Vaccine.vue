@@ -83,7 +83,7 @@
                         </td>
                         <td nowrap>{{ vaccineFromPet.clinic_history ? vaccineFromPet.clinic_history.number_folio : '' }}</td>
                         <td nowrap>
-                          <div v-if="vaccineFromPet.showFormForEdit">
+                          <!--<div v-if="vaccineFromPet.showFormForEdit">
                             <button class="btn btn-primary btn-sm mr-1" @click="updateVaccine(vaccineFromPet)" :disabled="vaccineFromPet.updating">
                               <span v-if="vaccineFromPet.updating" class="spinner-border spinner-border-sm"></span>
                               <i class="fa fa-save" v-else></i>
@@ -101,7 +101,7 @@
                               <span v-if="vaccineFromPet.deleting" class="spinner-border spinner-border-sm"></span>
                               <i class="fa fa-trash" v-else></i>
                             </button>
-                          </div>
+                          </div>-->
                         </td>
                     </tr>
                 </tbody>
@@ -159,7 +159,7 @@
                         }}</td>
                         <td nowrap>{{ dewormingFromPet.clinic_history ? dewormingFromPet.clinic_history.number_folio : '' }}</td>
                         <td nowrap>
-                          <div v-if="dewormingFromPet.showFormForEdit">
+                          <!--<div v-if="dewormingFromPet.showFormForEdit">
                             <button class="btn btn-primary btn-sm mr-1" @click="updateDeworming(dewormingFromPet)" :disabled="dewormingFromPet.updating">
                               <span v-if="dewormingFromPet.updating" class="spinner-border spinner-border-sm"></span>
                               <i class="fa fa-save" v-else></i>
@@ -177,7 +177,7 @@
                               <span v-if="dewormingFromPet.deleting" class="spinner-border spinner-border-sm"></span>
                               <i class="fa fa-trash" v-else></i>
                             </button>
-                          </div>
+                          </div>-->
                         </td>
                     </tr>
                 </tbody>

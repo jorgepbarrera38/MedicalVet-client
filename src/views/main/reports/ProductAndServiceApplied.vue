@@ -82,7 +82,7 @@
                         <td nowrap>{{ product.clinic_history ? product.clinic_history.number_folio : '' }}</td>
                         <td nowrap>
                           <div>
-                            <button class="btn btn-warning btn-sm mr-1" v-if="!product.edit"
+                            <!--<button class="btn btn-warning btn-sm mr-1" v-if="!product.edit"
                               :disabled="!hasPermission('clinic-histories.edit-quantity-products-applied')"
                               @click="product.edit = true">
                               <i class="fa fa-edit"></i>
@@ -103,7 +103,7 @@
                               @click="deleteApplicationProduct(product)">
                               <span v-if="product.deleting" class="spinner-border spinner-border-sm"></span>
                               <i class="fa fa-trash" v-else></i>
-                            </button>
+                            </button>-->
                           </div>
                         </td>
                     </tr>
@@ -150,7 +150,7 @@
                         <td nowrap>{{ service.clinic_history ? service.clinic_history.number_folio : '' }}</td>
                         <td nowrap>
                           <div>
-                            <button class="btn btn-warning btn-sm mr-1" v-if="!service.edit"
+                            <!--<button class="btn btn-warning btn-sm mr-1" v-if="!service.edit"
                               :disabled="!hasPermission('clinic-histories.edit-quantity-services-applied')"
                               @click="service.edit = true">
                               <i class="fa fa-edit"></i>
@@ -171,7 +171,7 @@
                               @click="deleteApplicationService(service)">
                               <span v-if="service.deleting" class="spinner-border spinner-border-sm"></span>
                               <i class="fa fa-trash" v-else></i>
-                            </button>
+                            </button>-->
                           </div>
                         </td>
                     </tr>
