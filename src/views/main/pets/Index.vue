@@ -11,7 +11,7 @@
             <div class="tile-title-w-btn">
               <h3 class="tile-title">Listado de mascotas</h3>
               <div class="btn-group">
-                <button :class="{btn: true, 'btn-primary': true, 'btn-sm': true, 'mr-1': true}"
+                <button :class="{btn: true, 'btn-secondary': !showOnlyHospitalizedPets, 'btn-primary': showOnlyHospitalizedPets, 'btn-sm': true, 'mr-1': true}"
                   @click="showOnlyHospitalizedPets = !showOnlyHospitalizedPets; loading = true; getPets()">
                   <i class="fa fa-hospital-o" v-if="showOnlyHospitalizedPets"></i> 
                   <i class="fa fa-paw" v-else></i> 
@@ -71,7 +71,10 @@
                           width="50" :src="pet.photo ? $APP_URL + pet.photo : avatarPet" alt="">
                           
                     </td>
-                    <td nowrap>{{ pet.name }}</td>
+                    <td nowrap>
+                      {{ pet.name }} <br>
+                      <div class="badge badge-success" v-if="pet.hospitalizations.length">Hospitalizado</div>
+                    </td>
                     <td>{{ pet.owner.identification + ' - ' + pet.owner.names + ' ' + pet.owner.surnames }}</td>
                     <td nowrap>{{ pet.date_born }}</td>
                     <td nowrap>{{ getAge(pet.date_born) }}</td>
