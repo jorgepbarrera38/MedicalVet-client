@@ -73,6 +73,7 @@ if (production) {
 axios.get('config-app').then( response => {
   
   Vue.prototype.$APP_URL = response.data.APP_URL
+  Vue.prototype.$APP_LOGO = response.data.APP_LOGO
 
   Vue.prototype.$http = axios
 

@@ -7,8 +7,11 @@
       <div class="logo">
         <h1>Medical Vet</h1>
       </div>
-      <div class="login-box">
-        <form class="login-form" @submit.prevent="login">
+      <div class="login-box" style="min-height:490px">
+        <form class="login-form" @submit.prevent="login" style="padding-top: 20px;">
+          <div class="text-center mb-3">
+            <img :src="$APP_URL + $APP_LOGO" alt="" width="150px">
+          </div>
           <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user"></i>Iniciar sesión</h3>
           <div class="form-group">
             <label class="control-label">NOMBRE DE USUARIO</label>
