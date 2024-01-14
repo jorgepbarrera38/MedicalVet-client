@@ -10,7 +10,7 @@
           <div class="tile">
             <div class="tile-title-w-btn">
               <h3 class="tile-title">Nueva mascota</h3>
-              <button class="btn btn-primary btn-sm" @click="showModalForCreateOwner()">
+              <button class="btn btn-primary btn-sm" @click="showModalForCreateOwner()" title="Registrar propietario">
                 <i class="fa fa-users"></i>
               </button>
               <!--inicio modal crear propietarios y mascotas-->
