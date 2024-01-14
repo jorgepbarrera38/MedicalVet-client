@@ -186,6 +186,9 @@
         VueLoading, Search
       },
       created () {
+        if (localStorage.getItem('showOnlyHospitalizedPets')) {
+          this.showOnlyHospitalizedPets = JSON.parse(localStorage.getItem('showOnlyHospitalizedPets'))
+        }
           this.getPets()
       },
       data() {
@@ -218,6 +221,7 @@
           this.getPets(1)
         },*/
         getPets (page = 1) {
+          localStorage.setItem('showOnlyHospitalizedPets', this.showOnlyHospitalizedPets)
           this.$http.get('pets?ownerIdOrName=' + this.search.ownerIdOrName + ' &petName=' + this.search.petName + '&showOnlyHospitalizedPets=' + this.showOnlyHospitalizedPets + '&page=' + page).then( response => {
             this.pets = response.data
             this.loading = false
