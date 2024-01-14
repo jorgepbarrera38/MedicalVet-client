@@ -10,26 +10,39 @@
           <div class="tile">
             <div class="tile-title-w-btn">
               <h3 class="tile-title">Listado de mascotas</h3>
-              <button :disabled="!hasPermission('pets.store')"
-                @click="$router.push({ name: 'pets.create' })"
-                class="btn btn-success btn-sm">
-                <i class="fa fa-fw fa-lg fa-plus"></i>Nuevo
-              </button>
+              <div class="btn-group">
+                <button :class="{btn: true, 'btn-primary': true, 'btn-sm': true, 'mr-1': true}"
+                  @click="showOnlyHospitalizedPets = !showOnlyHospitalizedPets; loading = true; getPets()">
+                  <i class="fa fa-hospital-o" v-if="showOnlyHospitalizedPets"></i> 
+                  <i class="fa fa-paw" v-else></i> 
+                  <span v-if="!showOnlyHospitalizedPets">
+                    Todas las mascotas
+                  </span>
+                  <span v-else>
+                    Solo hospitalizados
+                  </span>
+                </button>
+                <button :disabled="!hasPermission('pets.store')"
+                  @click="$router.push({ name: 'pets.create' })"
+                  class="btn btn-primary btn-sm">
+                  <i class="fa fa-fw fa-lg fa-plus"></i>Nuevo
+                </button>
+              </div>
             </div>
 
             <div class="row">
               <div class="col-md-12">
 
                 <form class="form-inline" @submit.prevent="loading = true; getPets()">
-                  <!--<label class="sr-only" for="inlineFormInputName2">Name</label>-->
+                  
                   <input type="text" class="form-control mb-3 mr-sm-2" style="min-width: 280px;" id="inlineFormInputName2" placeholder="Identificación o nombres propietario" v-model="search.ownerIdOrName">
                   
-                  <!--<label class="sr-only" for="inlineFormInputGroupUsername2">Username</label>-->
                   <input type="text" class="form-control mb-3 mr-sm-2" style="min-width: 220px;"  id="inlineFormInputName2" placeholder="Nombre de la mascota" v-model="search.petName">
-
-                  <button type="submit" class="btn btn-primary mb-3">
+                  
+                  <button type="submit" class="btn btn-primary mb-3 mr-sm-2">
                     <i class="fa fa-search"></i>
                   </button>
+                  
                 </form>
                 
               </div>
@@ -191,7 +204,8 @@
                 petName: '',
                 ownerIdOrName: '',
               },
-              avatarPet: 'img/avatar_pet.jpg'
+              avatarPet: 'img/avatar_pet.jpg',
+              showOnlyHospitalizedPets: false,
           }
       },
       methods: {
@@ -201,7 +215,7 @@
           this.getPets(1)
         },*/
         getPets (page = 1) {
-          this.$http.get('pets?ownerIdOrName=' + this.search.ownerIdOrName + ' &petName=' + this.search.petName + ' &page=' + page).then( response => {
+          this.$http.get('pets?ownerIdOrName=' + this.search.ownerIdOrName + ' &petName=' + this.search.petName + '&showOnlyHospitalizedPets=' + this.showOnlyHospitalizedPets + '&page=' + page).then( response => {
             this.pets = response.data
             this.loading = false
           }).catch( () => {
